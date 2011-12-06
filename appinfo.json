@@ -1,0 +1,10 @@
+{
+	"id": "com.excessdata.app.rogue.epokothar",
+	"version": "0.0.2",
+	"vendor": "Excess Data",
+	"type": "web",
+	"main": "index.html",
+	"title": "Cave of Epokothar",
+	"icon": "icon.png",
+	"uiRevision": 2
+}

@@ -1,0 +1,52 @@
+Cave of Epokothar
+
+Intro story:
+
+The Council of the Open Hand has learned of a plot by the nefarious demon Epokothar. The demon found an artifact of great magical power, called the Cloak of Ehpeway. 
+With it, he plans to destroy the peaceful community of Osweb. The Council has chosen you to enter Epokothar's lair to retrieve the Cloak of Ehpeway and save the Oswebians.
+Epokothar resides deep within Mount Exsap.
+
+
+Skills:
+combat: fight, unarmed, axe, mace (includes flail?), polearm (includes spear), smallBlade, staff, sword
+ranged: bow, crossbow, dart, sling, thrown
+defensive: armor, dodge, shield
+spells: casting, air, earth, fire, water
+other: stealth, sneakAttack, search (traps, hidden doors, invisible monsters?)
+
+TODO: deal with monsters that have inventory.
+
+Skills - as skill increases, get closer to double the item's capability
+
+
+// Hook up Secret doors - including finding them
+
+// autosave when app is closed
+
+// Better AI - hear/see player
+
+// display mini-map
+
+// drop random loot
+
+// Level-up - inc attribute (str/dex/int)
+
+// Implement stealth & sneak attack
+
+// starving hunger level reduces skills
+
+// Add hidden traps
+
+// Rendering performance on tablets 
+
+// Show hints/tips like Stone Soup Crawl
+
+// Add rings - protection, stealth, strength, agility, health, etc.
+
+// Add amulets - protection, health, intelligence, etc.
+
+// Make armor take time to wear or remove
+
+// fine-tune balance creatures & weapon accuracy
+
+// hostile monsters can swap places with neutrals (player can too?)
