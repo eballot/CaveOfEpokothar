@@ -6,7 +6,7 @@ var MonsterModel = function(details) {
 	this.template = t;
 	
 	this.damageTaken = 0;
-	this.hunger = MonsterModel.kMaxHunger;
+	this.hunger = MonsterModel.hunger.satiatedLevel; // start out at the high end of hungry
 	this.experience = 0;
 	
 	this.equippedItems = {
@@ -87,8 +87,14 @@ var MonsterModel = function(details) {
 };
 
 
-MonsterModel.kMaxHunger = 5000;
 MonsterModel.hunger = {
+	maxLevel: 5000,
+	satiatedLevel: 5000,
+	fullLevel: 4000,
+	hungryLevel: 3000,
+	ravenousLevel: 2000,
+	starvingLevel: 1000,
+	
 	rest: -1,
 	walkNormal: -2,
 	autoHeal: -2,
@@ -96,6 +102,15 @@ MonsterModel.hunger = {
 	fight: -5,
 	castSpell: -5
 };
+
+MonsterModel.hungerStrings = {
+	starving: $L("Starving"),
+	ravenous: $L("Ravenous"),
+	hungry: $L("Hungry"),
+	full: $L("Full"),
+	satiated: $L("Satiated")
+};
+
 var kModelKeyTypes = {
 	raw: 0, //number or boolean
 	string: 1,
@@ -360,6 +375,44 @@ MonsterModel.prototype.maybeIdentify = function(slot, bonus) {
 	return null;
 };
 
+MonsterModel.prototype.addItem = function(item) {
+	var i, length, inventory, inventoryItem;
+	inventory = this.inventory;
+	// Try to consolidate this item if the same items are already in inventory
+	if (item.canConsolidate()) {
+		i = 0;
+		length = inventory.length;
+		while (i < length) {
+			inventoryItem = inventory[i];
+			if (inventoryItem.consolidate(item)) {
+				break;
+			} else {
+				++i;
+			}
+		}
+		
+		// Wasn't consolidated so push it into the inventory list
+		if (i === length) {
+			inventory.push(item);
+		}
+	} else {
+		inventory.push(item);
+	}
+
+	this.updateWeightCarried();
+	// recalc in case encumberance changed
+	this._calculateDefenses();
+};
+
+MonsterModel.prototype.dropItemByIndex = function(index) {
+	this.unequipAnItem(index);
+	item = this.inventory.splice(index, 1);
+	this.updateWeightCarried();
+	// recalc in case armor was unequipped or encumberance changed
+	this._calculateDefenses();
+	return item[0];
+};
+
 MonsterModel.prototype.removeItemFromInventory = function(item) {
 	if (this.inventory) {
 		var i, inventoryLength, slot;
@@ -438,15 +491,21 @@ MonsterModel.prototype.getSkillXpLevel = function(skillName) {
 
 MonsterModel.prototype.exerciseSkill = function(skillName) {
 	var skillObj, skillIncreased = false;
+	// Special case for armor skill. Only exercise if wearing armor on the torso slot and it requires skill.
+	// For example, a rogue doesn't gain skill if he's wearing a helmet and leather armor. 
+	if (skillName === "armor" && this.equippedItems.torso && this.equippedItems.torso.canUseUnskilled()) {
+		return false;
+	}
+	
 	if (Math.random() < 0.5) {
 		skillObj = this.skills[skillName];
 		if (!skillObj) {
 			// new, unpracticed skill
 			this.skills[skillName] = {lvl:0, xp:1};
-			skillIncreased = true;
 		} else {
 			++skillObj.xp;
-			if (skillObj.xp > (skillObj.lvl/2 + 1) * 10) {
+			// Special case for lvl 0 since you're still learning the basics...
+			if ((skillObj.lvl === 0 && skillObj.xp > 35) || skillObj.xp > (skillObj.lvl/2 + 1) * 10) {
 				skillObj.xp = 0;
 				++skillObj.lvl;
 			}
@@ -485,7 +544,17 @@ MonsterModel.prototype.getEquippedItem = function(slot) {
 };
 
 MonsterModel.prototype.updateWeightCarried = function(weight) {
-	this.weight = weight;
+	var i, length;
+	if (weight) {
+		this.weight = weight;
+	} else {
+		weight = 0;
+		length = this.inventory.length;
+		for (i = 0; i < length; i++) {
+			weight += this.inventory[i].getWeight();
+		}
+		this.weight = weight;
+	}
 	return this.getEncumberance(weight);
 };
 
@@ -500,43 +569,66 @@ MonsterModel.prototype.getAccuracy = function() {
 	return this.template.accuracy;
 };
 
+MonsterModel.prototype.eatItemByIndex = function(index) {
+	var result = null, item, nourishment;
+	
+	item = this.inventory[index];
+	if (item) {
+		if (item.getCategory() === "corpse" && this.hunger > MonsterModel.hunger.ravenousLevel) {
+			result = $L("You aren't hungry enough to eat dead things.");
+		} else {
+			// Don't eat it if you're too full
+			nourishment = item.getNourishment();
+			if (this.hunger + nourishment > MonsterModel.hunger.maxLevel) {
+				result = $L("You are too full to eat that.");
+			} else {
+				// TODO: eating a corpse could make you sick or could add intrinsic abilities
+				this.updateHunger(nourishment);
+				this.inventory.splice(index, 1);
+			}
+		}
+	}
+	
+	return result;
+};
+
 MonsterModel.prototype.updateHunger = function(hungerDelta) {
 	this.hunger += hungerDelta;
-	if (this.hunger > MonsterModel.kMaxHunger) {
-		this.hunger = MonsterModel.kMaxHunger;
+	if (this.hunger > MonsterModel.hunger.maxLevel) {
+		this.hunger = MonsterModel.hunger.maxLevel;
 	}
 	
 	return this.getHunger(false);
 };
 
 MonsterModel.prototype.getHunger = function(includeColor) {
-	var hungerPercent = this.hunger/MonsterModel.kMaxHunger;
-	if (hungerPercent <= 0) {
+	var hunger = this.hunger;
+	if (hunger <= 0) {
 		return null; //$L("Starved to death");
-	} else if (hungerPercent < 0.20) {
+	} else if (hunger < MonsterModel.hunger.starvingLevel) {
 		if (includeColor) {
-			return $L('<span style="color:red;">Starving</span>');
+			return $L('<span id="hunger" style="color:red;">' + MonsterModel.hungerStrings.starving + '</span>');
 		} else {
-			return $L("Starving");
+			return MonsterModel.hungerStrings.starving;
 		}
-	} else if (hungerPercent < 0.40) {
+	} else if (hunger < MonsterModel.hunger.ravenousLevel) {
 		if (includeColor) {
 			// light orange
-			return $L('<span style="color:#FF9933;">Ravenous</span>');
+			return $L('<span id="hunger" style="color:#FF9933;">' + MonsterModel.hungerStrings.ravenous + '</span>');
 		} else {
-			return $L("Ravenous");
+			return MonsterModel.hungerStrings.ravenous;
 		}
-	} else if (hungerPercent < 0.60) {
+	} else if (hunger < MonsterModel.hunger.hungryLevel) {
 		if (includeColor) {
 			// light yellow
-			return $L('<span style="color:#FFFF66;">Hungry</span>');
+			return $L('<span id="hunger" style="color:#FFFF66;">' + MonsterModel.hungerStrings.hungry + '</span>');
 		} else {
-			return $L("Hungry");
+			return MonsterModel.hungerStrings.hungry;
 		}
-	} else if (hungerPercent < 0.80) {
-		return $L("Full");
+	} else if (hunger < MonsterModel.hunger.fullLevel) {
+		return MonsterModel.hungerStrings.full;
 	} else {
-		return $L("Satiated");
+		return MonsterModel.hungerStrings.satiated;
 	}
 };
 

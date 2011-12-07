@@ -81,7 +81,7 @@ enyo.kind({
 		
 		// First the simple case: player tapped on the player
 		if (distanceX === 0 && distanceY === 0) {
-			this.doShowInventory(this);
+			this.doShowInventory();
 		} else {
 			// Next deal with anything in my path
 			rad = absDistanceX / absDistanceY;
@@ -171,7 +171,7 @@ enyo.kind({
 							this.$.interactionChoicePopup.openAtControl(something);
 						}
 					} else if (something.kind === "PlayerOnMap") {
-						this.doShowInventory(this);
+						this.doShowInventory();
 					// If you tapped on an open door and it is next to the player and it isn't block by items, then allow it to be closed
 					} else if (something.kind === MapTile.openDoor.kind && (absDistanceX < 2 && absDistanceY < 2) && !map.getItemPileAt({x:x, y:y})) {
 						options = [
@@ -334,12 +334,16 @@ enyo.kind({
 		return died;
 	},
 	
-	eatItem: function(item) {
-		var prehunger = this.monsterModel.getHunger(false);
-		var posthunger = this.monsterModel.updateHunger(item.getNourishment());
-		if (prehunger !== posthunger) {
+	eatItem: function(index) {
+		var result = null, prehunger, posthunger;
+		prehunger = this.monsterModel.getHunger(false);
+		result = this.monsterModel.eatItemByIndex(index);
+		// null result means ok. if the hunger level changed, update the stats bar
+		if (!result && prehunger !== this.monsterModel.getHunger(false)) {
 			this._statsChanged();
 		}
+
+		return result;
 	},
 	
 	_finishMyTurn: function(hungerChange) {

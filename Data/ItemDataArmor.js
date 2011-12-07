@@ -2,19 +2,19 @@ kItemsData.armor = {
 	/** Clothing **/
 	pantsblack: {
 		displayName: $L("Black pants"),
-		type:"pantsblack", category:"armor", slot:"legs", easy:true, defense:1, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
+		type:"pantsblack", category:"armor", slot:"legs", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
 		img: "tiles/player/leg/pants_black.gif",
 		description: $L("Just your standard durable pants.")
 	},
 	pantsblue: {
 		displayName: $L("Blue pants"),
-		type:"pantsblue", category:"armor", slot:"legs", easy:true, defense:1, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
+		type:"pantsblue", category:"armor", slot:"legs", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
 		img: "tiles/player/leg/pants_blue.gif",
 		description: $L("Just your standard durable pants.")
 	},
 	pantsbrown: {
 		displayName: $L("Brown pants"),
-		type:"pantsbrown", category:"armor", slot:"legs", easy:true, defense:1, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
+		type:"pantsbrown", category:"armor", slot:"legs", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
 		img: "tiles/player/leg/pants_brown.gif",
 		description: $L("Just your standard durable pants.")
 	},
@@ -69,7 +69,7 @@ kItemsData.armor = {
 	shield: {
 		displayName: $L("Shield"),
 		type:"shield", category:"armor", skill:"shield", weight:15, value:25,/*gp*/
-		hands:1, slot:"shield", defense:0, block:6, dexpenalty:0,
+		hands:1, slot:"shield", defense:0, block:5, dexpenalty:0,
 		img: "tiles/player/hand2/shield_knight_blue.gif",
 		description: $L("A large metal shield strapped to the forearm and gripped with the hand.")
 	},
@@ -104,5 +104,45 @@ kItemsData.armor = {
 		type:"hornedhelm", category:"armor", slot:"head", easy:true, defense:2, flexibility:1, dexpenalty:0, weight:8, value:10,/*gp*/
 		img: "tiles/player/head/horned.gif",
 		description: $L("A helmet with large horns attached.")
+	},
+	
+	/** Gauntlets **/
+	leatherglove: {
+		displayName: $L("Leather gloves"),
+		type:"leatherglove", category:"armor", slot:"glove", easy:true, defense:1, flexibility:1, dexpenalty:0, weight:1, value:2,/*gp*/
+		img: "tiles/player/arm/glove_brown.gif",
+		description: $L("Gloves made of stiffened leather that protect the hands and forearms.")
+	},
+	mailglove: {
+		displayName: $L("Mail gauntlets"),
+		type:"mailglove", category:"armor", slot:"glove", easy:true, defense:2, flexibility:1, dexpenalty:0, weight:2, value:5,/*gp*/
+		img: "tiles/player/arm/glove_gray.gif",
+		description: $L("Gloves made of chain mail and leather that protect the hands and forearms.")
+	},
+	plateglove: {
+		displayName: $L("Plate gauntlets"),
+		type:"plateglove", category:"armor", slot:"glove", easy:true, defense:3, flexibility:1, dexpenalty:0, weight:4, value:8,/*gp*/
+		img: "tiles/player/arm/glove_black.gif",
+		description: $L("Gloves made of articulated pieces of metal that protect the hands and forearms.")
+	},
+	
+	/** Gauntlets **/
+	leathershoes: {
+		displayName: $L("Sturdy shoes"),
+		type:"leathershoes", category:"armor", slot:"shoes", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:2,/*gp*/
+		img: "tiles/player/boot/short_brown.gif",
+		description: $L("A pair of sturdy leather shoes. They don't provide much protection in combat, but it's better than walking around barefoot.")
+	},
+	leatherboots: {
+		displayName: $L("Leather boots"),
+		type:"leatherboots", category:"armor", slot:"shoes", easy:true, defense:1, flexibility:1, dexpenalty:0, weight:1, value:2,/*gp*/
+		img: "tiles/player/boot/short_brown.gif",
+		description: $L("A pair of leather boots.")
+	},
+	sandals: {
+		displayName: $L("Sandals"),
+		type:"sandals", category:"armor", slot:"shoes", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:0.5, value:1,/*gp*/
+		img: "tiles/player/boot/mesh_black.gif",
+		description: $L("Sandals are probably the most basic form of footwear.")
 	}
 };

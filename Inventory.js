@@ -133,6 +133,18 @@ enyo.kind({
             className: "back-button",
 			onclick: "doDismiss"
 		}]
+	}, {
+		name: "notHungryDialog",
+		kind: enyo.Popup,
+		scrim: true,
+		components: [{
+			name: "notHungryText",
+			content: ""
+		}, {
+			kind: enyo.Button,
+			caption: enyo._$L("OK"),
+			onclick: "_closeNotHungryDialog"
+		}]
 	}],
 	
 	playerChanged: function(oldPlayer) {
@@ -229,7 +241,7 @@ enyo.kind({
 				
 			case "corpse":
 				// TODO "butcher"
-				options = [ Inventory.kItemOptions.kDrop, Inventory.kItemOptions.kInspect ];
+				options = [ Inventory.kItemOptions.kDrop, Inventory.kItemOptions.kEat, Inventory.kItemOptions.kInspect ];
 				break;
 				
 			default:
@@ -283,39 +295,35 @@ enyo.kind({
 	},
 	
 	_handleInventoryActionsChoice: function(inSender, inData) {
-		var index, item, position;
+		var index, item, result;
 		if (inData) {
 			index = this.$.inventoryActionsPopup.inventoryItemIndex;
 			if (index < this.inventory.length) {
 				switch (inData.action) {
 				case "drop":
-					position = this.player.getPosition();
-					this.player.unequipItem(index);
-					item = this.inventory.splice(index, 1);
-					this.map.addItem(item[0], position.x, position.y);
-						
+					this.player.dropItem(this.map, index);
+					// redraw both lists
 					this._updateInventoryList();
 					this._updateGroundList();
 					break;
 					
 				case "eat":
-					item = this.inventory.splice(index, 1);
+					result = this.player.eatItem(index);
+					if (result) {
+						this.$.notHungryDialog.openAtCenter();
+						this.$.notHungryText.setContent(result);
+					}
 					this._updateInventoryList();
-					this.player.eatItem(item[0]);
 					break;
 					
 				case "equip":
 					this.player.equipItem(index);
-					// redraw both lists
 					this._updateInventoryList();
-					this.$.groundList.punt();
 					break;
 					
 				case "unequip":
 					this.player.unequipItem(index);
-					// redraw both lists
 					this._updateInventoryList();
-					this.$.groundList.punt();
 					break;
 					
 				case "inspect":
@@ -349,8 +357,8 @@ enyo.kind({
 			for (i = 0; i < length; i++) {
 				totalWeight += this.inventory[i].getWeight();
 			}
-			// TODO: get a string from Player "carrying N lbs (M% encumbered)"
-			obj.percent = Math.round(this.player.updateWeightCarried(totalWeight));
+
+			obj.percent = this.player.updateWeightCarried(totalWeight);
 			if (obj.percent > 100) {
 				obj.encumberance = $L("crushing load");
 			} else if (obj.percent > 67) {
@@ -360,6 +368,7 @@ enyo.kind({
 			} else {
 				obj.encumberance = $L("lightly loaded");
 			}
+			obj.percent = Math.round(obj.percent);
 			obj.totalWeight = totalWeight.toFixed(1);
 			this.$.totalWeight.setContent(Inventory.kEncumberance.evaluate(obj));
 		}
@@ -371,5 +380,9 @@ enyo.kind({
 			this.itemPile = this.map.getItemPileAt(this.player.getPosition());
 			this.$.groundList.punt();
 		}
+	},
+
+	_closeNotHungryDialog: function() {
+		this.$.notHungryDialog.close();
 	}
 });

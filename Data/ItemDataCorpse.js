@@ -25,7 +25,7 @@ Object.defineProperty(kItemsData,
 		},
 		insectoid: {
 			displayName: $L("TBD"),
-			type:"insectoid", category:"corpse", canSpoil:true, weight:10, nourishment:550, value:0,/*gp*/
+			type:"insectoid", category:"corpse", canSpoil:true, weight:30, nourishment:550, value:0,/*gp*/
 			description: $L("Carrion can be eaten if you're really hungry.")
 		}
 	}

@@ -33,6 +33,16 @@ var MapTileIcons = {
 	smallshield:{ img: "items", offsetX: 352, offsetY: 224 },
 	shield:     { img: "items", offsetX: 320, offsetY: 224 },
 	
+	//gloves
+	leatherglove:{img: "items", offsetX: 192, offsetY: 256 },
+	mailglove:  { img: "items", offsetX: 256, offsetY: 256 },
+	plateglove: { img: "items", offsetX: 288, offsetY: 256 },
+
+	//shoes
+	leathershoes:{img: "items", offsetX: 320, offsetY: 256 },
+	leatherboots:{img: "items", offsetX: 352, offsetY: 256 },
+	sandals:    { img: "items", offsetX: 384, offsetY: 256 },
+	
 	//weapons
 	club:       { img: "items", offsetX: 480, offsetY: 0 },
 	dagger:     { img: "items", offsetX: 320, offsetY: 32 },

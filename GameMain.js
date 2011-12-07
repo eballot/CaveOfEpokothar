@@ -39,7 +39,7 @@ enyo.kind({
 						onDied: "playerDeath",
 						onStatsChanged: "playerStatsChanged",
 						onStatusText: "_showStatusText",
-						onShowInventory: "showInventory",
+						onShowInventory: "_showInventory",
 						onAlertDialog: "_showNoHandsAlert"
 					}]
 				}, {
@@ -52,7 +52,8 @@ enyo.kind({
 						name: "playerStats",
 						content: "",
 						allowHtml: true,
-						style: "margin:2px 6px 4px 6px;"
+						style: "margin:2px 6px 4px 6px;",
+						onclick: "_statsBoxClicked"
 					}, {
 						className: "player-stats-box-horiz-divider"
 					}, {
@@ -75,7 +76,7 @@ enyo.kind({
 				components: [{
 					kind: enyo.ToolButton,
 					caption: $L("Inventory"),
-					onclick: "showInventory"
+					onclick: "_showInventory"
 				}, {
 					kind: enyo.ToolButton,
 					caption: $L("Search"),
@@ -107,7 +108,7 @@ enyo.kind({
 		components: [{
 			name: "inventory",
 			kind: "Inventory",
-			onDismiss: "hideInventory"
+			onDismiss: "_hideInventory"
 		}]
 	}, {
 		name: "nohandsAlert",
@@ -215,19 +216,6 @@ enyo.kind({
 	searchNearby: function(inSender) {
 		this.$.map.searchNearby(this.$.me, 2);
 		this.$.me.rest(this.turnCount);
-	},
-	
-	showInventory: function(inSender, inPlayer) {
-		this.$.inventorySlidingView.setShowing(true);
-		this.$.inventory.setPlayer(this.$.me);
-		this.$.inventory.setMap(this.$.map);
-	},
-
-	hideInventory: function() {
-		// Ensure the hide is asynchronous since enyo panes apparently need this
-		window.setTimeout(function() {
-			this.$.inventorySlidingView.setShowing(false);
-		}.bind(this), 10);
 	},
 	
 	rendered: function() {
@@ -382,7 +370,6 @@ enyo.kind({
 		bounds = this.$.mapScroller.getBounds();
 		// For some reason, when the app is first launched after installation, the width is 2240px.
 		// Until I can figure out why, I'm simulating the correct width by setting it to 75% of window.innerWidth
-this.log(bounds); //TODO: remove this once the "initial size" bug is found
 		if (bounds.width > 1024) {
 			bounds.width = window.innerWidth * 0.75;
 		}
@@ -405,6 +392,28 @@ this.log(bounds); //TODO: remove this once the "initial size" bug is found
 		}
 	},
 	
+	_showInventory: function(inSender) {
+		this.$.inventorySlidingView.setShowing(true);
+		this.$.inventory.setPlayer(this.$.me);
+		this.$.inventory.setMap(this.$.map);
+	},
+
+	_hideInventory: function() {
+		// Ensure the hide is asynchronous since enyo panes apparently need this
+		window.setTimeout(function() {
+			this.$.inventorySlidingView.setShowing(false);
+		}.bind(this), 10);
+	},
+	
+	_statsBoxClicked: function(inSender, inEvent) {
+		if (inEvent.target.id === "hunger") {
+			if (inEvent.target.innerText !== MonsterModel.hungerStrings.satiated) {
+				//TODO: it would be nicer to pop up an eat dialog with a list of available food
+				this._showInventory(this);
+			}
+		}
+	},
+
 	_showNoHandsAlert: function(inSender) {
 		this.$.nohandsAlert.openAtCenter();
 	},

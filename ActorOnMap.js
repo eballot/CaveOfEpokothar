@@ -297,29 +297,20 @@ enyo.kind({
 		return foundSomething;
 	},
 	
+	dropItem: function(map, index) {
+		var item, position;
+
+		item = this.monsterModel.dropItemByIndex(index);
+		position = this.getPosition();
+		map.addItem(item, position.x, position.y);
+
+		this.showEquippedItems();
+		this._statsChanged();
+	},
+	
 	addItem: function(item) {
-		var i, length, inventory, inventoryItem;
-		inventory = this.monsterModel.inventory;
-		// Try to consolidate this item if the same items are already in inventory
-		if (item.canConsolidate()) {
-			i = 0;
-			length = inventory.length;
-			while (i < length) {
-				inventoryItem = inventory[i];
-				if (inventoryItem.consolidate(item)) {
-					break;
-				} else {
-					++i;
-				}
-			}
-			
-			// Wasn't consolidated so push it into the inventory list
-			if (i === length) {
-				inventory.push(item);
-			}
-		} else {
-			inventory.push(item);
-		}
+		this.monsterModel.addItem(item);
+		this._statsChanged();
 	},
 	
 	getInventoryList: function() {
