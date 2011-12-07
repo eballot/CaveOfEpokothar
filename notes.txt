@@ -12,14 +12,12 @@ combat: fight, unarmed, axe, mace (includes flail?), polearm (includes spear), s
 ranged: bow, crossbow, dart, sling, thrown
 defensive: armor, dodge, shield
 spells: casting, air, earth, fire, water
-other: stealth, sneakAttack, search (traps, hidden doors, invisible monsters?)
+other: stealth, search (traps, hidden doors, invisible monsters?)
 
 TODO: deal with monsters that have inventory.
 
 Skills - as skill increases, get closer to double the item's capability
 
-
-// Hook up Secret doors - including finding them
 
 // autosave when app is closed
 

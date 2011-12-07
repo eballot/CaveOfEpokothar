@@ -101,7 +101,7 @@ kItemsData.armor = {
 	},
 	hornedhelm: {
 		displayName: $L("Horned helmet"),
-		type:"hornedhelm", category:"armor", slot:"head", easy:true, defense:1, flexibility:1, dexpenalty:0, weight:8, value:10,/*gp*/
+		type:"hornedhelm", category:"armor", slot:"head", easy:true, defense:2, flexibility:1, dexpenalty:0, weight:8, value:10,/*gp*/
 		img: "tiles/player/head/horned.gif",
 		description: $L("A helmet with large horns attached.")
 	}

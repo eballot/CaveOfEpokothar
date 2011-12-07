@@ -114,6 +114,9 @@ ItemModel.prototype.getSkillRequired = function(ranged) {
 	// (or is ammo).
 	if (!ranged || this.template.ammo || this.template.category === "ammo") {
 		return this.template.skill;
+	// Special case thrown weapons: darts, spears and daggers/knives 
+	} else if (this.template.skill === "dart" || this.template.skill === "spear" || this.template.skill === "dagger"){
+		return this.template.skill;
 	} else {
 		return "thrown";
 	}

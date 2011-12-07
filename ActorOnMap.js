@@ -135,6 +135,12 @@ enyo.kind({
 		return this.monsterModel.int || 10;
 	},
 	
+	getSearchProbability: function() {
+		var total;
+		total = this.getIntelligence() * this.monsterModel.getSkillLevel("search", true);
+		return total / 25;
+	},
+	
 	performTurn: function(map) {
 		var player, position, firstAttack, meleeReach, rangeReach, hasLineOfSite, path,
 		distanceX, distanceY, absDistanceX, absDistanceY, moveX, moveY, pointA, pointB;
@@ -347,14 +353,14 @@ enyo.kind({
 				statusText = ActorOnMap.kAttackYouMissed.evaluate({name:defender.whatAreYou()});
 			} else {
 				statusText = $L("You dodged the attack");
-				defender.excerciseSkill("dodge");
+				defender.exerciseSkill("dodge");
 			}
 		} else if (tohit < defenses.dodge + defenses.block) {
 			if (this.isPlayer()) {
 				statusText = ActorOnMap.kAttackItBlocked.evaluate({name:defender.whatAreYou()});
 			} else {
 				statusText = $L("You block the attack");
-				defender.excerciseSkill("shield");
+				defender.exerciseSkill("shield");
 				defender.maybeIdentify("shield");
 			}
 		} else if (tohit < defenses.dodge + defenses.block + defenses.ac) {
@@ -362,7 +368,7 @@ enyo.kind({
 				statusText = ActorOnMap.kAttackItNotHurt.evaluate({name:defender.whatAreYou()});
 			} else {
 				statusText = $L("Your armor deflects the attack");
-				defender.excerciseSkill("armor");
+				defender.exerciseSkill("armor");
 				defender.maybeIdentify("armor");
 			}
 		} else {
@@ -383,7 +389,7 @@ enyo.kind({
 					statusText = ActorOnMap.kAttackYouHitIt.evaluate({name:defender.whatAreYou(), damage:damage});
 				}
 
-				this.excerciseSkill(weapon.getSkillRequired(range>0));
+				this.exerciseSkill(weapon.getSkillRequired(range>0));
 				this.maybeIdentify("weapon");
 				if (range > 0) {
 					this.maybeIdentify("quiver");
@@ -400,8 +406,8 @@ enyo.kind({
 		return success;
 	},
 	
-	excerciseSkill: function(skillName) {
-		if (this.monsterModel.excerciseSkill(skillName)) {
+	exerciseSkill: function(skillName) {
+		if (this.monsterModel.exerciseSkill(skillName)) {
 			this._statsChanged();
 		}
 	},

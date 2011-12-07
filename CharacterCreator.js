@@ -30,7 +30,7 @@ var kPlayerClasses = [{
 //			dagger: {lvl:1, xp:0},
 //			bow: {lvl:1, xp:0},
 //			dodge: {lvl:1, xp:0},
-//			sneakAttack: {lvl:1, xp:0}
+//			stealth: {lvl:1, xp:0}
 //		}
 //	}
 }];

@@ -436,7 +436,7 @@ MonsterModel.prototype.getSkillXpLevel = function(skillName) {
 	return xpPercent;
 };
 
-MonsterModel.prototype.excerciseSkill = function(skillName) {
+MonsterModel.prototype.exerciseSkill = function(skillName) {
 	var skillObj, skillIncreased = false;
 	if (Math.random() < 0.5) {
 		skillObj = this.skills[skillName];

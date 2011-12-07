@@ -262,7 +262,7 @@ enyo.kind({
 			}
 			
 			// Perform auto-search of adjacent tiles
-			map.searchNearby(position, 1);
+			map.searchNearby(this, 1);
 		}
 
 		this._finishMyTurn(MonsterModel.hunger.walkNormal);
@@ -378,7 +378,7 @@ enyo.kind({
 	},
 	
 	_statsChanged: function() {
-		var i, content = [], text, hp, damageTaken, defenses, weapon, hpColor, knownSkills, skill, ammoType, ammoItem;
+		var i, content = [], text, hp, damageTaken, defenses, weapon, hpColor, knownSkills, skill, skillLevel, ammoType, ammoItem;
 		hp = this.monsterModel.hp;
 		damageTaken = this.monsterModel.getDamageTaken();
 		defenses = this.getDefenses();
@@ -411,7 +411,10 @@ enyo.kind({
 			content.push("Known Skills");
 			for (i = 0; i < knownSkills.length; i++) {
 				skill = knownSkills[i];
-				content.push("<li>" + skill + ": " + this.monsterModel.getSkillLevel(skill, false) + " (" + this.monsterModel.getSkillXpLevel(skill) + "%)");
+				skillLevel = this.monsterModel.getSkillLevel(skill, false);
+				if (skillLevel > 0) {
+					content.push("<li>" + kSkills.getDisplayname(skill) + ": " + skillLevel + " (" + this.monsterModel.getSkillXpLevel(skill) + "%)");
+				}
 			}
 		}
 		

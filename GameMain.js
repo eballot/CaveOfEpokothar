@@ -213,7 +213,7 @@ enyo.kind({
 	},
 	
 	searchNearby: function(inSender) {
-		this.$.map.searchNearby(this.$.me.getPosition(), 2);
+		this.$.map.searchNearby(this.$.me, 2);
 		this.$.me.rest(this.turnCount);
 	},
 	

@@ -12,7 +12,7 @@ var MapTile = {
 	},
 	hiddenDoor: {
 		kind: "doorHidden",
-		obstructed: false, //TODO: change to true
+		obstructed: true,
 		hidden: true
 	},
 	floor: {
@@ -542,8 +542,11 @@ enyo.kind({
 		return this.items[this._itemsKey(position)];
 	},
 	
-	searchNearby: function(center, distance) {
-		var x, y, xExtent, yExtent, tile;
+	searchNearby: function(actor, distance) {
+		var center, probability, x, y, xExtent, yExtent, tile;
+		center = actor.getPosition();
+		probability = actor.getSearchProbability();
+
 		x = center.x - distance;
 		xExtent = center.x + distance + 1;
 		yExtent = center.y + distance + 1;
@@ -552,9 +555,11 @@ enyo.kind({
 			y = center.y - distance;
 			while(y < yExtent) {
 				tile = this.map.tiles[x][y];
-				if (tile && tile.base.hidden && Math.random() < 0.5) {
+				if (tile && tile.base.hidden && Math.random() < probability) {
+					actor.exerciseSkill("search");
 					if (tile.base.kind === MapTile.hiddenDoor.kind) {
 						tile.base = MapTile.closedDoor;
+						this._renderMap(x, y, x+1, y+1, true);
 					} else {
 						//TODO: search for nearby traps
 					}
