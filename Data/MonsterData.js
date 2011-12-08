@@ -32,6 +32,12 @@ var kMonsterData = {
 		inventory:[{type:"shortsword", category:"weapons", extras:{equipped:true}}],
 		img:"tiles/dc-mon0/goblin0.gif", corpse:"humanoid", corpseImg:"deadGoblin"
 	},
+	halfling:{
+		monsterName:$L("Halfling"), xp:2, hpMin:2, hpRnd:5, defenses:{dodge:13, block:0, ac:8}, dex:13, hands:2, showEquippedImg:true,
+		inventory:[{type:"dagger", category:"weapons", extras:{equipped:true}}],
+		img:"tiles/player/base/halfling_m.gif", corpse:"humanoid", corpseImg:"deadHumanoidFlesh",
+		defaultEquipped:{legs:new ItemModel("armor", "pantsbrown")}
+	},
 	human:{
 		monsterName:$L("Human"), xp:2, hpMin:2, hpRnd:6, defenses:{dodge:12, block:0, ac:8}, dex:12, hands:2, showEquippedImg:true,
 		inventory:[{type:"shortsword", category:"weapons", extras:{equipped:true}}],

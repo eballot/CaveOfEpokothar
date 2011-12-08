@@ -44,19 +44,33 @@ kItemsData.weapons = {
 	},
 	
 	// Ranged weapons
+	crossbow: {
+		displayName: $L("Crossbow"),
+		type: "crossbow", category:"weapons", slot:"weapon", skill: "crossbow", ammo: true, attackActions: "pierce", weight:15, value:75,/*gp*/
+		hands:2, accuracy:10, damageMin:1, damageRnd:9, meleeReach:-1, rangeReach:20, rangeAccuracy:12,
+		img: "tiles/player/hand1/crossbow2.gif",
+		description: $L("A crossbow for shooting arrows.")
+	},
 	longbow: {
 		displayName: $L("Longbow"),
-		type: "longbow", category:"weapons", slot:"weapon", skill: "bow", ammo: "arrow", attackActions: "pierce", weight:3, value:75,/*gp*/
+		type: "longbow", category:"weapons", slot:"weapon", skill: "bow", ammo: true, attackActions: "pierce", weight:3, value:75,/*gp*/
 		hands:2, accuracy:10, damageMin:1, damageRnd:7, meleeReach:-1, rangeReach:20, rangeAccuracy:10,
 		img: "tiles/player/hand1/bow3.gif",
 		description: $L("A bow for shooting arrows.")
 	},
 	shortbow: {
 		displayName: $L("Shortbow"),
-		type: "shortbow", category:"weapons", slot:"weapon", skill: "bow", ammo: "arrow", attackActions: "pierce", weight:2, value:30,/*gp*/
+		type: "shortbow", category:"weapons", slot:"weapon", skill: "bow", ammo: true, attackActions: "pierce", weight:2, value:30,/*gp*/
 		hands:2, accuracy:10, damageMin:1, damageRnd:5, meleeReach:-1, rangeReach:16, rangeAccuracy:8,
 		img: "tiles/player/hand1/bow_short.gif",
 		description: $L("A bow for shooting arrows.")
+	},
+	sling: {
+		displayName: $L("Sling"),
+		type: "sling", category:"weapons", slot:"weapon", skill: "sling", ammo: true, attackActions: "bludgeon", weight:1, value:1,/*gp*/
+		hands:1, accuracy:9, damageMin:1, damageRnd:3, meleeReach:-1, rangeReach:16, rangeAccuracy:7,
+		img: "tiles/player/hand1/sling.gif",
+		description: $L("A sling can fling small stones fast enough to kill.")
 	}
 };
 

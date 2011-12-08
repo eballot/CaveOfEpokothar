@@ -334,7 +334,7 @@ enyo.kind({
 	},
 	// range=0 means melee attack
 	useAttack: function(weapon, defender, range, extraBonus) {
-		var success=false, death=false, statusText="", tohit, defenses, damage, newLevel;
+		var success=false, death=false, statusText="", tohit, defenses, damage, newLevel, ammoItem;
 
 		tohit = (20 * Math.random()) + (weapon.getAccuracy(range) * this.monsterModel.getSkillLevel(weapon, true, range>0)) + extraBonus;
 		defenses = defender.monsterModel.getDefense();
@@ -365,6 +365,13 @@ enyo.kind({
 		} else {
 			success = true;
 			damage = weapon.calcDamage(this.monsterModel.getSkillLevel(weapon, false, range>0));
+			if (range > 0) {
+				// Include the ammunition's damage, if any
+				ammoItem = this.monsterModel.getEquippedItem("quiver");
+				if (ammoItem) {
+					damage += ammoItem.calcDamage(0);
+				}
+			}
 			death = defender.takeDamage(damage, this);
 			
 			if (this.isPlayer()) {

@@ -51,10 +51,15 @@ var MapTileIcons = {
 	shortsword: { img: "items", offsetX: 512, offsetY: 32 },
 	spear:      { img: "items", offsetX: 192, offsetY: 96 },
 
+	crossbow:   { img: "items", offsetX: 0, offsetY: 96 },
 	longbow:    { img: "items", offsetX: 608, offsetY: 64 },
 	shortbow:   { img: "items", offsetX: 608, offsetY: 64 },
+	sling:      { img: "items", offsetX: 576, offsetY: 64 },
 
-	arrow:       { img: "items", offsetX: 384, offsetY: 96 },
+	arrow:      { img: "items", offsetX: 384, offsetY: 96 },
+	crossbowbolt:{img: "items", offsetX: 32, offsetY: 128 },
+	slingstone: { img: "items", offsetX: 352, offsetY: 96 },
+	slingbullet:{ img: "items", offsetX: 320, offsetY: 160 },
 
 	//food
 	meat:       { img: "items", offsetX: 192, offsetY: 288 },

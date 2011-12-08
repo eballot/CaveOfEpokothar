@@ -19,8 +19,6 @@ TODO: deal with monsters that have inventory.
 Skills - as skill increases, get closer to double the item's capability
 
 
-// autosave when app is closed
-
 // Better AI - hear/see player
 
 // display mini-map

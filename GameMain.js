@@ -95,8 +95,8 @@ enyo.kind({
 					onclick: "useStairs"
 				}, {
 					kind: enyo.ToolButton,
-					caption: $L("Save"),
-					onclick: "saveGame"
+					caption: $L("Restart"),
+					onclick: "playerDeath"
 				}]
 			}]
 		}]
@@ -139,12 +139,14 @@ enyo.kind({
 		}]
 	}, {
 		kind: enyo.ApplicationEvents,
-		onKeyup: "_handleKeypress"
+		onKeyup: "_handleKeypress",
+		onUnload: "_handleUnload"
 	}],
 	
 	create: function() {
 		this.inherited(arguments);
 		
+		window.onunload = this._handleUnload.bind(this);
 		this.statusText = [];
 		this.killList = {};
 		this._showStatusText(this, $L("Welcome adventurer!"));		
@@ -250,11 +252,16 @@ enyo.kind({
 			deadThings.push(monsterName + ": " + this.killList[monsterName]);
 		}
 		obj.killList = deadThings.sort().join("<br/>");
+		if (!obj.killList) {
+			obj.killList = $L("Nothing");
+		}
 		
 		gameOverview = (new enyo.g11n.Template($L("#{reason}<br/>You explored #{maxLevel} levels in #{turns} turns.<br/>You killed the following:<br/>#{killList}"))).evaluate(obj);
 		
 		this.$.gameOverDialog.openAtCenter();
 		this.$.deathOverview.setContent(gameOverview);
+		
+		this.turnCount = 0;
 	},
 	
 	gameLoop: function(inSender, inHungerString) {
@@ -347,6 +354,12 @@ enyo.kind({
 			}
 			
 			this._updateToobarButtons();
+		}
+	},
+
+	_handleUnload: function() {
+		if (this.turnCount > 0) {
+			this.saveGame();
 		}
 	},
 

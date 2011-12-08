@@ -155,7 +155,7 @@ enyo.kind({
 							];
 							
 							if (rangeReach > 0 && absDistanceX <= rangeReach && absDistanceY <= rangeReach && map.hasLineOfSiteToPlayer(something)) {
-								if (firstAttack.getAmmoType()) {
+								if (firstAttack.requiresAmmunition()) {
 									text = PlayerOnMap.kRangedAttackShoot.evaluate({weaponName:firstAttack.getDisplayName(true)});
 								} else {
 									text = PlayerOnMap.kRangedAttackThrow.evaluate({weaponName:firstAttack.getDisplayName(true)});
@@ -269,14 +269,17 @@ enyo.kind({
 	},
 
 	rangedAttack: function(weapon, target, map, distance) {
-		var ammoType, ammoItem, remainingUses = 1;
-		ammoType = weapon.getAmmoType();
-		if (ammoType) {
+		var needsAmmo, ammoItem, remainingUses = 1;
+		needsAmmo = weapon.requiresAmmunition();
+		if (needsAmmo) {
 			ammoItem = this.monsterModel.getEquippedItem("quiver");
 			if (!ammoItem) {
 				remainingUses = 0;
-				this.doStatusText($L('<span style="color:red">You need to select ammunition</span>'));
-			} else if(ammoItem.getType() === ammoType) {
+				this.doStatusText($L('<span style="color:red">You need to select ammunition.</span>'));
+			} else if (ammoItem.getSkillRequired(true) !== weapon.getSkillRequired(true)) {
+				this.doStatusText($L('<span style="color:red">Wrong type of ammunition selected.</span>'));
+				remainingUses = 0;
+			} else {
 				remainingUses = ammoItem.getRemainingUses();
 			}
 		}
@@ -290,7 +293,7 @@ enyo.kind({
 				//statusText = (new enyo.g11n.Template($L('<span style="color:red">You used the last #{name} in your quiver.</span>'))).evaluate({name:ammoItem.getDisplayName()});
 				//this.doStatusText(statusText);
 				this.monsterModel.removeItemFromInventory(ammoItem);
-				if (!ammoType) {
+				if (!needsAmmo) {
 					// Thrown weapon so maybe no weapon is equipped
 					this.showEquippedItems();
 				}
@@ -382,7 +385,7 @@ enyo.kind({
 	},
 	
 	_statsChanged: function() {
-		var i, content = [], text, hp, damageTaken, defenses, weapon, hpColor, knownSkills, skill, skillLevel, ammoType, ammoItem;
+		var i, content = [], text, hp, damageTaken, defenses, weapon, hpColor, knownSkills, skill, skillLevel, ammoItem;
 		hp = this.monsterModel.hp;
 		damageTaken = this.monsterModel.getDamageTaken();
 		defenses = this.getDefenses();
@@ -397,10 +400,9 @@ enyo.kind({
 		content.push("Level: " + this.monsterModel.getLevel() + " (" + this.monsterModel.getExpToNextLevel() + ")");
 		if (weapon) {
 			text = "Wielding: " + weapon.getDisplayName(true);
-			ammoType = weapon.getAmmoType();
-			if (ammoType) {
+			if (weapon.requiresAmmunition()) {
 				ammoItem = this.monsterModel.getEquippedItem("quiver");
-				if (ammoItem && ammoItem.getType() === ammoType) {
+				if (ammoItem && ammoItem.getSkillRequired(true) === weapon.getSkillRequired(true)) {
 					text += " (" + ammoItem.getRemainingUses() + ")";
 				} else {
 					text += ' (<span style="color:red">empty</span>)';

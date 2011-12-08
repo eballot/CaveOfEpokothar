@@ -8,8 +8,11 @@ var kPlayerClasses = [{
 	className: $L("dwarven warrior"), description: $L("A dwarven warrior, well versed with axe and armor."),
 	race: "dwarf", focus: "warrior"
 }, {
-	className: $L("ranger"), description: $L("A ranger who is skilled with a bow and a sword, but not heavy armor"),
+	className: $L("human ranger"), description: $L("A human ranger who is skilled with a bow and a sword, but not heavy armor"),
 	race: "human", focus: "ranger"
+}, {
+	className: $L("halfling ranger"), description: $L("A halfling ranger. Slight of stature, but inately skilled at using slings and daggers"),
+	race: "halfling", focus: "ranger"
 //}, {
 //	className: $L("rogue"), description: $L("A rogue who prefers to sneak up and ambush foes or kill them from a distance"),
 //	player: {
@@ -161,22 +164,23 @@ enyo.kind({
 	},
 	
 	ranger: function(player) {
-		if (player.race === "elf") {
-			player.dex = 18;
+		if (player.race === "halfling") {
+			player.dex = 15;
 			player.str = 8;
-			player.int = 5;
+			player.int = 7;
 			player.inventory = [
-				new ItemModel("weapons", "shortsword"),
-				new ItemModel("weapons", "shortbow", {equipped:true}),
-				new ItemModel("ammo", "arrow", {count:20, equipped:true}),
+				new ItemModel("weapons", "dagger"),
+				new ItemModel("weapons", "sling", {equipped:true}),
+				new ItemModel("ammo", "slingbullet", {count:12, equipped:true}),
 				new ItemModel("armor", "leather", {equipped:true}),
+				new ItemModel("armor", "smallshield", {equipped:true}),
 				new ItemModel("armor", "pantsbrown", {equipped:true}),
 				new ItemModel("food", "bread")
 			];
 			player.skills = {
-				sword: {lvl:1, xp:0},
-				bow: {lvl:1, xp:0},
+				sling: {lvl:1, xp:0},
 				dagger: {lvl:1, xp:0},
+				shield: {lvl:1, xp:0},
 				dodge: {lvl:1, xp:0}
 			};
 		} else {

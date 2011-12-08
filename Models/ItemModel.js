@@ -134,7 +134,7 @@ ItemModel.prototype.getHandsRequired = function() {
 	}
 };
 
-ItemModel.prototype.getAmmoType = function() {
+ItemModel.prototype.requiresAmmunition = function() {
 	return this.template.ammo;
 };
 

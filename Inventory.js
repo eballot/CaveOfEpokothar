@@ -300,14 +300,14 @@ enyo.kind({
 			index = this.$.inventoryActionsPopup.inventoryItemIndex;
 			if (index < this.inventory.length) {
 				switch (inData.action) {
-				case "drop":
+				case Inventory.kItemOptions.kDrop.action:
 					this.player.dropItem(this.map, index);
 					// redraw both lists
 					this._updateInventoryList();
 					this._updateGroundList();
 					break;
 					
-				case "eat":
+				case Inventory.kItemOptions.kEat.action:
 					result = this.player.eatItem(index);
 					if (result) {
 						this.$.notHungryDialog.openAtCenter();
@@ -316,17 +316,17 @@ enyo.kind({
 					this._updateInventoryList();
 					break;
 					
-				case "equip":
+				case Inventory.kItemOptions.kEquip.action:
 					this.player.equipItem(index);
 					this._updateInventoryList();
 					break;
 					
-				case "unequip":
+				case Inventory.kItemOptions.kUnequip.action:
 					this.player.unequipItem(index);
 					this._updateInventoryList();
 					break;
 					
-				case "inspect":
+				case Inventory.kItemOptions.kInspect.action:
 					item = this.inventory[index];
 					item.identifyMagic(this.player.getIntelligence(), false);
 					this.$.itemDescription.setContent(item.getDescription());
