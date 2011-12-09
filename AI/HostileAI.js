@@ -5,7 +5,7 @@ var HostileAI = function(actor) {
 };
 
 HostileAI.prototype.performTurn = function(map) {
-	var i, length, acted, player, position, inventory, attacks, equippedWeapon, quiver, meleeReach, rangeReach, hasLineOfSite, path,
+	var i, length, acted, player, position, inventory, attacks, equippedWeapon, hasLineOfSite, path,
 	distanceX, distanceY, absDistanceX, absDistanceY, moveX, moveY, pointA, pointB;
 
 	if (!this.awareOfPlayer) {
@@ -83,7 +83,7 @@ HostileAI.prototype.performTurn = function(map) {
 };
 
 HostileAI.prototype._attackWith = function(weapon, map, absDistanceX, absDistanceY, hasLineOfSite) {
-	var attacked = false, meleeReach, rangeReach, hasLineOfSite, path, distanceX, distanceY;
+	var attacked = false, meleeReach, rangeReach;
 
 	meleeReach = weapon.getMeleeReach();
 	rangeReach = weapon.getRangedReach();

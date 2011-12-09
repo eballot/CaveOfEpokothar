@@ -146,7 +146,7 @@ enyo.kind({
 	create: function() {
 		this.inherited(arguments);
 		
-		window.onunload = this._handleUnload.bind(this);
+		window.document.addEventListener("unload", this._handleUnload.bind(this));
 		this.statusText = [];
 		this.killList = {};
 		this._showStatusText(this, $L("Welcome adventurer!"));		

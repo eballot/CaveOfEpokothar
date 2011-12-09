@@ -131,7 +131,7 @@ enyo.kind({
 				new ItemModel("weapons", "handaxe", {equipped:true}),
 				new ItemModel("weapons", "handaxe"),
 				new ItemModel("armor", "studdedleather", {equipped:true}),
-				new ItemModel("armor", "leathercap", {equipped:true}),
+				new ItemModel("armor", "hornedhelm", {equipped:true}),
 				new ItemModel("armor", "pantsbrown", {equipped:true}),
 				new ItemModel("food", "bread"),
 			];
@@ -172,7 +172,6 @@ enyo.kind({
 				new ItemModel("weapons", "dagger"),
 				new ItemModel("weapons", "sling", {equipped:true}),
 				new ItemModel("ammo", "slingbullet", {count:12, equipped:true}),
-				new ItemModel("armor", "leather", {equipped:true}),
 				new ItemModel("armor", "smallshield", {equipped:true}),
 				new ItemModel("armor", "pantsbrown", {equipped:true}),
 				new ItemModel("food", "bread")

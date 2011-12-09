@@ -18,6 +18,12 @@ kItemsData.armor = {
 		img: "tiles/player/leg/pants_brown.gif",
 		description: $L("Just your standard durable pants.")
 	},
+	shirtvest: {
+		displayName: $L("Shirt"),
+		type:"shirtvest", category:"armor", slot:"torso", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:0, value:1,/*gp*/
+		img: "tiles/player/body/shirt_vest.gif",
+		description: $L("A shirt and a sporty vest.")
+	},
 		
 	/** Body armor **/
 	leather: {

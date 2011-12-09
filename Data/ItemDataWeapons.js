@@ -68,7 +68,7 @@ kItemsData.weapons = {
 	sling: {
 		displayName: $L("Sling"),
 		type: "sling", category:"weapons", slot:"weapon", skill: "sling", ammo: true, attackActions: "bludgeon", weight:1, value:1,/*gp*/
-		hands:1, accuracy:9, damageMin:1, damageRnd:3, meleeReach:-1, rangeReach:16, rangeAccuracy:7,
+		hands:1, accuracy:10, damageMin:1, damageRnd:3, meleeReach:-1, rangeReach:16, rangeAccuracy:7,
 		img: "tiles/player/hand1/sling.gif",
 		description: $L("A sling can fling small stones fast enough to kill.")
 	}

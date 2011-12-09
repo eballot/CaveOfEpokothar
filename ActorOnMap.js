@@ -139,7 +139,7 @@ enyo.kind({
 	getSearchProbability: function() {
 		var total;
 		total = this.getIntelligence() * this.monsterModel.getSkillLevel("search", true);
-		return total / 25;
+		return total / 20;
 	},
 	
 	performTurn: function(map) {

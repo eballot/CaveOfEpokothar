@@ -18,6 +18,9 @@ TODO: deal with monsters that have inventory.
 
 Skills - as skill increases, get closer to double the item's capability
 
+// Rendering performance on tablets 
+
+// Implement Epokothar's level
 
 // Better AI - hear/see player
 
@@ -32,8 +35,6 @@ Skills - as skill increases, get closer to double the item's capability
 // starving hunger level reduces skills
 
 // Add hidden traps
-
-// Rendering performance on tablets 
 
 // Show hints/tips like Stone Soup Crawl
 

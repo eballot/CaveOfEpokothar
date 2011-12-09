@@ -36,7 +36,7 @@ var kMonsterData = {
 		monsterName:$L("Halfling"), xp:2, hpMin:2, hpRnd:5, defenses:{dodge:13, block:0, ac:8}, dex:13, hands:2, showEquippedImg:true,
 		inventory:[{type:"dagger", category:"weapons"}, {type:"sling", category:"weapons", extras:{equipped:true}}, {type:"slingstone", category:"ammo", extras:{equipped:true, count:10}}],
 		img:"tiles/player/base/halfling_m.gif", corpse:"humanoid", corpseImg:"deadHumanoidFlesh",
-		defaultEquipped:{legs:new ItemModel("armor", "pantsbrown")}
+		defaultEquipped:{legs:new ItemModel("armor", "pantsbrown"), torso:new ItemModel("armor", "shirtvest")}
 	},
 	human:{
 		monsterName:$L("Human"), xp:2, hpMin:2, hpRnd:6, defenses:{dodge:12, block:0, ac:8}, dex:12, hands:2, showEquippedImg:true,

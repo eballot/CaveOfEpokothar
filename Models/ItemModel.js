@@ -258,7 +258,8 @@ ItemModel.prototype.getRangedReach = function() {
 ItemModel.prototype.getAccuracy = function(range) {
 	var accuracy;
 	if (range > 1) {
-		accuracy = this.template.accuracy - 2 * Math.floor(range / this.template.rangeAccuracy);
+		// Using math.ceil to enforce less accuracy on all ranged weapon use (thrown and projectile)
+		accuracy = this.template.accuracy - 2 * Math.ceil(range / this.template.rangeAccuracy);
 	} else {
 		accuracy = this.template.accuracy;
 	}

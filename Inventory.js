@@ -233,7 +233,7 @@ enyo.kind({
 				
 			case "ammo":
 				if (inventoryItem.isEquipped()) {
-					options = [ Inventory.kItemOptions.kDrop, Inventory.kItemOptions.kInspect ];
+					options = [ Inventory.kItemOptions.kDrop, Inventory.kItemOptions.kInspect, Inventory.kItemOptions.kUnequip ];
 				} else {
 					options = [ Inventory.kItemOptions.kDrop, Inventory.kItemOptions.kInspect, Inventory.kItemOptions.kSelect ];
 				}
