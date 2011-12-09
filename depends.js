@@ -20,6 +20,9 @@ enyo.depends(
 
 	"Data/MonsterData.js",
 
+	"AI/NeutralAI.js",
+	"AI/HostileAI.js",
+	
 	"AboutCore.js",
 	"AppMain.js",
 	"AboutPopup.js",

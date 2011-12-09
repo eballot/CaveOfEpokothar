@@ -55,12 +55,13 @@ enyo.kind({
 		var m, faceGraphic;
 		this.inherited(arguments);
 
+		this.__defineGetter__("attitude", this.getAttitude);
+		this.__defineSetter__("attitude", this.setAttitude);
 		if (this.monsterModel) {
 			m = this.monsterModel;
 			this.$.avatar.setSrc(m.getGraphic());
 			this.showEquippedItems();
 			this.attitude = m.getAttitude();
-			this.addClass(this.attitude);
 			if (this.monsterModel.template.wpnTopOffset) {
 				this.$.weapon.applyStyle("top", this.monsterModel.template.wpnTopOffset);
 			}
@@ -142,82 +143,8 @@ enyo.kind({
 	},
 	
 	performTurn: function(map) {
-		var player, position, firstAttack, meleeReach, rangeReach, hasLineOfSite, path,
-		distanceX, distanceY, absDistanceX, absDistanceY, moveX, moveY, pointA, pointB;
-		switch (this.attitude) {
-		case "friendly":
-			//TODO: not implemented for version 1
-			break;
-
-		case "neutral":
-			// Move randomly
-			map.moveBy(this, Math.round(Math.random()*2)-1, Math.round(Math.random()*2)-1);
-			this.setShowing(map.hasLineOfSiteToPlayer(this));
-			break;
-
-		case "hostile":
-			player = map.getPlayer().getPosition();
-			position = this.getPosition();
-			firstAttack = this.monsterModel.getEquippedItem("weapon");
-			if (!firstAttack) {
-				firstAttack = this.monsterModel.getIntrinsicAttacks()[0];
-			}
-			if (firstAttack) {
-				meleeReach = firstAttack.getMeleeReach();
-				rangeReach = firstAttack.getRangedReach();
-			} else {
-				meleeReach = -1;
-				rangeReach = -1;
-			}
-			distanceX = player.x - position.x;
-			distanceY = player.y - position.y;
-			absDistanceX = Math.abs(distanceX);
-			absDistanceY = Math.abs(distanceY);
-			
-			hasLineOfSite = map.hasLineOfSiteToPlayer(this);
-			//TODO: handle spells and fleeing. Better AI.
-			if (meleeReach && absDistanceX <= meleeReach && absDistanceY <= meleeReach) {
-				// Attack if close enough
-				this.attack(map.getPlayer());
-			} else if (rangeReach && absDistanceX <= rangeReach && absDistanceY <= rangeReach && 
-				hasLineOfSite && this._wantsToShoot(firstAttack)) {
-				// TODO: implement attack if close enough
-				this.log("Ranged ATTACK")
-			} else if (this.pickUpItem(map)) {
-				// just picket up an item
-			} else if (absDistanceX <= 10 && absDistanceY <= 10) {
-				// Move towards player
-				if (hasLineOfSite) {
-					if (distanceX < 0) {
-						moveX = -1;
-					} else if (distanceX > 0) {
-						moveX = 1;
-					} else {
-						moveX = 0;
-					}
-
-					if (distanceY < 0) {
-						moveY = -1;
-					} else if (distanceY > 0) {
-						moveY = 1;
-					} else {
-						moveY = 0;
-					}
-					map.moveBy(this, moveX, moveY);
-				} else {
-					path = PathFinder.find(map, position, player);
-					if (path) {
-						pointA = path.pop();
-						pointB = path.pop();
-						moveX = pointB.x - pointA.x;
-						moveY = pointB.y - pointA.y;
-						map.moveBy(this, moveX, moveY);
-					}
-				}
-			}
-			this.setShowing(map.hasLineOfSiteToPlayer(this));
-			break;
-		}
+		this.ai.performTurn(map);
+		this.setShowing(map.hasLineOfSiteToPlayer(this));
 	},
 	
 	attack: function(defender) {
@@ -231,6 +158,43 @@ enyo.kind({
 		}.bind(this));
 	},
 
+	rangedAttack: function(weapon, target, map) {
+		var needsAmmo, ammoItem, remainingUses = 1;
+		needsAmmo = weapon.requiresAmmunition();
+		if (needsAmmo) {
+			ammoItem = this.monsterModel.getEquippedItem("quiver");
+			if (!ammoItem) {
+				remainingUses = 0;
+				this.doStatusText($L('<span style="color:red">You need to select ammunition.</span>'));
+			} else if (ammoItem.getSkillRequired(true) !== weapon.getSkillRequired(true)) {
+				this.doStatusText($L('<span style="color:red">Wrong type of ammunition selected.</span>'));
+				remainingUses = 0;
+			} else {
+				remainingUses = ammoItem.getRemainingUses();
+			}
+		}
+		
+		if (remainingUses) {
+			if (!ammoItem) {
+				ammoItem = weapon;
+			}
+			
+			if (ammoItem.useItOnce() === 0) {
+				//statusText = (new enyo.g11n.Template($L('<span style="color:red">You used the last #{name} in your quiver.</span>'))).evaluate({name:ammoItem.getDisplayName()});
+				//this.doStatusText(statusText);
+				this.monsterModel.removeItemFromInventory(ammoItem);
+				if (!needsAmmo) {
+					// Thrown weapon so maybe no weapon is equipped
+					this.showEquippedItems();
+				}
+			}
+
+			map.shootMissileOnPath(this, target, weapon, ammoItem);
+
+			this._statsChanged();
+		}
+	},
+	
 	takeDamage: function(damage, attacker) {
 		var died;
 		if (this.damageAnimationTimer) {
@@ -243,11 +207,9 @@ enyo.kind({
 			this.doDied();
 		} else {
 			// Make sure the monster is hostile since it was just attacked
+
 			if (this.attitude !== "hostile") {
-				this.removeClass(this.attitude);
-				this.monsterModel.setAttitude("hostile");				
 				this.attitude = "hostile";
-				this.addClass("hostile");
 			}
 
 			this.$.status.setContent(damage);
@@ -312,6 +274,58 @@ enyo.kind({
 		this.monsterModel.addItem(item);
 		this._statsChanged();
 	},
+	
+	equipBestWeapon: function(absDistanceX, absDistanceY, hasLineOfSite) {
+		var equippedWeapon, ammoItem, meleeReach, inventory, i, length, item, skill;
+
+		equippedWeapon = this.monsterModel.getEquippedItem("weapon");
+		if (equippedWeapon) {
+			meleeReach = equippedWeapon.getMeleeReach();
+			// Be somewhat intelligent and switch to a melee weapon if in melee range or
+			// ranged weapon if outside of melee range
+			if (meleeReach === -1) {
+				// Using a ranged weapon. Switch to a melee weapon if there's no more ammo or enemy is in the adjacent tile.
+				// TODO: add logic to use non-ammo range weapons (darts and such)
+				ammoItem = this.monsterModel.getEquippedItem("quiver");
+				if (!ammoItem || ammoItem.getRemainingUses() === 0 || (absDistanceX < 2 && absDistanceY < 2)) {
+					// Select most powerful melee weapon
+					inventory = this.getInventoryList();
+					length = inventory.length;
+					for (i = 0; i < length; i++) {
+						item = inventory[i];
+						if (item.getMeleeReach() > 0) {
+							//TODO: for now, just selecting the first melee weapon. Need to improve this once actors start picking up weapons 
+							this.equipItem(i);
+							equippedWeapon = item;
+							break;
+						}
+					}
+				}
+			} else {
+				// Using a melee weapon. Switch to a ranged weapon if the enemy is distant and have ammo.
+				if (absDistanceX > meleeReach || absDistanceY > meleeReach) {
+					ammoItem = this.monsterModel.getEquippedItem("quiver");
+					if (ammoItem && ammoItem.getRemainingUses() > 0) {
+						// Select ranged weapon that can fire the ammo
+						skill = ammoItem.getSkillRequired(true);
+						inventory = this.getInventoryList();
+						length = inventory.length;
+						for (i = 0; i < length; i++) {
+							item = inventory[i];
+							if (skill === item.getSkillRequired(true)) {
+								//TODO: for now, just selecting the first appropriate ranged weapon. Need to improve this once actors start picking up weapons 
+								this.equipItem(i);
+								equippedWeapon = item;
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		return equippedWeapon;
+	},
+
 	
 	getInventoryList: function() {
 		return this.monsterModel.inventory || [];
@@ -418,6 +432,40 @@ enyo.kind({
 			this.doStatusText(statusText);
 		}
 	},
+
+	getAttitude: function() {
+		return this._attitude;
+	},
+
+	setAttitude: function(attitude) {
+		if (this._attitude !== attitude) {
+			if (this._attitude) {
+				this.removeClass(this._attitude);
+			}
+			this.addClass(attitude);
+			this.monsterModel.setAttitude(attitude);
+			this._attitude = attitude;
+			
+			if (attitude === "neutral") {
+				this.ai = new NeutralAI(this);
+			} else {
+				this.ai = new HostileAI(this);
+			}
+		}
+	},
+
+	wantsToShoot: function(weapon) {
+		var ammoItem;
+		
+		// For now, wants to shoot until ammo is used up
+		if (weapon.requiresAmmunition()) {
+			ammoItem = this.monsterModel.getEquippedItem("quiver");
+			if (ammoItem) {
+				return (ammoItem.getRemainingUses() > 0);
+			}
+		}
+		return false;
+	},
 	
 	_levelUp: function() {
 		// base version of this function does nothing.
@@ -425,10 +473,5 @@ enyo.kind({
 	
 	_statsChanged: function() {
 		return ""; // base version of this function does nothing.
-	},
-	
-	_wantsToShoot: function(weapon) {
-		//TODO: implement this: check if weapon is sling or bow (and has ammo) or weapon is not the actor's last one.
-		return false;
 	}
 });

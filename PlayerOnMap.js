@@ -162,7 +162,7 @@ enyo.kind({
 								}
 								options.push({
 									caption:text,
-									action:this.rangedAttack.bind(this, firstAttack, something, map,
+									action:this._doRangedAttack.bind(this, firstAttack, something, map,
 											{range:Math.max(absDistanceX, absDistanceY), x:x, y:y})
 								});
 							}
@@ -268,44 +268,6 @@ enyo.kind({
 		this._finishMyTurn(MonsterModel.hunger.walkNormal);
 	},
 
-	rangedAttack: function(weapon, target, map, distance) {
-		var needsAmmo, ammoItem, remainingUses = 1;
-		needsAmmo = weapon.requiresAmmunition();
-		if (needsAmmo) {
-			ammoItem = this.monsterModel.getEquippedItem("quiver");
-			if (!ammoItem) {
-				remainingUses = 0;
-				this.doStatusText($L('<span style="color:red">You need to select ammunition.</span>'));
-			} else if (ammoItem.getSkillRequired(true) !== weapon.getSkillRequired(true)) {
-				this.doStatusText($L('<span style="color:red">Wrong type of ammunition selected.</span>'));
-				remainingUses = 0;
-			} else {
-				remainingUses = ammoItem.getRemainingUses();
-			}
-		}
-		
-		if (remainingUses) {
-			if (!ammoItem) {
-				ammoItem = weapon;
-			}
-			
-			if (ammoItem.useItOnce() === 0) {
-				//statusText = (new enyo.g11n.Template($L('<span style="color:red">You used the last #{name} in your quiver.</span>'))).evaluate({name:ammoItem.getDisplayName()});
-				//this.doStatusText(statusText);
-				this.monsterModel.removeItemFromInventory(ammoItem);
-				if (!needsAmmo) {
-					// Thrown weapon so maybe no weapon is equipped
-					this.showEquippedItems();
-				}
-			}
-
-			map.shootMissileOnPath(this, target, weapon, ammoItem);
-
-			this._statsChanged();
-		}
-		this._finishMyTurn(MonsterModel.hunger.fight);
-	},
-	
 	takeDamage: function(damage, attacker) {
 		var died;
 		if (this.damageAnimationTimer) {
@@ -348,7 +310,12 @@ enyo.kind({
 
 		return result;
 	},
-	
+
+	_doRangedAttack: function(weapon, target, map) {
+		this.rangedAttack(weapon, target, map);
+		this._finishMyTurn(MonsterModel.hunger.fight);
+	},
+		
 	_finishMyTurn: function(hungerChange) {
 		var hungerDescription = this.monsterModel.updateHunger(hungerChange);
 		if (hungerDescription) {

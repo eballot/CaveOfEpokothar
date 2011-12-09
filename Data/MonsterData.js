@@ -1,8 +1,8 @@
 
 var kMonstersAtLevel = [
 	/*1*/ ["cockroach", "dog", "mite", "rat", "skeleton", "spider", "worm"],
-	/*2*/ ["dog", "dwarf", "goblin", "human", "rat", "skeleton", "spider", "worm", "walkingmushroom"],
-	/*3*/ ["walkingmushroom", "dwarf", "goblin", "human"],
+	/*2*/ ["dog", "dwarf", "goblin", "halfling", "rat", "skeleton", "spider", "worm", "walkingmushroom"],
+	/*3*/ ["walkingmushroom", "dwarf", "goblin", "halfling", "human"],
 	/*4*/ ["walkingmushroom", "centaur"]
 ];
 
@@ -34,7 +34,7 @@ var kMonsterData = {
 	},
 	halfling:{
 		monsterName:$L("Halfling"), xp:2, hpMin:2, hpRnd:5, defenses:{dodge:13, block:0, ac:8}, dex:13, hands:2, showEquippedImg:true,
-		inventory:[{type:"dagger", category:"weapons", extras:{equipped:true}}],
+		inventory:[{type:"dagger", category:"weapons"}, {type:"sling", category:"weapons", extras:{equipped:true}}, {type:"slingstone", category:"ammo", extras:{equipped:true, count:10}}],
 		img:"tiles/player/base/halfling_m.gif", corpse:"humanoid", corpseImg:"deadHumanoidFlesh",
 		defaultEquipped:{legs:new ItemModel("armor", "pantsbrown")}
 	},

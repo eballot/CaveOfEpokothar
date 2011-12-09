@@ -605,7 +605,7 @@ enyo.kind({
 			if (ix > 0 && ix < MapLevel.kMapWidth && iy > 0 && iy < MapLevel.kMapHeight) {
 				item = this.whatIsAt(ix, iy);
 				if (item) {
-					if (item.kind === "ActorOnMap") {
+					if (item.kind === "ActorOnMap" || item.kind === "PlayerOnMap") {
 						hit = shooter.useAttack(weapon, target, range, extraBonus);
 					} else if (item.obstructed) {
 						// The missile passed thru an obstructed tile. Check the adjoining tile on the side that the missile is closest 
