@@ -27,6 +27,14 @@ enyo.kind({
 		kind: enyo.Image,
 		className: "wearables"
 	}, {
+		name: "shoes",
+		kind: enyo.Image,
+		className: "wearables"
+	}, {
+		name: "glove",
+		kind: enyo.Image,
+		className: "wearables"
+	}, {
 		name: "legs",
 		kind: enyo.Image,
 		className: "wearables"
@@ -117,7 +125,7 @@ enyo.kind({
 	showEquippedItems: function() {
 		if (this.monsterModel.showEquippedItems()) {
 			var i, arrayLen, slot, item, slotsArray;
-			slotsArray = [ "weapon", "shield", "head", "torso", "legs" ];
+			slotsArray = [ "weapon", "shield", "head", "torso", "legs", "shoes", "glove" ];
 			
 			arrayLen = slotsArray.length;
 			for (i = 0; i < arrayLen; i++) {

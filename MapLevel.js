@@ -1,36 +1,6 @@
 /*jslint white: false, undef: true, eqeqeq: true */ 
 /*global window, enyo, $L, JSON */
 
-var MapTile = {
-	closedDoor: {
-		kind: "doorClosed",
-		obstructed: true
-	},
-	openDoor: {
-		kind: "doorOpen"
-		//obstructed: false
-	},
-	hiddenDoor: {
-		kind: "doorHidden",
-		obstructed: true,
-		hidden: true
-	},
-	floor: {
-		kind: "floor"
-			//obstructed: false
-	},
-	stairsDown: {
-		kind: "stairsDown"
-	},
-	stairsUp: {
-		kind: "stairsUp"
-	},
-	wall: {
-		kind: "wall",
-		obstructed: true
-	}
-};
-
 enyo.kind({
 	name: "MapLevel",
 	kind: enyo.Control,
@@ -43,6 +13,10 @@ enyo.kind({
 		kind: enyo.Control,
 		style: "background:url(tiles/floor_tile.gif);",
 		nodeTag:"canvas"
+	}, {
+		//Need to call render() on a div that doesn't include the canvas since so canvas doesn't redraw whenever a new actor is added
+		name: "actorsContainer",
+		className: "actors-container"
 	}, {
 		name: "missile",
 		className: "missile-animation"
@@ -117,22 +91,17 @@ enyo.kind({
 			while (nourishment > 0) {
 				type = typeKeys[Math.floor(Math.random() * typeKeys.length)];
 				item = this.createItem("food", type);
-				nourishment -= item.getNourishment();
+				if (item) {
+					nourishment -= item.getNourishment();
+				} else {
+					nourishment = -1;
+				}
 			}
 			
 			// Create a few random weapons, armor, ammo
 			this.createRandomItems("weapons", 3, 2);
 			this.createRandomItems("armor", 4, 1);
 			this.createRandomItems("ammo", 3, 0);
-			
-			//TODO: implement correctly
-			this.createRandomMonster("neutral");
-			this.createRandomMonster("neutral");
-			var x=0;
-			while (++x < 10) {
-				this.createRandomMonster("hostile");
-			}
-			this.render();
 		}
 
 		this._renderMap(0,0, MapLevel.kMapWidth, MapLevel.kMapHeight, true);
@@ -190,6 +159,7 @@ enyo.kind({
 					data.actors[idx] = this.createComponent({
 						kind: "ActorOnMap",
 						owner: this,
+						parent: this.$.actorsContainer,				
 						position: item.position,
 						showing: false,
 						monsterModel: MonsterModel.loadFromObject(item.monsterModel),
@@ -249,9 +219,9 @@ enyo.kind({
 	
 	useStairsAt: function(x, y) {
 		var tileKind = this.getTileKindAt(x, y);
-		if (tileKind === MapTile.stairsDown.kind) {
+		if (tileKind === MapTileIcons.stairsDown.kind) {
 			this.setLevel(this.level + 1);
-		} else if (tileKind === MapTile.stairsUp.kind) {
+		} else if (tileKind === MapTileIcons.stairsUp.kind) {
 			if (this.level > 1) {
 				this.setLevel(this.level - 1);
 			}
@@ -260,7 +230,7 @@ enyo.kind({
 	
 	showFieldOfView: function(item, updateActors) {
 		var x, y, extentX, extentY, position, i, length, actor;
-		if (!this.iconsLoaded) {
+		if (!this.iconsLoaded || !this.map || !this.map.tiles) {
 			return;
 		}
 		
@@ -321,16 +291,16 @@ enyo.kind({
 
 	openDoorAt: function(x, y) {
 		var t = this.map.tiles[x][y];
-		if (t && t.base.kind === MapTile.closedDoor.kind) {
-			t.base = MapTile.openDoor;
+		if (t && t.base.kind === MapTileIcons.doorClosed.kind) {
+			t.base = MapTileIcons.doorOpen;
 			this._renderMap(x, y, x+1, y+1, true);
 		}
 	},
 	
 	closeDoorAt: function(x, y) {
 		var t = this.map.tiles[x][y];
-		if (t && t.base.kind === MapTile.openDoor.kind && !this.getItemPileAt({x:x, y:y})) {
-			t.base = MapTile.closedDoor;
+		if (t && t.base.kind === MapTileIcons.doorOpen.kind && !this.getItemPileAt({x:x, y:y})) {
+			t.base = MapTileIcons.doorClosed;
 			this._renderMap(x, y, x+1, y+1, true);
 		}
 	},
@@ -347,8 +317,12 @@ enyo.kind({
 		}
 		
 		position = this._generateRandomPosition();
-		item = new ItemModel(category, type, extras);
-		this.addItem(item, position.x, position.y);
+		if (position) {
+			item = new ItemModel(category, type, extras);
+			this.addItem(item, position.x, position.y);
+		} else {
+			item = null;
+		}
 		return item;
 	},
 
@@ -386,16 +360,18 @@ enyo.kind({
 		for (i = 0; i < length; i++) {
 			type = typeKeys[Math.floor(Math.random() * typeKeys.length)];
 			item = this.createItem(category, type);
-			if (item.canConsolidate()) {
-				item.setRemainingUses(Math.floor(Math.random() * 12) + 3);
-			}
-			
-			// Small chance to add magical bonus
-			magical = Math.floor(Math.random() * (10 + 2 * this.level));
-			if (magical > 15) {
-				item.addMagicBonus(this.level);
-			} else if (magical > 13) {
-				item.addRacialAdornment();
+			if (item) {
+				if (item.canConsolidate()) {
+					item.setRemainingUses(Math.floor(Math.random() * 12) + 3);
+				}
+				
+				// Small chance to add magical bonus
+				magical = Math.floor(Math.random() * (10 + 2 * this.level));
+				if (magical > 15) {
+					item.addMagicBonus(this.level);
+				} else if (magical > 13) {
+					item.addRacialAdornment();
+				}
 			}
 		}
 	},
@@ -416,16 +392,21 @@ enyo.kind({
 			position = this._generateRandomPosition();
 		}
 
-		this.actors.push(this.createComponent({
-			kind: "ActorOnMap",
-			owner: this,
-			position: position,
-			monsterModel: m,
-			showing: false,
-			onDied: "_monsterDiedHandler",
-			onStatusText: "doStatusText",
-			onItemPickedUp: "_monsterPickedUpItemHandler"
-		}));
+		if (position) {
+			this.actors.push(this.createComponent({
+				kind: "ActorOnMap",
+				owner: this,
+				parent: this.$.actorsContainer,				
+				position: position,
+				monsterModel: m,
+				showing: false,
+				onDied: "_monsterDiedHandler",
+				onStatusText: "doStatusText",
+				onItemPickedUp: "_monsterPickedUpItemHandler"
+			}));
+		}
+		
+		return !!position;
 	},
 	
 	everyoneTakeATurn: function(turnCount) {
@@ -434,6 +415,13 @@ enyo.kind({
 		arrayLength = this.actors.length;
 		for (i = 0; i < arrayLength; i++) {
 			this.actors[i].performTurn(this);
+		}
+		
+		// Periodically check to see if more actors should appear on the scene
+		if (this.actors.length < 3 + this.level && turnCount % 250 === 0) {
+			if (this.createRandomMonster("hostile")) {
+				this.$.actorsContainer.render(); // enyo doesn't add the new component to the DOM tree until you call render() on an ancestor
+			}
 		}
 	},
 	
@@ -510,7 +498,7 @@ enyo.kind({
 		if (t) {
 			return t.base.kind;
 		} else {
-			return MapTile.wall.kind;
+			return MapTileIcons.wall.kind;
 		}
 	},
 	
@@ -557,12 +545,14 @@ enyo.kind({
 				tile = this.map.tiles[x][y];
 				if (tile && tile.base.hidden && Math.random() < probability) {
 					actor.exerciseSkill("search");
-					if (tile.base.kind === MapTile.hiddenDoor.kind) {
-						tile.base = MapTile.closedDoor;
+					if (tile.base.kind === MapTileIcons.doorHidden.kind) {
+						tile.base = MapTileIcons.doorClosed;
 						this._renderMap(x, y, x+1, y+1, true);
+						this.doStatusText($L("You found a hidden door!"));
 					} else {
 						//TODO: search for nearby traps
 					}
+					found = true;
 					break;
 				}
 				++y;
@@ -694,6 +684,11 @@ enyo.kind({
 		return "x"+position.x+"y"+position.y;
 	},
 	
+	_epokotharDiedHandler: function(inActor) {
+		//TODO: show congratulatory message and instructions to take the cloak out.
+		this._monsterDiedHandler(inActor);
+	},
+	
 	_monsterDiedHandler: function(inActor) {
 		var i, actor, inventory, position, corpse;
 		// Let the map know that another monster was killed
@@ -717,23 +712,18 @@ enyo.kind({
 
 			actor.destroy();
 		}
-		
-		if (!this.newMonsterTimer) {
-			var that = this;
-			window.setTimeout(function() {
-				//TODO: implement this better.
-				that.createRandomMonster("hostile");
-				that.render();
-			}, 60000);
-		}
 	},
 	
 	_generateRandomPosition: function() {
-		var room = this.map.rooms[Math.floor(Math.random() * this.map.rooms.length)];
-		return {
-			x: room.x + Math.floor(Math.random() * room.w),
-			y: room.y + Math.floor(Math.random() * room.h)
-		};
+		if (!this.map.rooms) {
+			return null;
+		} else {
+			var room = this.map.rooms[Math.floor(Math.random() * this.map.rooms.length)];
+			return {
+				x: room.x + Math.floor(Math.random() * room.w),
+				y: room.y + Math.floor(Math.random() * room.h)
+			};
+		}
 	},
 	
 	_iconsLoaded: function() {
@@ -749,13 +739,47 @@ enyo.kind({
 	},
 	
 	_buildLevel: function() {
-		var newMap = MapGeneratorBsp.generateMap(MapLevel.kMapWidth, MapLevel.kMapHeight);
-		this.map = {
-			tiles: newMap.tiles,
-			rooms: newMap.rooms,
-			stairsUp: newMap.up,
-			stairsDown: newMap.down
-		};
+		var newMap;
+		if (this.level === 11) {
+			newMap = MapGeneratorBossLevel.generateMap(MapLevel.kMapWidth, MapLevel.kMapHeight);
+			this.map = {
+				tiles: newMap.tiles,
+				stairsUp: newMap.up
+			};
+			//TODO: add Epokothar and a few evil minions
+			this.actors.push(this.createComponent({
+				kind: "ActorOnMap",
+				owner: this,
+				parent: this.$.actorsContainer,				
+				position: {x:newMap.throne.x, y:newMap.throne.y},
+				monsterModel: new MonsterModel({
+					race: "epokothar",
+					level: this.level,
+					attitude:"hostile"
+				}),
+				showing: false,
+				onDied: "_epokotharDiedHandler",
+				onStatusText: "doStatusText",
+				onItemPickedUp: "_monsterPickedUpItemHandler"
+			}));
+			this.$.actorsContainer.render();
+		} else {
+			newMap = MapGeneratorBsp.generateMap(MapLevel.kMapWidth, MapLevel.kMapHeight);
+			this.map = {
+				tiles: newMap.tiles,
+				rooms: newMap.rooms,
+				stairsUp: newMap.up,
+				stairsDown: newMap.down
+			};
+
+			this.createRandomMonster("neutral");
+			this.createRandomMonster("neutral");
+			var x=0;
+			while (++x < 10) {
+				this.createRandomMonster("hostile");
+			}
+			this.$.actorsContainer.render();
+		}
 	},
 
 	_renderMap: function(initX, initY, extentX, extentY, forceRender) {
@@ -832,5 +856,4 @@ enyo.kind({
 			}
 		}
 	}
-	
 });

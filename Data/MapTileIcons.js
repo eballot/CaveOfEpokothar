@@ -8,14 +8,17 @@ var MapTileIcons = {
 	},
 
 	// dungeon features
-	doorClosed: { img: "dungeon", offsetX: 128, offsetY: 64 },
-	doorOpen:   { img: "dungeon", offsetX: 160, offsetY: 64 },
-	doorHidden: { img: "dungeon", offsetX: 0, offsetY: 32 },
-	floor:      { img: "dungeon", offsetX: 64, offsetY: 0 },
-	stairsDown: { img: "dungeon", offsetX: 0, offsetY: 64 },
-	stairsUp:   { img: "dungeon", offsetX: 32, offsetY: 64 },
-	wall:       { img: "dungeon", offsetX: 0, offsetY: 32 },
+	doorClosed: { img: "dungeon", offsetX: 128, offsetY: 64, kind:"doorClosed", obstructed:true },
+	doorOpen:   { img: "dungeon", offsetX: 160, offsetY: 64, kind: "doorOpen" },
+	doorHidden: { img: "dungeon", offsetX: 0,   offsetY: 32, kind: "doorHidden", obstructed: true, hidden: true },
+	floor:      { img: "dungeon", offsetX: 64,  offsetY: 0,  kind: "floor" },
+	stairsDown: { img: "dungeon", offsetX: 0,   offsetY: 64, kind: "stairsDown" },
+	stairsUp:   { img: "dungeon", offsetX: 32,  offsetY: 64, kind: "stairsUp" },
+	wall:       { img: "dungeon", offsetX: 0,   offsetY: 32, kind: "wall", obstructed: true },
 	
+	throne:     { img: "dungeon", offsetX: 0,   offsetY: 128, kind: "throne" },
+	bighead:    { img: "dungeon", offsetX: 96,  offsetY: 160, kind: "bighead", obstructed: true },
+
 	//armor
 	leather:    { img: "items", offsetX: 480, offsetY: 160 },
 	studdedleather: { img: "items", offsetX: 512, offsetY: 160 },

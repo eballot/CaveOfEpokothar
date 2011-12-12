@@ -14,10 +14,7 @@ defensive: armor, dodge, shield
 spells: casting, air, earth, fire, water
 other: stealth, search (traps, hidden doors, invisible monsters?)
 
-TODO: deal with monsters that have inventory.
-
-Skills - as skill increases, get closer to double the item's capability
-
+Tasks:
 // Rendering performance on tablets 
 
 // Implement Epokothar's level

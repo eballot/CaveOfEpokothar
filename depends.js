@@ -1,5 +1,6 @@
 enyo.depends(
 	"Utils/FieldOfView.js",
+	"Utils/MapGeneratorBossLevel.js",
 	"Utils/MapGeneratorBsp.js",
 	"Utils/MapRleCodex.js",
 	"Utils/PathFinder.js",

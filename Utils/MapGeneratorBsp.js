@@ -17,7 +17,7 @@ var MapGeneratorBsp = {
 		for (x = 0; x < width; x++) {
 			tiles[x] = new Array(height);
 			for (y = 0; y < height; y++) {
-				tiles[x][y] = {base:MapTile.wall};
+				tiles[x][y] = {base:MapTileIcons.wall};
 			}
 		}
 
@@ -47,8 +47,8 @@ var MapGeneratorBsp = {
 			x: room.x + Math.floor(room.w/2) + 1,
 			y: room.y + Math.floor(room.h/2)
 		};
-		results.tiles[results.up.x][results.up.y] = {base:MapTile.stairsUp};
-		results.tiles[results.down.x][results.down.y] = {base:MapTile.stairsDown};
+		results.tiles[results.up.x][results.up.y] = {base:MapTileIcons.stairsUp};
+		results.tiles[results.down.x][results.down.y] = {base:MapTileIcons.stairsDown};
 		
 		return results;
 	},
@@ -83,7 +83,7 @@ var MapGeneratorBsp = {
 			
 			for (x=0; x < room.w; x++) {
 				for (y=0; y < room.h; y++) {
-					results.tiles[x + room.x][y + room.y] = {base:MapTile.floor};
+					results.tiles[x + room.x][y + room.y] = {base:MapTileIcons.floor};
 				}
 			}
 			results.rooms.push(room);
@@ -123,12 +123,12 @@ var MapGeneratorBsp = {
 		var corridorMade = false, startX, endX, midpointY;
 		startX = endX = dungeon.left + x;
 		midpointY = dungeon.top + offsetY + Math.round(dungeon.height/2);
-		while (startX > dungeon.left && results.tiles[startX][midpointY].base === MapTile.wall) {
+		while (startX > dungeon.left && results.tiles[startX][midpointY].base === MapTileIcons.wall) {
 			--startX;
 		}
 		if (startX > dungeon.left) {
 			++startX; // bump so it doesn't start in the room
-			while (endX < (dungeon.left + dungeon.width) && results.tiles[endX][midpointY].base === MapTile.wall) {
+			while (endX < (dungeon.left + dungeon.width) && results.tiles[endX][midpointY].base === MapTileIcons.wall) {
 				++endX;
 			}
 			
@@ -137,7 +137,7 @@ var MapGeneratorBsp = {
 				results.corridors.push({ startX:startX, startY:midpointY, endX:endX, endY:midpointY });
 				corridorMade = true;
 				for (x=startX; x <= endX; x++) {
-					results.tiles[x][midpointY] = {base:MapTile.floor};
+					results.tiles[x][midpointY] = {base:MapTileIcons.floor};
 				}
 			}
 		}
@@ -183,12 +183,12 @@ var MapGeneratorBsp = {
 		var corridorMade = false, startY, endY, midpointX, addDoor;
 		midpointX = dungeon.left + offsetX + Math.round(dungeon.width/2);
 		startY = endY = dungeon.top + y;
-		while (startY > dungeon.top && results.tiles[midpointX][startY].base === MapTile.wall) {
+		while (startY > dungeon.top && results.tiles[midpointX][startY].base === MapTileIcons.wall) {
 			--startY;
 		}
 		if (startY > dungeon.top) {
 			++startY; // bump so it doesn't start in the room
-			while (endY < (dungeon.top + dungeon.height) && results.tiles[midpointX][endY].base === MapTile.wall) {
+			while (endY < (dungeon.top + dungeon.height) && results.tiles[midpointX][endY].base === MapTileIcons.wall) {
 				++endY;
 			}
 			
@@ -197,28 +197,28 @@ var MapGeneratorBsp = {
 				results.corridors.push({ startX:midpointX, startY:startY, endX:midpointX, endY:endY });
 				corridorMade = true;
 				for (y = startY; y <= endY; y++) {
-					results.tiles[midpointX][y] = {base:MapTile.floor};
+					results.tiles[midpointX][y] = {base:MapTileIcons.floor};
 				}
 
 				// For now, only adding doors on vertical corridors because it looks better. Maybe later, I'll add horizontal doors
 				addDoor = Math.random();
-				if (addDoor < 0.20 && results.tiles[midpointX-1][startY].base === MapTile.wall && results.tiles[midpointX+1][startY].base === MapTile.wall) {
+				if (addDoor < 0.20 && results.tiles[midpointX-1][startY].base === MapTileIcons.wall && results.tiles[midpointX+1][startY].base === MapTileIcons.wall) {
 					if (addDoor < 0.02) {
-						results.tiles[midpointX][startY] = {base:MapTile.hiddenDoor};
+						results.tiles[midpointX][startY] = {base:MapTileIcons.doorHidden};
 					} else if (addDoor < 0.10) {
-						results.tiles[midpointX][startY] = {base:MapTile.openDoor};
+						results.tiles[midpointX][startY] = {base:MapTileIcons.doorOpen};
 					} else {
-						results.tiles[midpointX][startY] = {base:MapTile.closedDoor};
+						results.tiles[midpointX][startY] = {base:MapTileIcons.doorClosed};
 					}
 				}
 				addDoor = Math.random();
-				if (addDoor < 0.20 && results.tiles[midpointX-1][endY].base === MapTile.wall && results.tiles[midpointX+1][endY].base === MapTile.wall) {
+				if (addDoor < 0.20 && results.tiles[midpointX-1][endY].base === MapTileIcons.wall && results.tiles[midpointX+1][endY].base === MapTileIcons.wall) {
 					if (addDoor < 0.02) {
-						results.tiles[midpointX][endY] = {base:MapTile.hiddenDoor};
+						results.tiles[midpointX][endY] = {base:MapTileIcons.doorHidden};
 					} else if (addDoor < 0.10) {
-						results.tiles[midpointX][endY] = {base:MapTile.openDoor};
+						results.tiles[midpointX][endY] = {base:MapTileIcons.doorOpen};
 					} else {
-						results.tiles[midpointX][endY] = {base:MapTile.closedDoor};
+						results.tiles[midpointX][endY] = {base:MapTileIcons.doorClosed};
 					}
 				}
 			}

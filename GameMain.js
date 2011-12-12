@@ -124,6 +124,7 @@ enyo.kind({
 	}, {
 		name: "gameOverDialog",
 		kind: enyo.Popup,
+		onBeforeOpen: "_deathOverview",
 		modal: true,
 		dismissWithClick: false,
 		dismissWithEscape: false,
@@ -132,6 +133,17 @@ enyo.kind({
 			name: "deathOverview",
 			allowHtml: true,
 			content: ""
+		}, {
+			name: "deathListScroller",
+			kind: enyo.Scroller,
+			autoHorizontal: false,
+			horizontal: false,
+			components: [{
+				name: "deathList",
+				allowHtml: true,
+				flex: 1,
+				content: ""
+			}]
 		}, {
 			kind: enyo.Button,
 			caption: enyo._$L("OK"),
@@ -239,7 +251,7 @@ enyo.kind({
 	},
 	
 	playerDeath: function(inSender, inDeathReason) {
-		var obj = {}, gameOverview, deadThings = [];
+		var obj = {}, deadThings = [];
 		// TODO: show your inventory? 
 		obj.reason = inDeathReason;
 
@@ -251,15 +263,16 @@ enyo.kind({
 		for (var monsterName in this.killList) {
 			deadThings.push(monsterName + ": " + this.killList[monsterName]);
 		}
+		obj.killListLen = deadThings.length;
 		obj.killList = deadThings.sort().join("<br/>");
 		if (!obj.killList) {
 			obj.killList = $L("Nothing");
+			obj.killListLen = 1;
 		}
 		
-		gameOverview = (new enyo.g11n.Template($L("#{reason}<br/>You explored #{maxLevel} levels in #{turns} turns.<br/>You killed the following:<br/>#{killList}"))).evaluate(obj);
-		
+		this.playerDeathDetails = obj;
+		// The rest is done in _deathOverview() callback
 		this.$.gameOverDialog.openAtCenter();
-		this.$.deathOverview.setContent(gameOverview);
 		
 		this.turnCount = 0;
 	},
@@ -363,13 +376,23 @@ enyo.kind({
 		}
 	},
 
+	//Callback for the gameOver dialog. At this point, the components are built so they can be filled in.
+	_deathOverview: function(inSender) {
+		var text = (new enyo.g11n.Template($L("#{reason}<br/>You explored #{maxLevel} levels in #{turns} turns.<br/>You killed the following:"))).evaluate(this.playerDeathDetails);
+		this.$.deathOverview.setContent(text);
+		this.$.deathList.setContent(this.playerDeathDetails.killList);
+		//TODO: get bounds of deathList once the new content has been layed out.
+		this.$.deathListScroller.applyStyle("height", Math.min(320, 28 * this.playerDeathDetails.killListLen)+"px");
+		this.playerDeathDetails = undefined;
+	},
+	
 	_updateToobarButtons: function() {
 		var tileKind, position = this.$.me.getPosition();
 		tileKind = this.$.map.getTileKindAt(position.x, position.y);
-		if (tileKind === MapTile.stairsDown.kind) {
+		if (tileKind === MapTileIcons.stairsDown.kind) {
 			this.$.stairsUp.setShowing(false);
 			this.$.stairsDown.setShowing(true);
-		} else if (tileKind === MapTile.stairsUp.kind) {
+		} else if (tileKind === MapTileIcons.stairsUp.kind) {
 			this.$.stairsUp.setShowing(true);
 			this.$.stairsDown.setShowing(false);
 		} else {

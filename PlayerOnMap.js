@@ -71,7 +71,7 @@ enyo.kind({
 
 	interactWithMap: function(map, x, y, turnCount) {
 		var done, i, inventory, currentPosition, rad, distanceX, distanceY, absDistanceX, absDistanceY, nearX, nearY,
-		    something, firstAttack, meleeReach, rangeReach, changedCallback, options, text;
+		    something, firstAttack, meleeReach, rangeReach, changedCallback, options, text, action;
 		done = false;
 		currentPosition = this.getPosition();
 		distanceX = x - currentPosition.x;
@@ -113,15 +113,14 @@ enyo.kind({
 			
 			something = map.whatIsAt(nearX, nearY, false);
 			if (something) {
-				if (something.kind === "ActorOnMap") {
+				if (something.kind === "ActorOnMap" && something.getAttitude() === "hostile") {
 					firstAttack = this.monsterModel.getEquippedItem("weapon");
 					meleeReach = firstAttack ? firstAttack.getMeleeReach() : 1;
 					if (meleeReach > 0) {
 						done = true;
-						this.attack(something);
-						this._finishMyTurn(MonsterModel.hunger.fight);
+						this._doMeleeAttack(something);
 					}
-				} else if (something.kind === MapTile.closedDoor.kind) {
+				} else if (something.kind === MapTileIcons.doorClosed.kind) {
 					done = true;
 					map.openDoorAt(nearX, nearY);
 					this._autoHeal(turnCount);
@@ -146,8 +145,17 @@ enyo.kind({
 
 					if (something.kind === "ActorOnMap") {
 						if (absDistanceX <= meleeReach && absDistanceY <= meleeReach) {
-							this.attack(something);
-							this._finishMyTurn(MonsterModel.hunger.fight);
+							if (something.getAttitude() === "hostile") {
+								this._doMeleeAttack(something);
+							} else {
+								// If the actor is not hostile, ask if you really want to attack it
+								options = [
+									{ caption:something.whatAreYou(true), action:something.describeYourself.bind(something) }, //TODO: display the description
+									{ caption:$L("Attack"), action:this._doMeleeAttack.bind(this, something) }
+								];
+								this.$.interactionChoicePopup.setItems(options);
+								this.$.interactionChoicePopup.openAtControl(something);
+							}
 						} else {
 							options = [
 								{ caption:something.whatAreYou(true), action:something.describeYourself.bind(something) }, //TODO: display the description
@@ -156,14 +164,18 @@ enyo.kind({
 							
 							if (rangeReach > 0 && absDistanceX <= rangeReach && absDistanceY <= rangeReach && map.hasLineOfSiteToPlayer(something)) {
 								if (firstAttack.requiresAmmunition()) {
+									//Shoot
 									text = PlayerOnMap.kRangedAttackShoot.evaluate({weaponName:firstAttack.getDisplayName(true)});
+									action = this._doRangedAttack.bind(this, firstAttack, something, map);
 								} else {
+									//Throw
 									text = PlayerOnMap.kRangedAttackThrow.evaluate({weaponName:firstAttack.getDisplayName(true)});
+									action = this._doRangedAttack.bind(this, firstAttack, something, map);
 								}
+
 								options.push({
 									caption:text,
-									action:this._doRangedAttack.bind(this, firstAttack, something, map,
-											{range:Math.max(absDistanceX, absDistanceY), x:x, y:y})
+									action:action
 								});
 							}
 							
@@ -173,7 +185,7 @@ enyo.kind({
 					} else if (something.kind === "PlayerOnMap") {
 						this.doShowInventory();
 					// If you tapped on an open door and it is next to the player and it isn't block by items, then allow it to be closed
-					} else if (something.kind === MapTile.openDoor.kind && (absDistanceX < 2 && absDistanceY < 2) && !map.getItemPileAt({x:x, y:y})) {
+					} else if (something.kind === MapTileIcons.doorOpen.kind && (absDistanceX < 2 && absDistanceY < 2) && !map.getItemPileAt({x:x, y:y})) {
 						options = [
 							{ caption:$L("Close Door"), action:this.closeDoorAt.bind(this, map, x, y) },
 							{ caption:$L("Move"), action:this.move.bind(this, map, distanceX, distanceY) }
@@ -311,6 +323,11 @@ enyo.kind({
 		return result;
 	},
 
+	_doMeleeAttack: function(target) {
+		this.attack(target);
+		this._finishMyTurn(MonsterModel.hunger.fight);
+	},
+		
 	_doRangedAttack: function(weapon, target, map) {
 		this.rangedAttack(weapon, target, map);
 		this._finishMyTurn(MonsterModel.hunger.fight);

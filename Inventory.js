@@ -188,7 +188,11 @@ enyo.kind({
 			this.$.equipmentItemName.setContent(itemName);
 			weight = inventoryItem.getWeight();
 			if (inventoryItem.canConsolidate()) {
-				weight = weight.toFixed(2);
+				weight = weight.toFixed(2) + $L(" lbs");
+			} else if (weight === 1) {
+				weight = weight + $L(" lb");
+			} else {
+				weight = weight + $L(" lbs");
 			}
 			this.$.equipmentItemWeight.setContent(weight);
 			

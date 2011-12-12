@@ -75,6 +75,12 @@
 	text-align: center;	
 }
 
+.actors-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
 .actor-styles {
 }
 

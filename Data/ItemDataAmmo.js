@@ -21,7 +21,7 @@ kItemsData.ammo = {
 	slingbullet: {
 		displayName: $L("Sling bullet"),
 		type: "slingbullet", category:"ammo", slot:"quiver", skill: "sling", attackActions:"bludgeon", weight:0.25, value:0.5,/*gp*/
-		damageMin:1, damageRnd:0, canConsolidate: true, destroyedWhenUsed: 0.1,
+		damageMin:1, damageRnd:0, canConsolidate: true, destroyedWhenUsed: 0.15,
 		description: $L("Heavy lead bullets that can be flung using a sling.")
 	}
 };

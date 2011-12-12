@@ -35,7 +35,7 @@ var MapRleCodex = {
 	},
 	
 	decode: function(rleTiles) {
-		var tiles, tx, txlen, row, ty, tylen, rleTiles, rleRow, rleObj, rleCount, rleVisited, rleBase, tile;
+		var tiles, tx, txlen, row, ty, tylen, rleRow, rleObj, rleCount, rleBase, tile;
 		txlen = rleTiles.length;
 		tiles = [];
 		for (tx = 0; tx < txlen; tx++) {
@@ -46,31 +46,9 @@ var MapRleCodex = {
 				rleObj = rleRow[ty];
 				rleCount = rleObj.c;
 				
-				switch (rleObj.t) {
-				case MapTile.floor.kind:
-					rleBase = MapTile.floor;
-					break;
-				case MapTile.wall.kind:
-					rleBase = MapTile.wall;
-					break;
-				case MapTile.openDoor.kind:
-					rleBase = MapTile.openDoor;
-					break;
-				case MapTile.closedDoor.kind:
-					rleBase = MapTile.closedDoor;
-					break;
-				case MapTile.hiddenDoor.kind:
-					rleBase = MapTile.hiddenDoor;
-					break;
-				case MapTile.stairsDown.kind:
-					rleBase = MapTile.stairsDown;
-					break;
-				case MapTile.stairsUp.kind:
-					rleBase = MapTile.stairsUp;
-					break;
-				default:
-					rleBase = MapTile.wall;
-					break;
+				rleBase = MapTileIcons[rleObj.t];
+				if (!rleBase) {
+					rleBase = MapTileIcons.wall;
 				}
 
 				while (rleCount-- > 0) {

@@ -24,6 +24,12 @@ kItemsData.armor = {
 		img: "tiles/player/body/shirt_vest.gif",
 		description: $L("A shirt and a sporty vest.")
 	},
+	shirtwhite: {
+		displayName: $L("Shirt"),
+		type:"shirtwhite", category:"armor", slot:"torso", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:0, value:1,/*gp*/
+		img: "tiles/player/body/shirt_white1.gif",
+		description: $L("A simple shirt.")
+	},
 		
 	/** Body armor **/
 	leather: {
@@ -76,8 +82,8 @@ kItemsData.armor = {
 		displayName: $L("Shield"),
 		type:"shield", category:"armor", skill:"shield", weight:15, value:25,/*gp*/
 		hands:1, slot:"shield", defense:0, block:5, dexpenalty:0,
-		img: "tiles/player/hand2/shield_knight_blue.gif",
-		description: $L("A large metal shield strapped to the forearm and gripped with the hand.")
+		img: "tiles/player/hand2/shield_round6.gif",
+		description: $L("A medium metal shield strapped to the forearm and gripped with the hand.")
 	},
 	
 	/** Helmets **/
