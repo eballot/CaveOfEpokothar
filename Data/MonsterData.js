@@ -8,8 +8,8 @@ var kMonstersAtLevel = [
 
 var kMonsterData = {
 	epokothar:{
-		monsterName:$L("Lord Epokothar"), xp:3, hpMin:2, hpRnd:3, defenses:{dodge:1, block:1, ac:10}, hands:0, attacks:[{type:"bitesmall"}],
-		img:"tiles/dc-mon0/giant_cockroach.gif", corpse:"insectoid", corpseImg:"deadInsect"
+		monsterName:$L("Lord Epokothar"), xp:3, hpMin:5, hpRnd:3, defenses:{dodge:15, block:1, ac:1}, dex:15, hands:0, attacks:[{type:"bitesmall"}],
+		img:"tiles/dc-mon0/epokothar.gif", corpse:"insectoid", corpseImg:"deadInsect"
 	},
 	centaur:{
 		monsterName:$L("Centaur"), xp:3, hpMin:2, hpRnd:7, defenses:{dodge:8, block:5, ac:10}, dex:8, hands:2, showEquippedImg:false,

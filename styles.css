@@ -21,13 +21,14 @@
 	position: absolute;
 	top: 0;
 	left: 0;
+	-webkit-transform: translateZ(2px);
 }
 
 .map-scroller {
 	position:relative;
-	width:75%;
+	width: 75%;
 	-webkit-transition-duration: 150ms;
-	-webkit-transition-property: -webkit-transform top left;
+	-webkit-transition-property: top left;
 	-webkit-transition-timing-function: linear;
 }
 
@@ -64,24 +65,24 @@
 
 .on-map {
 	-webkit-transition-duration: 150ms;
-	-webkit-transition-property: -webkit-transform top left;
+	-webkit-transition-property: top left;
 	-webkit-transition-timing-function: linear;
 
 	position: absolute;
-	line-height: 1;
-	/*overflow: hidden;*/
-	font-size: 24pt;
-	font-weight: bold;
-	text-align: center;	
+	-webkit-transform: translateZ(3px);
 }
 
 .actors-container {
 	position: absolute;
 	top: 0;
 	left: 0;
+	width: 32px;
+	height: 32px;
 }
 
 .actor-styles {
+	width: 32px;
+	height: 32px;
 }
 
 .actor-styles.player {
@@ -104,12 +105,20 @@
 	position: absolute;
 	top: 0;
 	left: 0;
+	width: 32px;
+	height: 32px;
 }
 
 .actor-status {
 	position: absolute;
 	top: -5px;
 	left: 7px;
+	width: 32px;
+	height: 32px;
+	line-height: 1;
+	font-size: 24pt;
+	font-weight: bold;
+	text-align: center;	
 	opacity: 1.0;
 	color: yellow;
 }

@@ -13,7 +13,8 @@ enyo.kind({
 	},
 	chrome: [{
 		name: "avatar",
-		kind: enyo.Image
+		kind: enyo.Image,
+		className: "wearables"
 	}, {
 		name: "torso",
 		kind: enyo.Image,

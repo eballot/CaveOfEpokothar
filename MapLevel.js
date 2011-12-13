@@ -49,6 +49,9 @@ enyo.kind({
 		
 		this.iconsLoaded = false;
 		MapTileIcons.imgs.dungeon.onload = this._iconsLoaded.bind(this);
+		
+		this.applyStyle("width", (MapLevel.kMapWidth*MapLevel.kTileSize)+"px");
+		this.applyStyle("height", (MapLevel.kMapHeight*MapLevel.kTileSize)+"px");
 	},
 
 	newGame: function() {
@@ -813,11 +816,12 @@ enyo.kind({
 					tileObj = MapTileIcons[tileType];
 					if (forceRender || tile.visited === this.currentTime && tileDrawState[x][y] !== MapLevel.kDrawStateVisible) {
 						tileDrawState[x][y] = MapLevel.kDrawStateVisible;
-						if (tileType === "floor") {
-							this.ctx.clearRect((x*MapLevel.kTileSize), (y*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
-						} else {
+						// Commented out because using background image for floor tiles doesn't improve rendering performance
+						//if (tileType === "floor") {
+						//	this.ctx.clearRect((x*MapLevel.kTileSize), (y*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
+						//} else {
 							this.ctx.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, (x*MapLevel.kTileSize), (y*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
-						}
+						//}
 
 						key = this._itemsKey({x:x, y:y});
 						itemPile = this.items[key];
