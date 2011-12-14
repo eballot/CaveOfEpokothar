@@ -238,7 +238,8 @@ enyo.kind({
 		// Slight delay to allow layout to complete so bounds are correct
 //		window.setTimeout(function() {
 		//Hack needed because the main enyo slidingview is fixed size and for some reason it is really wide on first launch
-		this.$.game.applyStyle("width", window.innerWidth+"px");
+		//Note: capping width to 1280 to match the max-width set on AppMain
+		this.$.game.applyStyle("width", Math.min(1280, window.innerWidth)+"px");
 		this._setMapScrollingBounds();
 		//Even more hackery. Something in enyo is setting this width when I set game's width. So forcing it back to 0
 		this.$.mainSlidingView.applyStyle("width", "0");
@@ -304,7 +305,8 @@ enyo.kind({
 	resizeHandler: function() {
 		this.inherited(arguments);
 		//Hack needed because the main enyo slidingview is fixed size so it doesnt update on window resize
-		this.$.game.applyStyle("width", window.innerWidth+"px");
+		//Note: capping width to 1280 to match the max-width set on AppMain
+		this.$.game.applyStyle("width", Math.min(1280, window.innerWidth)+"px");
 		this._setMapScrollingBounds();
 		//Even more hackery. Something in enyo is setting this width when I set game's width. So forcing it back to 0
 		this.$.mainSlidingView.applyStyle("width", "0");

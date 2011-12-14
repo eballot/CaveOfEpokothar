@@ -1,6 +1,9 @@
 #appMain {
 	background-color: black;
 	color: #717171;
+	/* For now, limiting the size so you can't see too much of the map when using a large-screen device. It's mainly to avoid dealing with a few UI issues. */  
+	max-width:1280px;
+	max-height:1024px;
 }
 
 .back-button {
