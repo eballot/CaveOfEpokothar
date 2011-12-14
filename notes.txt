@@ -1,0 +1,54 @@
+Cave of Epokothar
+
+Intro story:
+The Council of the Open Hand has learned of a plot by the nefarious demon Epokothar. The demon found an artifact of great magical power, called the Cloak of Ehpeway. 
+With it, he plans to destroy the peaceful community of Osweb. The Council has chosen you to enter Epokothar's lair to retrieve the Cloak of Ehpeway and save the Oswebians.
+Epokothar resides deep within Mount Exsap.
+
+
+Skills:
+combat: fight, unarmed, axe, mace (includes flail?), polearm (includes spear), smallBlade, staff, sword
+ranged: bow, crossbow, dart, sling, thrown
+defensive: armor, dodge, shield
+spells: casting, air, earth, fire, water
+other: stealth, search (traps, hidden doors, invisible monsters?)
+
+Tasks:
+// Implement Epokothar's level
+
+// Better AI - hear/see player
+
+// Need a strategy for random items to prevent too much powerful stuff appearing in beginner levels
+ 
+// display mini-map
+
+// drop random loot
+
+// Level-up - inc attribute (str/dex/int)
+
+// Implement stealth & sneak attack
+
+// starving hunger level reduces skills
+
+// Add hidden traps
+
+// Show hints/tips like Stone Soup Crawl
+
+// Add rings - protection, stealth, strength, agility, health, etc.
+
+// Add amulets - protection, health, intelligence, etc.
+
+// Make armor take time to wear or remove
+
+// fine-tune balance creatures & weapon accuracy
+
+// hostile monsters can swap places with neutrals (player can too?)
+
+Performance research:
+1. webkit.compositing.paintGraphicsLayerContents takes ~130ms & webkit.pixmap.create takes ~60ms per turn. That is all related to drawing to the canvas.
+2. changing field of view radius has negligible impact
+3. using offscreen canvas to hold wall and floor tiles (including shaded versions of both) has negligible impact.
+4. not using graphics acceleration (removing translateZ from map-styles) has negligible impact. It removes the pixmap.create hit, but similar time is added to compositing.paintGraphicsLayerContents.
+5. making floor tiles be a background image is negligible impact. 
+6. disabling MapLevel._renderMap() "fixes" the problem since nothing is drawn to the canvas.
++ using graphics accel for actors (adding translateZ and fixed width and height) is definitely necessary (webkit.compositing.paintGraphicsLayerContents is ~130ms with v ~240ms without)
