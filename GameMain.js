@@ -68,6 +68,10 @@ enyo.kind({
 							kind: enyo.Control,
 							allowHtml: true
 						}]
+					}, {
+						kind: enyo.ToolButton,
+						caption: $L("Restart"),
+						onclick: "playerDeath"
 					}]
 				}]
 			}, {
@@ -93,10 +97,6 @@ enyo.kind({
 					caption: $L("Go Down"),
 					showing: false,
 					onclick: "useStairs"
-				}, {
-					kind: enyo.ToolButton,
-					caption: $L("Restart"),
-					onclick: "playerDeath"
 				}]
 			}]
 		}]

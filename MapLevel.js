@@ -731,6 +731,7 @@ enyo.kind({
 	
 	_iconsLoaded: function() {
 		this.iconsLoaded = true;
+		//this._createOffscreenImages();
 		this._renderMap(0,0, MapLevel.kMapWidth, MapLevel.kMapHeight, true);
 		if (this.player) {
 			this.showFieldOfView(this.player, true);
@@ -778,16 +779,59 @@ enyo.kind({
 			this.createRandomMonster("neutral");
 			this.createRandomMonster("neutral");
 			var x=0;
-			while (++x < 10) {
+			while (++x < 20) {
 				this.createRandomMonster("hostile");
 			}
 			this.$.actorsContainer.render();
 		}
 	},
+	
+//	_createOffscreenImages: function() {
+//		var context, tileObj, floorCanvas, wallCanvas, floorShadedCanvas, wallShadedCanvas;
+//		
+//		floorCanvas = document.createElement("canvas");
+//		floorCanvas.width = 32;
+//		floorCanvas.height = 32;
+//		context = floorCanvas.getContext("2d");
+//		tileObj = MapTileIcons.floor;
+//		context.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, 0, 0, MapLevel.kTileSize, MapLevel.kTileSize);
+//
+//		floorShadedCanvas = document.createElement("canvas");
+//		floorShadedCanvas.width = 32;
+//		floorShadedCanvas.height = 32;
+//		context = floorShadedCanvas.getContext("2d");
+//		tileObj = MapTileIcons.floor;
+//		context.drawImage(floorCanvas, 0, 0);
+//		context.fillStyle = "rgba(0,0,0,0.4)";
+//		context.fillRect(0, 0, MapLevel.kTileSize, MapLevel.kTileSize);
+//
+//		wallCanvas = document.createElement("canvas");
+//		wallCanvas.width = 32;
+//		wallCanvas.height = 32;
+//		context = wallCanvas.getContext("2d");
+//		tileObj = MapTileIcons.wall;
+//		context.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, 0, 0, MapLevel.kTileSize, MapLevel.kTileSize);
+//
+//		wallShadedCanvas = document.createElement("canvas");
+//		wallShadedCanvas.width = 32;
+//		wallShadedCanvas.height = 32;
+//		context = wallShadedCanvas.getContext("2d");
+//		tileObj = MapTileIcons.wall;
+//		context.drawImage(wallCanvas, 0, 0);
+//		context.fillStyle = "rgba(0,0,0,0.4)";
+//		context.fillRect(0, 0, MapLevel.kTileSize, MapLevel.kTileSize);
+//   		this.offscreenCanvas = {
+//			floor: floorCanvas,
+//			wall: wallCanvas,
+//			floorShaded: floorShadedCanvas,
+//			wallShaded: wallShadedCanvas
+//		};
+//   		
+//	},
 
 	_renderMap: function(initX, initY, extentX, extentY, forceRender) {
 		var x, y, columns, tile, tileType, key, tileObj, itemPile, tileDrawState;
-		if (!this.canvas) {
+		if (!this.canvas || !this.iconsLoaded) {
 			return; // Not ready yet, so just return
 		}
 

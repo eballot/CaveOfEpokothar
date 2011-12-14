@@ -124,11 +124,12 @@ enyo.kind({
 	
 	warrior: function(player) {
 		if (player.race === "dwarf") {
-			player.dex = 8;
+			player.dex = 9;
 			player.str = 18;
 			player.int = 5;
 			player.inventory = [
 				new ItemModel("weapons", "handaxe", {equipped:true}),
+				new ItemModel("weapons", "handaxe"),
 				new ItemModel("weapons", "handaxe"),
 				new ItemModel("armor", "studdedleather", {equipped:true}),
 				new ItemModel("armor", "hornedhelm", {equipped:true}),
@@ -165,7 +166,7 @@ enyo.kind({
 	
 	ranger: function(player) {
 		if (player.race === "halfling") {
-			player.dex = 15;
+			player.dex = 13;
 			player.str = 8;
 			player.int = 7;
 			player.inventory = [
@@ -184,7 +185,7 @@ enyo.kind({
 			};
 		} else {
 			// Default is human
-			player.dex = 15;
+			player.dex = 13;
 			player.str = 10;
 			player.int = 5;
 			player.inventory = [

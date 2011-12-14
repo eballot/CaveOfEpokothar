@@ -17,11 +17,11 @@ var kMonsterData = {
 		img:"tiles/dc-mon0/centaur_warrior.gif", corpse:"equine", corpseImg:"deadEquine"
 	},
 	cockroach:{
-		monsterName:$L("Giant Cockroach"), xp:1, hpMin:1, hpRnd:3, defenses:{dodge:1, block:1, ac:10}, hands:0, attacks:[{type:"bitesmall", extras:{bonus:-2}}],
+		monsterName:$L("Giant Cockroach"), xp:1, hpMin:1, hpRnd:3, defenses:{dodge:2, block:2, ac:10}, hands:0, attacks:[{type:"bitesmall", extras:{bonus:-2}}],
 		img:"tiles/dc-mon0/giant_cockroach.gif", corpse:"insectoid", corpseImg:"deadInsect"
 	},
 	dog:{
-		monsterName:$L("Large Dog"), xp:2, hpMin:3, hpRnd:4, defenses:{dodge:10, block:0, ac:5}, hands:0, attacks:[{type:"bitemedium"}],
+		monsterName:$L("Large Dog"), xp:2, hpMin:3, hpRnd:4, defenses:{dodge:10, block:0, ac:6}, hands:0, attacks:[{type:"bitemedium"}],
 		img:"tiles/dc-mon0/hound.gif", corpse:"animalsmall", corpseImg:"deadDog"
 	},
 	dwarf:{
@@ -61,7 +61,7 @@ var kMonsterData = {
 		img:"tiles/dc-mon0/skeletal_warrior.gif"
 	},
 	spider:{
-		monsterName:$L("Redback Spider"), xp:1, hpMin:3, hpRnd:4, defenses:{dodge:7, block:0, ac:5}, hands:0, attacks:[{type:"bitesmall", extras:{special:"poison", bonus:-1}}],
+		monsterName:$L("Redback Spider"), xp:1, hpMin:3, hpRnd:4, defenses:{dodge:9, block:0, ac:5}, hands:0, attacks:[{type:"bitesmall", extras:{special:"poison", bonus:-1}}],
 		img:"tiles/dc-mon0/redback.gif", corpse:"insectoid", corpseImg:"deadInsect"
 	},
 	walkingmushroom:{
@@ -69,7 +69,7 @@ var kMonsterData = {
 		img:"tiles/dc-mon0/wandering_mushroom.gif"
 	},
 	worm:{
-		monsterName:$L("Killer Worm"), xp:2, hpMin:8, hpRnd:5, defenses:{dodge:0, block:6, ac:5}, hands:0, attacks:[{type:"bitesmall", extras:{bonus:-2}}],
+		monsterName:$L("Killer Worm"), xp:2, hpMin:8, hpRnd:5, defenses:{dodge:0, block:6, ac:7}, hands:0, attacks:[{type:"bitesmall", extras:{bonus:-2}}],
 		img:"tiles/dc-mon0/worm.gif", corpse:"insectoid", corpseImg:"deadInsect"
 	}
 };
