@@ -1,0 +1,10 @@
+K 13
+svn:mergeinfo
+V 456
+/nova/palm/enyo/branches/scott/gesture/framework/lib/accounts:407317-409048
+/nova/palm/enyo/trunk/framework/lib/accounts:461410-500961
+/nova/palm/enyo/versions/0.6/lib/accounts:391636,391639,393187,394164,394196,394265,395205,395305,395308,395952,396806-396807,396891,397363,397445-404300
+/nova/palm/enyo/versions/0.8/framework/lib/accounts:413778-414507
+/nova/palm/enyo-apps/accounts.ui/trunk:396893-397450
+/nova/palm/enyo-lib/accounts/trunk:500962-516446
+END

@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/main/!svn/ver/500979/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/mojoshim
+END
+mojo-serviceRequest.js
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/main/!svn/ver/500979/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/mojoshim/mojo-serviceRequest.js
+END
+mojoCore-service.js
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/main/!svn/ver/500979/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/mojoshim/mojoCore-service.js
+END
+importContactsBase.js
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/main/!svn/ver/500979/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/mojoshim/importContactsBase.js
+END

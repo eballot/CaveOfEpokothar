@@ -1,0 +1,62 @@
+10
+
+dir
+525194
+http://subversion.palm.com/main/nova/palm/enyo/versions/0.10/framework/lib
+http://subversion.palm.com/main
+
+
+
+2011-08-03T22:39:29.530528Z
+501126
+yvonne yip
+has-props
+
+svn:special svn:externals svn:needs-lock
+svn:externals
+
+
+
+
+
+
+
+
+
+
+66e7e368-e84f-11db-80e5-f76231892b0b
+
+enyo-lib-depends.js
+file
+
+
+
+
+2011-08-04T16:51:04.000000Z
+a69f2040e35d57e4b556e766e86346e7
+2011-08-03T21:16:51.052821Z
+501022
+yvonne yip
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+19
+

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/main/!svn/ver/519643/nova/palm/enyo-lib/wifi/versions/0.10/framework/lib/wifi
+END
+depends.js
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/main/!svn/ver/508262/nova/palm/enyo-lib/wifi/versions/0.10/framework/lib/wifi/depends.js
+END
+wifi.js
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/main/!svn/ver/519643/nova/palm/enyo-lib/wifi/versions/0.10/framework/lib/wifi/wifi.js
+END

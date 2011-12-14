@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/main/!svn/ver/521653/nova/palm/enyo-lib/mediacapture/versions/0.10/framework/lib/mediacapture
+END
+depends.js
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/main/!svn/ver/501112/nova/palm/enyo-lib/mediacapture/versions/0.10/framework/lib/mediacapture/depends.js
+END
+MediaCapture.js
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/main/!svn/ver/509291/nova/palm/enyo-lib/mediacapture/versions/0.10/framework/lib/mediacapture/MediaCapture.js
+END

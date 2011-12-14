@@ -1,0 +1,19 @@
+K 13
+svn:externals
+V 1520
+accounts	http://subversion.palm.com/main/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts
+addressing	http://subversion.palm.com/main/nova/palm/enyo-lib/addressing/versions/0.10/framework/lib/addressing
+authlib	http://subversion.palm.com/main/nova/palm/enyo-lib/authlib/versions/0.10/framework/lib/authlib
+captiveportal	http://subversion.palm.com/main/nova/palm/enyo-lib/captiveportal/versions/0.10/framework/lib/captiveportal
+contactsui	http://subversion.palm.com/main/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui
+mediacapture	http://subversion.palm.com/main/nova/palm/enyo-lib/mediacapture/versions/0.10/framework/lib/mediacapture
+networkalerts	http://subversion.palm.com/main/nova/palm/enyo-lib/networkalerts/versions/0.10/framework/lib/networkalerts
+palmstyle	http://subversion.palm.com/main/nova/palm/enyo-lib/palmstyle/versions/0.10/framework/lib/palmstyle
+printdialog	http://subversion.palm.com/main/nova/palm/enyo-lib/printdialog/versions/0.10/framework/lib/printdialog
+syncui	http://subversion.palm.com/main/nova/palm/enyo-lib/syncui/versions/0.10/framework/lib/syncui
+systemui	http://subversion.palm.com/main/nova/palm/enyo-lib/systemui/versions/0.10/framework/lib/systemui
+telephony	http://subversion.palm.com/main/nova/palm/enyo-lib/telephony/versions/0.10/framework/lib/telephony
+test	http://subversion.palm.com/main/nova/palm/enyo-lib/test/versions/0.10/framework/lib/test
+wifi	http://subversion.palm.com/main/nova/palm/enyo-lib/wifi/versions/0.10/framework/lib/wifi
+
+END

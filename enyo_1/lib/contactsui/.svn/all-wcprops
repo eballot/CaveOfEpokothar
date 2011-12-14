@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/main/!svn/ver/521771/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui
+END
+depends.js
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/main/!svn/ver/513745/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/depends.js
+END
+jslint-ignore
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/main/!svn/ver/500979/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/jslint-ignore
+END

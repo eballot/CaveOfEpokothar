@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/main/!svn/ver/521771/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/UI
+END
+PersonListWidget.js
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/main/!svn/ver/513780/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/UI/PersonListWidget.js
+END
+resources.js
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/main/!svn/ver/500979/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/UI/resources.js
+END
+FieldGroup.js
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/main/!svn/ver/515945/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/UI/FieldGroup.js
+END
+PseudoDetails.js
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/main/!svn/ver/500979/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/UI/PseudoDetails.js
+END
+PersonList.js
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/main/!svn/ver/521771/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/UI/PersonList.js
+END
+DetailsInDialog.js
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/main/!svn/ver/501507/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/UI/DetailsInDialog.js
+END
+ContactPointPickerList.js
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/main/!svn/ver/521771/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/UI/ContactPointPickerList.js
+END
+PersonListDialog.js
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/main/!svn/ver/521771/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/UI/PersonListDialog.js
+END
+DetailsDialog.js
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/main/!svn/ver/500979/nova/palm/enyo-lib/contactsui/versions/0.10/framework/lib/contactsui/UI/DetailsDialog.js
+END

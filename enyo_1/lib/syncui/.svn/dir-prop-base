@@ -1,0 +1,8 @@
+K 13
+svn:mergeinfo
+V 329
+/nova/palm/enyo/branches/scott/gesture/framework/lib/syncui:407317-409048
+/nova/palm/enyo/trunk/framework/lib/syncui:461410-500994
+/nova/palm/enyo/versions/0.6/lib/syncui:391636,391639,393187,394164,394196,394265,395205,395305,395308,395952,396806-396807,396891,397363,397773,397792
+/nova/palm/enyo-lib/syncui/trunk:500995-514982
+END

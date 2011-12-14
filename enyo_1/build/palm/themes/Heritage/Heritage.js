@@ -1,0 +1,1 @@
+﻿enyo.registerTheme(enyo.Heritage);

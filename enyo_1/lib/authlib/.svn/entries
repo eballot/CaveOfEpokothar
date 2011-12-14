@@ -1,0 +1,105 @@
+10
+
+dir
+525194
+http://subversion.palm.com/main/nova/palm/enyo-lib/authlib/versions/0.10/framework/lib/authlib
+http://subversion.palm.com/main
+
+
+
+2011-08-03T21:15:07.492123Z
+500971
+yvonne yip
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+66e7e368-e84f-11db-80e5-f76231892b0b
+
+depends.js
+file
+
+
+
+
+2011-08-04T16:51:05.000000Z
+df8cd1a4afcdfb94a37f8b515e306c04
+2011-05-10T00:34:53.506879Z
+446647
+jesse donaldson
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+237
+
+dialpadwidget
+dir
+
+images
+dir
+
+source
+dir
+
+styles.css
+file
+
+
+
+
+2011-08-04T16:51:05.000000Z
+224902045ae094a960d97fd58d76dec7
+2011-06-21T20:28:02.400977Z
+481083
+suresh arumugam
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1383
+

@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/main/!svn/ver/521653/nova/palm/enyo-lib/mediacapture/versions/0.10/framework/lib/mediacapture/helper
+END
+MediaCapturePropertyHelper.js
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/main/!svn/ver/521653/nova/palm/enyo-lib/mediacapture/versions/0.10/framework/lib/mediacapture/helper/MediaCapturePropertyHelper.js
+END
+MediaCaptureErrorHelper.js
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/main/!svn/ver/501112/nova/palm/enyo-lib/mediacapture/versions/0.10/framework/lib/mediacapture/helper/MediaCaptureErrorHelper.js
+END
+MediaCaptureProxyHelper.js
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/main/!svn/ver/509291/nova/palm/enyo-lib/mediacapture/versions/0.10/framework/lib/mediacapture/helper/MediaCaptureProxyHelper.js
+END
+MediaServerMockDispatcher.js
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/main/!svn/ver/509291/nova/palm/enyo-lib/mediacapture/versions/0.10/framework/lib/mediacapture/helper/MediaServerMockDispatcher.js
+END

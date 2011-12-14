@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/main/!svn/ver/516447/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source
+END
+sim-account.js
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/main/!svn/ver/500963/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/sim-account.js
+END
+check-first-launch.js
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/main/!svn/ver/500963/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/check-first-launch.js
+END
+entry-modify.js
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/main/!svn/ver/508763/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/entry-modify.js
+END
+cross-app.js
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/main/!svn/ver/512655/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/cross-app.js
+END
+login-utils.js
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/main/!svn/ver/500963/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/login-utils.js
+END
+errors.js
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/main/!svn/ver/514201/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/errors.js
+END
+entry-first-launch.js
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/main/!svn/ver/513408/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/entry-first-launch.js
+END
+duplicate-check.js
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/main/!svn/ver/500963/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/duplicate-check.js
+END
+entry-add.js
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/main/!svn/ver/514201/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/entry-add.js
+END
+accounts-list.js
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/main/!svn/ver/514201/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/accounts-list.js
+END
+remove-account.js
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/main/!svn/ver/500963/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/remove-account.js
+END
+get-templates.js
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/main/!svn/ver/516447/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/get-templates.js
+END
+util.js
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/main/!svn/ver/500963/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/util.js
+END
+add-account.js
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/main/!svn/ver/500963/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/add-account.js
+END
+get-accounts.js
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/main/!svn/ver/500963/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/get-accounts.js
+END
+credentials.js
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/main/!svn/ver/513408/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/credentials.js
+END
+modify.js
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/main/!svn/ver/514201/nova/palm/enyo-lib/accounts/versions/0.10/framework/lib/accounts/source/modify.js
+END
