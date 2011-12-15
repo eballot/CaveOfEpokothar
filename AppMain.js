@@ -1,10 +1,6 @@
 /*jslint white: false, undef: true, eqeqeq: true */ 
 /*global window, enyo, $L, JSON */
 
-// Setup all the tile icons globally so they're loaded asap. 
-MapTileIcons.loadImages();
-
-
 enyo.kind({
 	name: "AppMain",
 	kind: enyo.VFlexBox,

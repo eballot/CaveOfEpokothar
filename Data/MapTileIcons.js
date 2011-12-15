@@ -92,3 +92,7 @@ var MapTileIcons = {
 		}
 	}
 };
+
+//Setup all the tile icons globally so they're loaded asap. 
+MapTileIcons.loadImages();
+

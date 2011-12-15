@@ -6,6 +6,7 @@ enyo.kind({
 	kind: enyo.Control,
 	events: {
 		onStatusText: "doStatusText",
+		onMonsterClicked: "",
 		onMonsterDied: ""
 	},
 	components: [{
@@ -166,6 +167,7 @@ enyo.kind({
 						position: item.position,
 						showing: false,
 						monsterModel: MonsterModel.loadFromObject(item.monsterModel),
+						onclick: "_monsterClicked",
 						onDied: "_monsterDiedHandler",
 						onStatusText: "doStatusText",
 						onItemPickedUp: "_monsterPickedUpItemHandler"
@@ -403,6 +405,7 @@ enyo.kind({
 				position: position,
 				monsterModel: m,
 				showing: false,
+				onclick: "_monsterClicked",
 				onDied: "_monsterDiedHandler",
 				onStatusText: "doStatusText",
 				onItemPickedUp: "_monsterPickedUpItemHandler"
@@ -717,6 +720,11 @@ enyo.kind({
 		}
 	},
 	
+	_monsterClicked: function(inSender, inEvent) {
+		this.doMonsterClicked(inSender); // passing up the actor that was clicked
+		return true;
+	},
+	
 	_generateRandomPosition: function() {
 		if (!this.map.rooms) {
 			return null;
@@ -762,6 +770,7 @@ enyo.kind({
 					attitude:"hostile"
 				}),
 				showing: false,
+				onclick: "_monsterClicked",
 				onDied: "_epokotharDiedHandler",
 				onStatusText: "doStatusText",
 				onItemPickedUp: "_monsterPickedUpItemHandler"

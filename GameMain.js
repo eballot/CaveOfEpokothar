@@ -30,11 +30,14 @@ enyo.kind({
 						name: "map",
 						kind: "MapLevel",
 						className: "map-styles",
+						onclick: "_mapClickHandler",
+						onMonsterClicked: "_monsterClickHandler",
 						onStatusText: "_showStatusText",
 						onMonsterDied: "_updateKillList"
 					}, {
 						name: "me",
 						kind: "PlayerOnMap",
+						onclick: "_showInventory",
 						onActed: "gameLoop",
 						onDied: "playerDeath",
 						onStatsChanged: "playerStatsChanged",
@@ -285,21 +288,21 @@ enyo.kind({
 		this.scrollMapToPlayer();
 	},
 	
-	clickHandler: function(inSender, inEvent) {
-		var tileX, tileY, position;
+	_mapClickHandler: function(inSender, inEvent) {
+		var tileX, tileY;
 		if (inSender.kind === "MapLevel") {
 			tileX = Math.floor(inEvent.offsetX / MapLevel.kTileSize);
 			tileY = Math.floor(inEvent.offsetY / MapLevel.kTileSize);
 			this.$.me.interactWithMap(this.$.map, tileX, tileY, this.turnCount);
 			this._updateToobarButtons();
 			return true;
-		} else if (inSender.kind === "ItemOnMap" || inSender.kind === "ActorOnMap" || inSender.kind === "PlayerOnMap") {
-			position = inSender.getPosition();
-			this.$.me.interactWithMap(this.$.map, position.x, position.y, this.turnCount);
-			return true;
-		} else if (inSender.parent) {
-			this.clickHandler(inSender.parent, inEvent);
 		}
+	},
+	
+	_monsterClickHandler: function(inSender, inActor) {
+		var position = inActor.getPosition();
+		this.$.me.interactWithMap(this.$.map, position.x, position.y, this.turnCount);
+		return true;
 	},
 	
 	resizeHandler: function() {
