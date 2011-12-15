@@ -9,12 +9,9 @@ var MapGeneratorBossLevel = {
 	 * 
 	 */
 	generateMap: function(width, height) {
-		var results, x, y, tiles, rooms = [], epok, throne, stairsUpX, midpointY, corridorWX, corridorEX, corridorNY, corridorSY,
+		var results, x, y, tiles, epok, throne, loot, stairsUpX, midpointY, corridorWX, corridorEX, corridorNY, corridorSY,
 			chamberWX, chamberEX, chamberNY, chamberSY;
 		
-//		var t = [
-//			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-//		];
 		// First fill it all with walls and later carve out the rooms and corridors
 		tiles = new Array(width);
 		for (x = 0; x < width; x++) {
@@ -67,7 +64,7 @@ var MapGeneratorBossLevel = {
 		tiles[chamberEX][midpointY-1] =  {base:MapTileIcons.floor};
 		tiles[chamberEX][midpointY] =  {base:MapTileIcons.floor};
 		tiles[chamberEX][midpointY+1] =  {base:MapTileIcons.floor};
-		this._buildRoom(tiles, chamberWX, chamberEX, chamberNY, chamberSY+1, rooms);
+		this._buildRoom(tiles, chamberWX, chamberEX, chamberNY, chamberSY+1);
 
 		// Main chamber
 		chamberEX = chamberWX - 1;
@@ -82,7 +79,7 @@ var MapGeneratorBossLevel = {
 		tiles[chamberEX][midpointY] =  {base:MapTileIcons.floor};
 		tiles[chamberEX][midpointY+1] =  {base:MapTileIcons.floor};
 		this._buildRoom(tiles, chamberWX, chamberEX, chamberNY, chamberSY+1);
-		epok = {wx:chamberWX, ny:chamberNY, ex:chamberEX-1, sy:chamberSY};
+		epok = {x:chamberWX, y:chamberNY, w:10, h:chamberSY-chamberNY};
 		throne = {x:chamberWX + 3, y:midpointY};
 		tiles[throne.x][throne.y] = {base:MapTileIcons.throne};
 
@@ -92,11 +89,17 @@ var MapGeneratorBossLevel = {
 			tiles[x][chamberSY-4] = {base:MapTileIcons.bighead};
 		}
 
+		// Add secret loot room
+		this._buildRoom(tiles, chamberWX-8, chamberWX-1, midpointY-3, midpointY+4);
+		loot = {x:chamberWX-8, y:midpointY-3, w:7, h:6};
+		tiles[chamberWX-1][midpointY] = {base:MapTileIcons.doorHidden};
+
 		results = {
 			tiles: tiles,
-			up: {x:stairsUpX, y:midpointY },
+			up: {x:stairsUpX, y:midpointY},
 			epok: epok,
-			throne: throne
+			throne: throne,
+			loot: loot
 		};
 		return results;
 	},
