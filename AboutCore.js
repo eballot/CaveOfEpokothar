@@ -14,7 +14,7 @@ enyo.kind({
 	}, {
 		kind: enyo.Control,
 		className: "help-body-title",
-		content: $L("About")
+		content: $L("How To Play")
 	}, {
 		kind: enyo.Control,
 		className: "help-body-text",
