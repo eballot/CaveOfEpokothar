@@ -290,15 +290,29 @@ enyo.kind({
 	
 	_mapClickHandler: function(inSender, inEvent) {
 		var tileX, tileY;
-		console.log("_mapClickHandler"); //ECB!!! debugging
-		for (var key in inEvent) {
-			if (inEvent.hasOwnProperty(key)) {
-				console.log(key + ": "+inEvent[key]);
-			}
-		}
 		if (inSender.kind === "MapLevel") {
-			tileX = Math.floor(inEvent.offsetX / MapLevel.kTileSize);
-			tileY = Math.floor(inEvent.offsetY / MapLevel.kTileSize);
+			// offsetX is available in Chrome & Safari versions of webkit
+			if (inEvent.offsetX) {
+				tileX = Math.floor(inEvent.offsetX / MapLevel.kTileSize);
+				tileY = Math.floor(inEvent.offsetY / MapLevel.kTileSize);
+			// layerX is available in Firefox
+			} else if (inEvent.layerX) {
+				tileX = Math.floor(inEvent.layerX / MapLevel.kTileSize);
+				tileY = Math.floor(inEvent.layerY / MapLevel.kTileSize);
+			// Mobile Safari (iPad) doesn't support above so fall back to manually calculating.
+			} else {
+				// Walk up the ancestor list looking for the map scroller div which has the correct offsetTop/Left.
+				var mapScroller = inEvent.target;
+				while (mapScroller && mapScroller.className !== "map-scroller") {
+					mapScroller = mapScroller.parentElement;
+				}
+				if (mapScroller) {
+					tileX = Math.floor((inEvent.pageX - mapScroller.offsetLeft) / MapLevel.kTileSize);
+					tileY = Math.floor((inEvent.pageY - mapScroller.offsetTop) / MapLevel.kTileSize);
+				} else {
+					throw new Error("mapClickHandler: can't find dive with class===map-scroller");
+				}
+			}
 			this.$.me.interactWithMap(this.$.map, tileX, tileY, this.turnCount);
 			this._updateToobarButtons();
 			return true;
