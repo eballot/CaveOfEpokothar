@@ -266,8 +266,14 @@ MonsterModel.prototype.getExperience = function(xp) {
 	return this.experience;
 };
 
-MonsterModel.prototype.getExpToNextLevel = function() {
-	return MonsterModel.expNeeded(this.getLevel() + 1) - this.experience;
+MonsterModel.prototype.getExpToNextLevel = function(asPercentage) {
+	var current, next = MonsterModel.expNeeded(this.getLevel() + 1);
+	if (asPercentage) {
+		current = MonsterModel.expNeeded(this.getLevel());
+		return Math.floor(100 * (this.experience - current) / (next - current));
+	} else {
+		return next - this.experience;
+	}
 };
 
 MonsterModel.prototype.getLevel = function(xp) {

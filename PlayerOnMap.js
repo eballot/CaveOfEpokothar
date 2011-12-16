@@ -151,7 +151,8 @@ enyo.kind({
 								// If the actor is not hostile, ask if you really want to attack it
 								options = [
 									{ caption:something.whatAreYou(true), action:something.describeYourself.bind(something) }, //TODO: display the description
-									{ caption:$L("Attack"), action:this._doMeleeAttack.bind(this, something) }
+									{ caption:$L("Attack"), action:this._doMeleeAttack.bind(this, something) },
+									{ caption:$L("Ignore") }
 								];
 								this.$.interactionChoicePopup.setItems(options);
 								this.$.interactionChoicePopup.openAtControl(something);
@@ -381,7 +382,7 @@ enyo.kind({
 		content.push("Dex: " + this.monsterModel.dex);
 		content.push("Int: " + this.monsterModel.int);
 		content.push("AC: " + Math.floor(defenses.ac) + ", Block: " + Math.floor(defenses.block) + ", Dodge: " + Math.floor(defenses.dodge));
-		content.push("Level: " + this.monsterModel.getLevel() + " (" + this.monsterModel.getExpToNextLevel() + ")");
+		content.push("Level: " + this.monsterModel.getLevel() + " (" + this.monsterModel.getExpToNextLevel(true) + "%)");
 		if (weapon) {
 			text = "Wielding: " + weapon.getDisplayName(true);
 			if (weapon.requiresAmmunition()) {
