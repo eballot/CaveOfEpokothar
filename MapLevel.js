@@ -574,11 +574,12 @@ enyo.kind({
 		extraBonus = 0;
 		startPos = shooter.getPosition();
 		endPos = target.getPosition();
-		maxRange = weapon.getRangedReach();
 		deltaX = endPos.x - startPos.x;
 		deltaY = endPos.y - startPos.y;
 		absX = Math.abs(deltaX);
 		absY = Math.abs(deltaY);
+		maxRange = Math.max(absX, absY) + Math.ceil(Math.random()*5);
+		maxRange = Math.min(maxRange, weapon.getRangedReach());
 		
 		//angle = Math.floor(Math.atan(deltaY / deltaX) * 180 / Math.PI);
 		
@@ -638,6 +639,18 @@ enyo.kind({
 //					this.ctx.fillRect((ix*MapLevel.kTileSize), (iy*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
 				}
 			} else {
+				if (ix <= 0) {
+					ix = 1;
+				} else if (ix >= MapLevel.kMapWidth) {
+					ix = MapLevel.kMapWidth - 1;
+				}
+
+				if (iy <= 0) {
+					iy = 1;
+				} else if (iy >= MapLevel.kMapHeight) {
+					iy = MapLevel.kMapHeight - 1;
+				}
+
 				break;
 			}
 		}
@@ -668,6 +681,7 @@ enyo.kind({
 				if (!ammoItem.destroyedWhenUsed(hit)) {
 					newItem = ammoItem.makeCopy();
 					newItem.setAutoPickupFlag();
+					newItem.setEquipped(false);
 					if (ammoItem.getCategory() === "ammo") {
 						newItem.setRemainingUses(1);
 					}

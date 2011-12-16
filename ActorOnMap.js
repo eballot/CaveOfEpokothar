@@ -102,13 +102,13 @@ enyo.kind({
 		if (showAttitude) {
 			switch (this.attitude) {
 			case "neutral":
-				text = new enyo.g11n.Template($L("Indifferent #{name}")).evaluate({name:this.monsterModel.getDisplayName()});
+				text = new enyo.g11n.Template($L("#{name} (ignoring you)")).evaluate({name:this.monsterModel.getDisplayName()});
 				break;
 			case "friendly":
-				text = new enyo.g11n.Template($L("Friendly #{name}")).evaluate({name:this.monsterModel.getDisplayName()});
+				text = new enyo.g11n.Template($L("#{name} (friendly)")).evaluate({name:this.monsterModel.getDisplayName()});
 				break;
 			default:
-				text = new enyo.g11n.Template($L("Hostile #{name}")).evaluate({name:this.monsterModel.getDisplayName()});
+				text = new enyo.g11n.Template($L("#{name} (it looks hostile)")).evaluate({name:this.monsterModel.getDisplayName()});
 				break;
 			}
 		} else {

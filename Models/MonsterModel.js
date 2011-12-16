@@ -505,7 +505,7 @@ MonsterModel.prototype.exerciseSkill = function(skillName) {
 		} else {
 			++skillObj.xp;
 			// Special case for lvl 0 since you're still learning the basics...
-			if ((skillObj.lvl === 0 && skillObj.xp > 35) || skillObj.xp > (skillObj.lvl/2 + 1) * 10) {
+			if ((skillObj.lvl === 0 && skillObj.xp > 35) || skillObj.xp >= (skillObj.lvl/2 + 1) * 10) {
 				skillObj.xp = 0;
 				++skillObj.lvl;
 			}
