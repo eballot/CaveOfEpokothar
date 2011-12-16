@@ -290,8 +290,8 @@ enyo.kind({
 	
 	_mapClickHandler: function(inSender, inEvent) {
 		var tileX, tileY;
-		this.log(inSender);
-		this.log(inEvent);
+		console.log("_mapClickHandler"+inEvent);
+		console.log("_mapClickHandler"+inEvent.offsetX);
 //		if (inSender.kind === "MapLevel") {
 			tileX = Math.floor(inEvent.offsetX / MapLevel.kTileSize);
 			tileY = Math.floor(inEvent.offsetY / MapLevel.kTileSize);
