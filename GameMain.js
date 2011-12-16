@@ -290,15 +290,19 @@ enyo.kind({
 	
 	_mapClickHandler: function(inSender, inEvent) {
 		var tileX, tileY;
-		console.log("_mapClickHandler"+inEvent);
-		console.log("_mapClickHandler"+inEvent.offsetX);
-//		if (inSender.kind === "MapLevel") {
+		console.log("_mapClickHandler"); //ECB!!! debugging
+		for (var key in inEvent) {
+			if (inEvent.hasOwnProperty(key)) {
+				console.log(key + ": "+inEvent[key]);
+			}
+		}
+		if (inSender.kind === "MapLevel") {
 			tileX = Math.floor(inEvent.offsetX / MapLevel.kTileSize);
 			tileY = Math.floor(inEvent.offsetY / MapLevel.kTileSize);
 			this.$.me.interactWithMap(this.$.map, tileX, tileY, this.turnCount);
 			this._updateToobarButtons();
 			return true;
-//		}
+		}
 	},
 	
 	_monsterClickHandler: function(inSender, inActor) {
