@@ -496,11 +496,17 @@ MonsterModel.prototype.getSkillXpLevel = function(skillName) {
 };
 
 MonsterModel.prototype.exerciseSkill = function(skillName) {
-	var skillObj, skillIncreased = false;
+	var skillObj, item, skillIncreased = false;
 	// Special case for armor skill. Only exercise if wearing armor on the torso slot and it requires skill.
 	// For example, a rogue doesn't gain skill if he's wearing a helmet and leather armor. 
 	if (skillName === "armor" && this.equippedItems.torso && this.equippedItems.torso.canUseUnskilled()) {
 		return false;
+	// If no shield is equipped, must be using a defensive weapon, like quarterstaff
+	} else if (skillName === "shield" && !this.equippedItems[skillName]) {
+		item = this.getEquippedItem("weapon");
+		if (item && item.getBlock()) {
+			skillName = item.getSkillRequired();
+		}
 	}
 	
 	if (Math.random() < 0.5) {
@@ -671,9 +677,7 @@ MonsterModel.prototype._calculateDefenses = function() {
 	}
 
 	for (var key in this.equippedItems) {
-		if (key === "weapon") {
-			//TODO: for now ignoring weapons potential for adding to block or ac
-		} else if (key === "rings") {
+		if (key === "rings") {
 			//TODO: for now ignoring rings of protect and evasion
 		} else {
 			item = this.equippedItems[key];

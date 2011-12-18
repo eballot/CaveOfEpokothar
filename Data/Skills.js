@@ -23,7 +23,6 @@ var kSkills = {
 	polearm:  { displayName: $L("Polearm") },
 	spear:    { displayName: $L("Spear") },
 	staff:    { displayName: $L("Staff") },
-	stealth:  { displayName: $L("Stealth") },
 	sword:    { displayName: $L("Sword") },
 	
 	bow:      { displayName: $L("Bow") },

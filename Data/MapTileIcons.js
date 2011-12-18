@@ -21,7 +21,7 @@ var MapTileIcons = {
 
 	//armor
 	leather:    { img: "items", offsetX: 480, offsetY: 160 },
-	studdedleather: { img: "items", offsetX: 512, offsetY: 160 },
+	studdedleather:{img: "items", offsetX: 512, offsetY: 160 },
 	scalemail:  { img: "items", offsetX: 64, offsetY: 192 },
 	chainmail:  { img: "items", offsetX: 576, offsetY: 160 },
 	fieldplate: { img: "items", offsetX: 256, offsetY: 192 },
@@ -49,10 +49,16 @@ var MapTileIcons = {
 	//weapons
 	club:       { img: "items", offsetX: 480, offsetY: 0 },
 	dagger:     { img: "items", offsetX: 320, offsetY: 32 },
+	greataxe:   { img: "items", offsetX: 512, offsetY: 64 },
 	handaxe:    { img: "items", offsetX: 384, offsetY: 64 },
+	heavymace:  { img: "items", offsetX: 544, offsetY: 0 },
 	longsword:  { img: "items", offsetX: 544, offsetY: 32 },
+	mace:       { img: "items", offsetX: 512, offsetY: 0 },
+	quarterstaff:{img: "items", offsetX: 448, offsetY: 0 },
 	shortsword: { img: "items", offsetX: 512, offsetY: 32 },
 	spear:      { img: "items", offsetX: 192, offsetY: 96 },
+	trident:    { img: "items", offsetX: 288, offsetY: 96 },
+	waraxe:     { img: "items", offsetX: 448, offsetY: 64 },
 
 	crossbow:   { img: "items", offsetX: 0, offsetY: 96 },
 	longbow:    { img: "items", offsetX: 608, offsetY: 64 },
