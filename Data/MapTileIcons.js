@@ -61,6 +61,7 @@ var MapTileIcons = {
 	waraxe:     { img: "items", offsetX: 448, offsetY: 64 },
 
 	crossbow:   { img: "items", offsetX: 0, offsetY: 96 },
+	heavycrossbow:{img: "items", offsetX: 0, offsetY: 96 },
 	longbow:    { img: "items", offsetX: 608, offsetY: 64 },
 	shortbow:   { img: "items", offsetX: 608, offsetY: 64 },
 	sling:      { img: "items", offsetX: 576, offsetY: 64 },

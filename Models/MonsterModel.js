@@ -237,7 +237,7 @@ MonsterModel.prototype.getGraphic = function() {
 };
 
 MonsterModel.prototype.getFaceGraphic = function() {
-	return this.template.faceImg;
+	return this.template.faceImg || "$base-themes-default-theme/images/blank.gif";
 };
 
 MonsterModel.prototype.getDisplayName = function(short) {
@@ -702,7 +702,7 @@ MonsterModel.prototype._calculateDefenses = function() {
 	if (this.getEncumberance() > 67) {
 		flexibility *= 0.75;
 	}
-	defenses.dodge = flexibility * this.getSkillLevel("dodge", true) * dexterity;
+	defenses.dodge = flexibility * this.getSkillLevel("dodge", true) * (2 * dexterity / 3);
 	
 	this.defenses = defenses;
 };

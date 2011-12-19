@@ -166,7 +166,7 @@ enyo.kind({
 	
 	ranger: function(player) {
 		if (player.race === "halfling") {
-			player.dex = 13;
+			player.dex = 14;
 			player.str = 8;
 			player.int = 7;
 			player.inventory = [
@@ -185,7 +185,7 @@ enyo.kind({
 			};
 		} else {
 			// Default is human
-			player.dex = 13;
+			player.dex = 14;
 			player.str = 10;
 			player.int = 5;
 			player.inventory = [
