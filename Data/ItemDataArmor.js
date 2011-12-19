@@ -1,35 +1,4 @@
 kItemsData.armor = {
-	/** Clothing **/
-	pantsblack: {
-		displayName: $L("Black pants"),
-		type:"pantsblack", category:"armor", slot:"legs", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
-		img: "tiles/player/leg/pants_black.gif",
-		description: $L("Just your standard durable pants.")
-	},
-	pantsblue: {
-		displayName: $L("Blue pants"),
-		type:"pantsblue", category:"armor", slot:"legs", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
-		img: "tiles/player/leg/pants_blue.gif",
-		description: $L("Just your standard durable pants.")
-	},
-	pantsbrown: {
-		displayName: $L("Brown pants"),
-		type:"pantsbrown", category:"armor", slot:"legs", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
-		img: "tiles/player/leg/pants_brown.gif",
-		description: $L("Just your standard durable pants.")
-	},
-	shirtvest: {
-		displayName: $L("Shirt"),
-		type:"shirtvest", category:"armor", slot:"torso", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:0, value:1,/*gp*/
-		img: "tiles/player/body/shirt_vest.gif",
-		description: $L("A shirt and a sporty vest.")
-	},
-	shirtwhite: {
-		displayName: $L("Shirt"),
-		type:"shirtwhite", category:"armor", slot:"torso", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:0, value:1,/*gp*/
-		img: "tiles/player/body/shirt_white1.gif",
-		description: $L("A simple shirt.")
-	},
 		
 	/** Body armor **/
 	leather: {
@@ -158,3 +127,59 @@ kItemsData.armor = {
 		description: $L("Sandals are probably the most basic form of footwear.")
 	}
 };
+
+//The following are simple clothing that shouldn't be enumerable so they don't show up as random loot
+Object.defineProperty(kItemsData.armor, 
+	"pantsblack", {
+	enumerable: false,
+	value: {
+		displayName: $L("Black pants"),
+		type:"pantsblack", category:"armor", slot:"legs", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
+		img: "tiles/player/leg/pants_black.gif",
+		description: $L("Just your standard durable pants.")
+	}
+});
+
+Object.defineProperty(kItemsData.armor, 
+	"pantsblue", {
+	enumerable: false,
+	value: {
+		displayName: $L("Blue pants"),
+		type:"pantsblue", category:"armor", slot:"legs", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
+		img: "tiles/player/leg/pants_blue.gif",
+		description: $L("Just your standard durable pants.")
+	}
+});
+
+Object.defineProperty(kItemsData.armor, 
+	"pantsbrown", {
+	enumerable: false,
+	value: {
+		displayName: $L("Brown pants"),
+		type:"pantsbrown", category:"armor", slot:"legs", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
+		img: "tiles/player/leg/pants_brown.gif",
+		description: $L("Just your standard durable pants.")
+	}
+});
+
+Object.defineProperty(kItemsData.armor, 
+	"shirtvest", {
+	enumerable: false,
+	value: {
+		displayName: $L("Shirt"),
+		type:"shirtvest", category:"armor", slot:"torso", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:0, value:1,/*gp*/
+		img: "tiles/player/body/shirt_vest.gif",
+		description: $L("A shirt and a sporty vest.")
+	}
+});
+
+Object.defineProperty(kItemsData.armor, 
+	"shirtwhite", {
+	enumerable: false,
+	value: {
+		displayName: $L("Shirt"),
+		type:"shirtwhite", category:"armor", slot:"torso", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:0, value:1,/*gp*/
+		img: "tiles/player/body/shirt_white1.gif",
+		description: $L("A simple shirt.")
+	}
+});
