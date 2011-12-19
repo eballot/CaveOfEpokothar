@@ -417,7 +417,7 @@ enyo.kind({
 		if (tileKind === MapTileIcons.stairsDown.kind) {
 			this.$.stairsUp.setShowing(false);
 			this.$.stairsDown.setShowing(true);
-		} else if (tileKind === MapTileIcons.stairsUp.kind) {
+		} else if (tileKind === MapTileIcons.stairsUp.kind && this.$.map.getLevel() !== 1) { //TODO: for now, you can't leave. Later add a check if quest is complete
 			this.$.stairsUp.setShowing(true);
 			this.$.stairsDown.setShowing(false);
 		} else {
