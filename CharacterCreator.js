@@ -2,16 +2,16 @@
 /*global window, enyo, $L, JSON */
 
 var kPlayerClasses = [{
-	className: $L("human warrior"), description: $L("A human warrior trained to fight with a shield and various types of melee weapons"),
+	className: $L("human warrior"), description: $L("A human warrior trained to fight with a shield and various types of melee weapons."),
 	race: "human", focus: "warrior"
 }, {
 	className: $L("dwarven warrior"), description: $L("A dwarven warrior, well versed with axe and armor."),
 	race: "dwarf", focus: "warrior"
 }, {
-	className: $L("human ranger"), description: $L("A human ranger who is skilled with a bow and a sword, but not heavy armor"),
+	className: $L("human ranger"), description: $L("A human ranger who is skilled with a bow and a sword, but not heavy armor."),
 	race: "human", focus: "ranger"
 }, {
-	className: $L("halfling ranger"), description: $L("A halfling ranger. Slight of stature, but inately skilled at using slings and daggers"),
+	className: $L("halfling slinger"), description: $L("A halfling slinger. Slight of stature, but inately skilled at using slings and daggers."),
 	race: "halfling", focus: "ranger"
 //}, {
 //	className: $L("rogue"), description: $L("A rogue who prefers to sneak up and ambush foes or kill them from a distance"),

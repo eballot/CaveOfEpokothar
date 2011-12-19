@@ -128,6 +128,19 @@ kItemsData.armor = {
 	}
 };
 
+
+//This artifact is never random so it's not enumerable
+Object.defineProperty(kItemsData.armor, 
+	"cloakehpeway", {
+	enumerable: false,
+	value: {
+		displayName: $L("Cloak of Ehpeway"),
+		type: "cloakehpeway", category:"armor", slot:"cloak", easy:true, defense:4, block:4, weight:1, value:10000,/*gp*/
+		img: "tiles/player/cloak/blue.gif",
+		description: $L("This cloak has a large E and W embroidered into it. It must be the magical ehpeway cloak.")
+	}
+});
+
 //The following are simple clothing that shouldn't be enumerable so they don't show up as random loot
 Object.defineProperty(kItemsData.armor, 
 	"pantsblack", {

@@ -65,7 +65,7 @@ enyo.kind({
 	},
 
 	setLevel: function(level) {
-		var i, arrayLen, item, typeKeys, type, nourishment;
+		var i, arrayLen;
 		if (this.level) {
 			this.save();
 		}
@@ -88,24 +88,6 @@ enyo.kind({
 				// level (the stairs). Need an optional param to specify positioning override.
 				this.player.positionAt(this.map.stairsUp.x, this.map.stairsUp.y);
 			}
-			
-			// First create some food items
-			nourishment = 2000;
-			typeKeys = Object.keys(kItemsData.food);
-			while (nourishment > 0) {
-				type = typeKeys[Math.floor(Math.random() * typeKeys.length)];
-				item = this.createItem("food", type);
-				if (item) {
-					nourishment -= item.getNourishment();
-				} else {
-					nourishment = -1;
-				}
-			}
-			
-			// Create a few random weapons, armor, ammo
-			this.createRandomItems("weapons", 3, 2);
-			this.createRandomItems("armor", 4, 1);
-			this.createRandomItems("ammo", 3, 0);
 		}
 
 		this._renderMap(0,0, MapLevel.kMapWidth, MapLevel.kMapHeight, true);
@@ -739,11 +721,15 @@ enyo.kind({
 		return true;
 	},
 	
-	_generateRandomPosition: function() {
-		if (!this.map.rooms) {
+	_generateRandomPosition: function(rooms) {
+		if (!rooms) {
+			rooms = this.map.rooms;
+		}
+		
+		if (!rooms) {
 			return null;
 		} else {
-			var room = this.map.rooms[Math.floor(Math.random() * this.map.rooms.length)];
+			var room = rooms[Math.floor(Math.random() * rooms.length)];
 			return {
 				x: room.x + Math.floor(Math.random() * room.w),
 				y: room.y + Math.floor(Math.random() * room.h)
@@ -765,31 +751,9 @@ enyo.kind({
 	},
 	
 	_buildLevel: function() {
-		var newMap;
-		if (this.level === 11) {
-			newMap = MapGeneratorBossLevel.generateMap(MapLevel.kMapWidth, MapLevel.kMapHeight);
-			this.map = {
-				tiles: newMap.tiles,
-				stairsUp: newMap.up
-			};
-			//TODO: add Epokothar and a few evil minions
-			this.actors.push(this.createComponent({
-				kind: "ActorOnMap",
-				owner: this,
-				parent: this.$.actorsContainer,				
-				position: {x:newMap.throne.x, y:newMap.throne.y},
-				monsterModel: new MonsterModel({
-					race: "epokothar",
-					level: this.level,
-					attitude:"hostile"
-				}),
-				showing: false,
-				onclick: "_monsterClicked",
-				onDied: "_epokotharDiedHandler",
-				onStatusText: "doStatusText",
-				onItemPickedUp: "_monsterPickedUpItemHandler"
-			}));
-			this.$.actorsContainer.render();
+		var newMap, item, typeKeys, type, nourishment;
+		if (this.level === 10) {
+			this._buildBossLevel();
 		} else {
 			newMap = MapGeneratorBsp.generateMap(MapLevel.kMapWidth, MapLevel.kMapHeight);
 			this.map = {
@@ -806,7 +770,57 @@ enyo.kind({
 				this.createRandomMonster("hostile");
 			}
 			this.$.actorsContainer.render();
+			
+			// First create some food items
+			nourishment = 2000;
+			typeKeys = Object.keys(kItemsData.food);
+			while (nourishment > 0) {
+				type = typeKeys[Math.floor(Math.random() * typeKeys.length)];
+				item = this.createItem("food", type);
+				if (item) {
+					nourishment -= item.getNourishment();
+				} else {
+					nourishment = -1;
+				}
+			}
+			
+			// Create a few random weapons, armor, ammo
+			this.createRandomItems("weapons", 3, 2);
+			this.createRandomItems("armor", 4, 1);
+			this.createRandomItems("ammo", 3, 0);
 		}
+	},
+	
+	_buildBossLevel: function() {
+		var newMap, item, position;
+		newMap = MapGeneratorBossLevel.generateMap(MapLevel.kMapWidth, MapLevel.kMapHeight);
+		this.map = {
+			tiles: newMap.tiles,
+			stairsUp: newMap.up
+		};
+		
+		this.actors.push(this.createComponent({
+			kind: "ActorOnMap",
+			owner: this,
+			parent: this.$.actorsContainer,				
+			position: {x:newMap.throne.x, y:newMap.throne.y},
+			monsterModel: new MonsterModel({
+				race: "epokothar",
+				level: this.level,
+				attitude:"hostile"
+			}),
+			showing: false,
+			onclick: "_monsterClicked",
+			onDied: "_epokotharDiedHandler",
+			onStatusText: "doStatusText",
+			onItemPickedUp: "_monsterPickedUpItemHandler"
+		}));
+		//TODO: add a few evil minions
+		this.$.actorsContainer.render();
+		
+		item = new ItemModel("armor", "cloakehpeway");
+		position = this._generateRandomPosition(newMap.loot);
+		this.addItem(item, position.x, position.y);
 	},
 	
 //	_createOffscreenImages: function() {

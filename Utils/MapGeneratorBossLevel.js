@@ -91,7 +91,7 @@ var MapGeneratorBossLevel = {
 
 		// Add secret loot room
 		this._buildRoom(tiles, chamberWX-8, chamberWX-1, midpointY-3, midpointY+4);
-		loot = {x:chamberWX-8, y:midpointY-3, w:7, h:6};
+		loot = [{x:chamberWX-8, y:midpointY-3, w:7, h:6}];
 		tiles[chamberWX-1][midpointY] = {base:MapTileIcons.doorHidden};
 
 		results = {

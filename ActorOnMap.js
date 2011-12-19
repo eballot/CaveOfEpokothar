@@ -12,6 +12,10 @@ enyo.kind({
 		onAlertDialog: ""
 	},
 	chrome: [{
+		name: "cloak",
+		kind: enyo.Image,
+		className: "wearables"
+	}, {
 		name: "avatar",
 		kind: enyo.Image,
 		className: "wearables"
@@ -126,7 +130,7 @@ enyo.kind({
 	showEquippedItems: function() {
 		if (this.monsterModel.showEquippedItems()) {
 			var i, arrayLen, slot, item, slotsArray;
-			slotsArray = [ "weapon", "shield", "head", "torso", "legs", "shoes", "glove" ];
+			slotsArray = [ "weapon", "shield", "head", "torso", "legs", "shoes", "glove", "cloak" ];
 			
 			arrayLen = slotsArray.length;
 			for (i = 0; i < arrayLen; i++) {
@@ -168,7 +172,7 @@ enyo.kind({
 	},
 
 	rangedAttack: function(weapon, target, map) {
-		var needsAmmo, ammoItem, remainingUses = 1;
+		var needsAmmo, ammoItem, remainingUses;
 		needsAmmo = weapon.requiresAmmunition();
 		if (needsAmmo) {
 			ammoItem = this.monsterModel.getEquippedItem("quiver");
@@ -181,6 +185,8 @@ enyo.kind({
 			} else {
 				remainingUses = ammoItem.getRemainingUses();
 			}
+		} else {
+			remainingUses = weapon.getRemainingUses();
 		}
 		
 		if (remainingUses) {

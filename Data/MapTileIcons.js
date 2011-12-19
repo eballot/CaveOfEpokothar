@@ -18,6 +18,7 @@ var MapTileIcons = {
 	
 	throne:     { img: "dungeon", offsetX: 0,   offsetY: 128, kind: "throne" },
 	bighead:    { img: "dungeon", offsetX: 96,  offsetY: 160, kind: "bighead", obstructed: true },
+	cloakehpeway:{img: "items", offsetX: 576, offsetY: 224 },
 
 	//armor
 	leather:    { img: "items", offsetX: 480, offsetY: 160 },
