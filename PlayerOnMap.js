@@ -251,7 +251,7 @@ enyo.kind({
 						statusTemplate = new enyo.g11n.Template($L("You pick up: #{name}."));
 						for (i = 0; i < pickedUpItems.length; i++) {
 							item = pickedUpItems[i];
-							this.addItem(item);
+							this.addItem(item, true);
 							statusText = statusTemplate.evaluate({name:item.getDisplayName()});
 							this.doStatusText(statusText);
 						}

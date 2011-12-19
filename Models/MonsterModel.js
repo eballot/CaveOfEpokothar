@@ -381,7 +381,7 @@ MonsterModel.prototype.maybeIdentify = function(slot, bonus) {
 	return null;
 };
 
-MonsterModel.prototype.addItem = function(item) {
+MonsterModel.prototype.addItem = function(item, autoEquip) {
 	var i, length, inventory, inventoryItem;
 	inventory = this.inventory;
 	// Try to consolidate this item if the same items are already in inventory
@@ -403,6 +403,10 @@ MonsterModel.prototype.addItem = function(item) {
 		}
 	} else {
 		inventory.push(item);
+		// If not currently wielding a weapon and this could be weilded (eg, it was auto-pickup), do so
+		if (autoEquip && !this.equippedItems.weapon && item.getCategory() === "weapons") {
+			this.equipAnItem(inventory.length - 1);
+		}
 	}
 
 	this.updateWeightCarried();

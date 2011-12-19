@@ -279,8 +279,11 @@ enyo.kind({
 		this._statsChanged();
 	},
 	
-	addItem: function(item) {
-		this.monsterModel.addItem(item);
+	addItem: function(item, autoEquip) {
+		this.monsterModel.addItem(item, autoEquip);
+		if (autoEquip) {
+			this.showEquippedItems();
+		}
 		this._statsChanged();
 	},
 	
