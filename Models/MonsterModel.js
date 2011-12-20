@@ -524,6 +524,8 @@ MonsterModel.prototype.exerciseSkill = function(skillName) {
 			if ((skillObj.lvl === 0 && skillObj.xp > 35) || skillObj.xp >= (skillObj.lvl + 1) * 10) {
 				skillObj.xp = 0;
 				++skillObj.lvl;
+				// More skill may change defenses.
+				this._calculateDefenses();
 			}
 			skillIncreased = true;
 		}
