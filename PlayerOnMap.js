@@ -313,7 +313,7 @@ enyo.kind({
 	},
 	
 	eatItem: function(index) {
-		var result = null, prehunger, posthunger;
+		var result = null, prehunger;
 		prehunger = this.monsterModel.getHunger(false);
 		result = this.monsterModel.eatItemByIndex(index);
 		// null result means ok. if the hunger level changed, update the stats bar
