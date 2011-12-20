@@ -180,6 +180,10 @@ enyo.kind({
 								});
 							}
 							
+							if (something.getAttitude() !== "hostile") {
+								options.push({ caption:$L("Ignore") });
+							}
+
 							this.$.interactionChoicePopup.setItems(options);
 							this.$.interactionChoicePopup.openAtControl(something);
 						}
