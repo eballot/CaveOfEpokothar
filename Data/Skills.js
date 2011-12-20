@@ -16,6 +16,7 @@ var kSkills = {
 	dodge:    { displayName: $L("Dodge") },
 	shield:   { displayName: $L("Shield") },
 	
+	fight:    { displayName: $L("Fight") },
 	axe:      { displayName: $L("Axe") },
 	club:     { displayName: $L("Club") },
 	dagger:   { displayName: $L("Dagger") },

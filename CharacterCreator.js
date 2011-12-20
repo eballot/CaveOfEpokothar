@@ -137,6 +137,7 @@ enyo.kind({
 				new ItemModel("food", "bread"),
 			];
 			player.skills = {
+				fight: {lvl:1, xp:0},
 				axe: {lvl:1, xp:0},
 				thrown: {lvl:1, xp:0},
 				armor: {lvl:1, xp:0},
@@ -156,6 +157,7 @@ enyo.kind({
 				new ItemModel("food", "bread"),
 			];
 			player.skills = {
+				fight: {lvl:1, xp:0},
 				sword: {lvl:1, xp:0},
 				spear: {lvl:1, xp:0},
 				armor: {lvl:1, xp:0},
@@ -178,6 +180,7 @@ enyo.kind({
 				new ItemModel("food", "bread")
 			];
 			player.skills = {
+				fight: {lvl:1, xp:0},
 				sling: {lvl:1, xp:0},
 				dagger: {lvl:1, xp:0},
 				shield: {lvl:1, xp:0},
@@ -197,6 +200,7 @@ enyo.kind({
 				new ItemModel("food", "bread")
 			];
 			player.skills = {
+				fight: {lvl:1, xp:0},
 				sword: {lvl:1, xp:0},
 				bow: {lvl:1, xp:0},
 				dagger: {lvl:1, xp:0},

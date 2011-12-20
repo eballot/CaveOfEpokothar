@@ -513,7 +513,7 @@ MonsterModel.prototype.exerciseSkill = function(skillName) {
 		}
 	}
 	
-	if (Math.random() < 0.5) {
+	if (Math.random() < 0.4) {
 		skillObj = this.skills[skillName];
 		if (!skillObj) {
 			// new, unpracticed skill
