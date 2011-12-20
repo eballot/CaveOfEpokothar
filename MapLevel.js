@@ -340,11 +340,10 @@ enyo.kind({
 		}
 	},
 
-	createRandomItems: function(category, rand, min) {
-		var i, length, typeKeys, type, item, magical;
+	createRandomItems: function(category, value) {
+		var typeKeys, type, item, magical;
 		typeKeys = Object.keys(kItemsData[category]);
-		length = Math.floor(Math.random() * rand) + min;
-		for (i = 0; i < length; i++) {
+		while (value > 0) {
 			type = typeKeys[Math.floor(Math.random() * typeKeys.length)];
 			item = this.createItem(category, type);
 			if (item) {
@@ -359,8 +358,10 @@ enyo.kind({
 				} else if (magical > 13) {
 					item.addRacialAdornment();
 				}
+				value -= item.getGoldValue();
 			}
 		}
+		return value;
 	},
 
 	createRandomMonster: function(attitude, position) {
@@ -751,7 +752,7 @@ enyo.kind({
 	},
 	
 	_buildLevel: function() {
-		var newMap, item, typeKeys, type, nourishment;
+		var newMap, item, typeKeys, type, nourishment, value;
 		if (this.level === 10) {
 			this._buildBossLevel();
 		} else {
@@ -785,9 +786,12 @@ enyo.kind({
 			}
 			
 			// Create a few random weapons, armor, ammo
-			this.createRandomItems("weapons", 3, 2);
-			this.createRandomItems("armor", 4, 1);
-			this.createRandomItems("ammo", 3, 0);
+			value = 40 * this.level;
+			value = this.createRandomItems("armor", value);
+			value += 30 * this.level;
+			this.createRandomItems("weapons", value);
+			
+			this.createRandomItems("ammo", 1.5 * this.level);
 		}
 	},
 	

@@ -27,7 +27,7 @@ kItemsData.armor = {
 	},
 	fieldplate: {
 		displayName: $L("Field plate mail"),
-		type:"fieldplate", category:"armor", skill:"armor", slot:"torso", defense:17, flexibility:0.3, dexpenalty:-7, weight:50, value:600,/*gp*/
+		type:"fieldplate", category:"armor", skill:"armor", slot:"torso", defense:15, flexibility:0.3, dexpenalty:-7, weight:50, value:600,/*gp*/
 		img: "tiles/player/body/plate_and_cloth2.gif",
 		description: $L("Field plate mail consists of chain mail armor plus interlocking metal plates protecting the torso and shoulders.")
 	},

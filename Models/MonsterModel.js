@@ -492,7 +492,7 @@ MonsterModel.prototype.getKnownSkills = function() {
 MonsterModel.prototype.getSkillXpLevel = function(skillName) {
 	var xpPercent, skillObj = this.skills[skillName];
 	if (skillObj) {
-		xpPercent = Math.floor(skillObj.xp * 10 / (skillObj.lvl/2 + 1));
+		xpPercent = Math.floor(skillObj.xp * 10 / (skillObj.lvl + 1));
 	} else {
 		xpPercent = 0;
 	}
@@ -521,7 +521,7 @@ MonsterModel.prototype.exerciseSkill = function(skillName) {
 		} else {
 			++skillObj.xp;
 			// Special case for lvl 0 since you're still learning the basics...
-			if ((skillObj.lvl === 0 && skillObj.xp > 35) || skillObj.xp >= (skillObj.lvl/2 + 1) * 10) {
+			if ((skillObj.lvl === 0 && skillObj.xp > 35) || skillObj.xp >= (skillObj.lvl + 1) * 10) {
 				skillObj.xp = 0;
 				++skillObj.lvl;
 			}

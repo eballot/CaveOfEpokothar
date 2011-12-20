@@ -455,6 +455,14 @@ ItemModel.prototype.checkAge = function(turnCount, changedCallback) {
 	return false;
 };
 
+ItemModel.prototype.getGoldValue = function() {
+	var value = this.template.value || 10;
+	value *= this.getRemainingUses();
+	if (this.extras.bonus) {
+		value *= (1 + this.extras.bonus);
+	}
+	return value;
+};
 
 
 ItemModel.prototype.toString = function() {
