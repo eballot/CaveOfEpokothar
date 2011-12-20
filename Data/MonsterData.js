@@ -1,9 +1,11 @@
 
 var kMonstersAtLevel = [
-	/*1*/ ["cockroach", "dog", "mite", "rat", "spider", "worm"], //~15 defense
-	/*2*/ ["dog", "dwarf", "goblin", "skeleton", "spider", "worm", "walkingmushroom"],  //~18 defense
-	/*3*/ ["walkingmushroom", "dwarf", "goblin", "human"], //~22 defense
-	/*4*/ ["walkingmushroom", "centaur", "halfling"] //~25
+	/*1*/ ["cockroach", "mite", "rat", "spider", "worm"], //~15 defense
+	/*2*/ ["spider", "worm", "dog", "goblin", "skeleton"],  //~18 defense
+	/*3*/ ["dog", "goblin", "dwarf", "human", "walkingmushroom"], //~22 defense
+	/*4*/ ["dwarf", "human", "walkingmushroom", "centaur", "wormspiny"], //~25
+	/*5*/ ["centaur", "wormspiny", "halfling", "hobgoblin"] //~25
+	/*6*/ ["orc", "orcwarrior"],
 ];
 
 var kMonsterData = {
@@ -42,6 +44,11 @@ var kMonsterData = {
 		img:"tiles/player/base/halfling_m.gif", corpse:"humanoid", corpseImg:"deadHumanoidFlesh",
 		defaultEquipped:{legs:new ItemModel("armor", "pantsbrown"), torso:new ItemModel("armor", "shirtvest")}
 	},
+	hobgoblin:{
+		monsterName:$L("Hobgoblin"), xp:3, hpMin:2, hpRnd:7, defenses:{dodge:5, block:0, ac:11}, dex:8, hands:2, showEquippedImg:true,
+		inventory:[{type:"waraxe", category:"weapons", extras:{equipped:true}}, {type:"shield", category:"armor", extras:{equipped:true}}],
+		img:"tiles/dc-mon0/hobgoblin0.gif", corpse:"humanoid", corpseImg:"deadGoblin"
+	},
 	human:{
 		monsterName:$L("Human"), xp:2, hpMin:2, hpRnd:6, defenses:{dodge:8, block:0, ac:12}, dex:12, hands:2, showEquippedImg:true,
 		inventory:[{type:"shortsword", category:"weapons", extras:{equipped:true}}],
@@ -51,6 +58,16 @@ var kMonsterData = {
 	mite:{
 		monsterName:$L("Giant Mite"), xp:2, hpMin:3, hpRnd:4, defenses:{dodge:0, block:5, ac:11}, hands:0, attacks:[{type:"bitesmall", extras:{bonus:-3}}],
 		img:"tiles/dc-mon0/giant_mite.gif", corpse:"insectoid", corpseImg:"deadInsect"
+	},
+	orc:{
+		monsterName:$L("Orc"), xp:2, hpMin:2, hpRnd:7, defenses:{dodge:8, block:4, ac:9}, dex:12, hands:2, showEquippedImg:true, wpnTopOffset:"1px",
+		inventory:[{type:"club", category:"weapons", extras:{equipped:true}}],
+		img:"tiles/dc-mon0/orc0.gif", corpse:"humanoid", corpseImg:"deadOrc"
+	},
+	orcwarrior:{
+		monsterName:$L("Orc Warrior"), xp:2, hpMin:4, hpRnd:7, defenses:{dodge:8, block:4, ac:11}, dex:12, hands:2, showEquippedImg:true, wpnTopOffset:"1px",
+		inventory:[{type:"greataxe", category:"weapons", extras:{equipped:true}}],
+		img:"tiles/dc-mon0/orc_warrior0.gif", corpse:"humanoid", corpseImg:"deadOrc"
 	},
 	rat:{
 		monsterName:$L("Giant Rat"), xp:2, hpMin:1, hpRnd:4, defenses:{dodge:8, block:0, ac:5}, hands:0, attacks:[{type:"bitemedium"}],
@@ -71,5 +88,10 @@ var kMonsterData = {
 	worm:{
 		monsterName:$L("Killer Worm"), xp:2, hpMin:8, hpRnd:5, defenses:{dodge:0, block:6, ac:5}, hands:0, attacks:[{type:"bitesmall", extras:{bonus:-2}}],
 		img:"tiles/dc-mon0/worm.gif", corpse:"insectoid", corpseImg:"deadInsect"
+	},
+	wormspiny:{
+		monsterName:$L("Spiny Worm"), xp:2, hpMin:6, hpRnd:5, defenses:{dodge:0, block:6, ac:10}, hands:0, attacks:[{type:"spear", extras:{bonus:-1}}],
+		img:"tiles/dc-mon0/spiny_worm.gif", corpse:"insectoid", corpseImg:"deadInsect"
 	}
+
 };

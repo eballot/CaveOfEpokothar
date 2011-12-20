@@ -89,6 +89,7 @@ var MapTileIcons = {
 	deadEquine:          { img: "corpses", offsetX: 736, offsetY: 32 },
 	deadGoblin:          { img: "corpses", offsetX: 64, offsetY: 64 },
 	deadDog:             { img: "corpses", offsetX: 160, offsetY: 64 },
+	deadOrc:             { img: "corpses", offsetX: 800, offsetY: 64 },
 	deadRatGreen:        { img: "corpses", offsetX: 832, offsetY: 64 },
 	deadRatGray:         { img: "corpses", offsetX: 864, offsetY: 64 },
 	deadRatOrange:       { img: "corpses", offsetX: 896, offsetY: 64 },

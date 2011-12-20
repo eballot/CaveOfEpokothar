@@ -671,13 +671,18 @@ MonsterModel.prototype._generateHP = function() {
 
 MonsterModel.prototype._calculateDefenses = function() {
 	var item, skill, flexibility, def, block, dexterity, defenses;
-	
+
+	// Most monsters don't have inventory so do the simple case and use the template
+	if (!this.inventory) {
+		return;
+	}
+
 	item = this.equippedItems.torso;
 	flexibility = 1;
 	if (this.isPlayer) {
 		defenses = { dodge: 0, block: 0, ac: 0 };
 	} else {
-		defenses = this.template.defenses;
+		defenses = { dodge: this.template.defenses.dodge, block: this.template.defenses.block, ac: this.template.defenses.ac };
 	}
 
 	for (var key in this.equippedItems) {
