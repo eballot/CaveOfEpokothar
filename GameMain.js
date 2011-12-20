@@ -89,6 +89,11 @@ enyo.kind({
 					caption: $L("Search"),
 					onclick: "searchNearby"
 				}, {
+					name: "restAndHeal",
+					kind: enyo.ToolButton,
+					caption: $L("Rest & Heal"),
+					onclick: "_restAndHeal"
+				}, {
 					name: "stairsUp",
 					kind: enyo.ToolButton,
 					caption: $L("Go Up"),
@@ -233,6 +238,24 @@ enyo.kind({
 	searchNearby: function(inSender) {
 		this.$.map.searchNearby(this.$.me, 2);
 		this.$.me.rest(this.turnCount);
+	},
+	
+	_restAndHeal: function(inSender) {
+		var endTurn, remainingDamage, visibleActors;
+		endTurn = this.turnCount +  100;
+		remainingDamage = this.$.me.getDamageTaken();
+		while (remainingDamage > 0 && this.turnCount < endTurn) {
+			visibleActors = this.$.map.whoCanPlayerSee();
+			if (visibleActors.length === 0) {
+				this.$.me.rest(this.turnCount);
+			} else {
+				this._showStatusText(this, $L("There's a monster nearby."));
+				return;
+			}
+			remainingDamage = this.$.me.getDamageTaken();
+		}
+		
+		this._showStatusText(this, $L("You feel rested."));
 	},
 	
 	rendered: function() {

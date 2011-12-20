@@ -414,6 +414,18 @@ enyo.kind({
 		}
 	},
 	
+	whoCanPlayerSee: function() {
+		var i, length, actor, visibleActors = [];
+		length = this.actors.length;
+		for (i = 0; i < length; i++) {
+			actor = this.actors[i];
+			if (this.hasLineOfSiteToPlayer(actor)) {
+				visibleActors.push(actor);
+			}
+		}
+		return visibleActors;
+	},
+	
 	moveBy: function(actor, deltaX, deltaY) {
 		var position, x, y, something, acted = false;
 		position = actor.getPosition();

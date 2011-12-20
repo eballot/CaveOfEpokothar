@@ -210,6 +210,10 @@ enyo.kind({
 		}
 	},
 	
+	getDamageTaken: function() {
+		return this.monsterModel.getDamageTaken();
+	},
+	
 	takeDamage: function(damage, attacker) {
 		var died;
 		if (this.damageAnimationTimer) {
