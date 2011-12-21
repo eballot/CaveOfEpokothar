@@ -30,6 +30,7 @@ enyo.depends(
 	"AboutPopup.js",
 	"GameMain.js",
 	"MapLevel.js",
+	"MiniMap.js",
 	"Inventory.js",
 	"CharacterCreator.js",
 	"ItemOnMap.js",

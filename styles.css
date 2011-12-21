@@ -35,6 +35,10 @@
 	-webkit-transition-timing-function: linear;
 }
 
+.minimap {
+	margin: 3px 0px -6px 10px;
+}
+
 .enyo-sliding-view-shadow.stats-box-shadow {
 	position: absolute;
 	top: 0;

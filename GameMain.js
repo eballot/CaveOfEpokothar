@@ -1,4 +1,4 @@
-/*jslint white: false, undef: true, eqeqeq: true */ 
+/*jslint white: false, undef: true, eqeqeq: true */
 /*global window, enyo, $L, JSON */
 
 enyo.kind({
@@ -71,6 +71,10 @@ enyo.kind({
 							kind: enyo.Control,
 							allowHtml: true
 						}]
+					}, {
+						name: "miniMap",
+						kind: "MiniMap",
+						className: "minimap"
 					}, {
 						kind: enyo.ToolButton,
 						caption: $L("Restart"),
@@ -171,6 +175,7 @@ enyo.kind({
 		this.killList = {};
 		this._showStatusText(this, $L("Welcome adventurer!"));		
 		this.$.map.setPlayer(this.$.me);
+		this.$.map.setMiniMap(this.$.miniMap);
 		
 		if (this.restoreGame()) {
 			this._updateToobarButtons();

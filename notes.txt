@@ -14,13 +14,9 @@ spells: casting, air, earth, fire, water
 other: stealth, search (traps, hidden doors, invisible monsters?)
 
 Tasks:
-// Implement Epokothar's level
+// Implement Epokothar's level - bodyguards, extra loot
 
 // Better AI - hear/see player
-
-// Need a strategy for random items to prevent too much powerful stuff appearing in beginner levels
- 
-// display mini-map
 
 // drop random loot
 
@@ -52,3 +48,5 @@ Performance research:
 5. making floor tiles be a background image is negligible impact. 
 6. disabling MapLevel._renderMap() "fixes" the problem since nothing is drawn to the canvas.
 + using graphics accel for actors (adding translateZ and fixed width and height) is definitely necessary (webkit.compositing.paintGraphicsLayerContents is ~130ms with v ~240ms without)
+
+- build a list of changes to make and do them in a tight loop (see if that changes drawing perf)

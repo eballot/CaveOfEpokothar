@@ -93,6 +93,9 @@ enyo.kind({
 		this._renderMap(0,0, MapLevel.kMapWidth, MapLevel.kMapHeight, true);
 		if (this.player) {
 			this.showFieldOfView(this.player, true);
+			if (this.miniMap) {
+				this.miniMap.drawMap(this.map.tiles, this.player, 0, 0, MapLevel.kMapWidth, MapLevel.kMapHeight);
+			}
 		}
 
 		this.doStatusText(new enyo.g11n.Template($L("You are now on level #{level}.")).evaluate(this));
@@ -200,6 +203,9 @@ enyo.kind({
 			this._renderMap(0,0, MapLevel.kMapWidth, MapLevel.kMapHeight, true);
 			if (this.player) {
 				this.showFieldOfView(this.player, true);
+				if (this.miniMap) {
+					this.miniMap.drawMap(this.map.tiles, this.player, 0, 0, MapLevel.kMapWidth, MapLevel.kMapHeight);
+				}
 			}
 		}
 	},
@@ -230,6 +236,9 @@ enyo.kind({
 		y = position.y - MapLevel.kViewRadius - 1;
 		extentY = position.y + MapLevel.kViewRadius + 2;
 		this._renderMap(x, y, extentX, extentY, false);
+		if (this.miniMap) {
+			this.miniMap.drawMap(this.map.tiles, this.player, x, y, extentX, extentY);
+		}
 		
 		if (updateActors) {
 			length = this.actors.length;
@@ -270,6 +279,10 @@ enyo.kind({
 
 	setPlayer: function(inPlayer) {
 		this.player = inPlayer;
+	},
+	
+	setMiniMap: function(inMiniMap) {
+		this.miniMap = inMiniMap;
 	},
 	
 	getPlayer: function() {
@@ -754,6 +767,9 @@ enyo.kind({
 		this.iconsLoaded = true;
 		//this._createOffscreenImages();
 		this._renderMap(0,0, MapLevel.kMapWidth, MapLevel.kMapHeight, true);
+		if (this.miniMap) {
+			this.miniMap.drawMap(this.map.tiles, this.player, 0, 0, MapLevel.kMapWidth, MapLevel.kMapHeight);
+		}
 		if (this.player) {
 			this.showFieldOfView(this.player, true);
 		}
