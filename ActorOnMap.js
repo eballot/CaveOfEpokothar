@@ -455,6 +455,7 @@ enyo.kind({
 		var statusText, item = this.monsterModel.maybeIdentify(slot, 10);
 		if (item) {
 			statusText = (new enyo.g11n.Template($L("You realize you have a #{name}"))).evaluate({name:item.getDisplayName()});
+			statusText = '<span style="color:lightgreen;">' + statusText + '</span>';
 			this.doStatusText(statusText);
 		}
 	},
