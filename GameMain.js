@@ -117,6 +117,7 @@ enyo.kind({
 		kind: enyo.SlidingView,
 		dismissible: true,
 		showing: false,
+		onHide: "_hidingInventory",
 		components: [{
 			name: "inventory",
 			kind: "Inventory",
@@ -522,5 +523,9 @@ enyo.kind({
 		} else {
 			this.killList[inMonster] = 1;
 		}
+	},
+	
+	_hidingInventory: function(inSender) {
+		this.$.inventory.hidingInventoryView();
 	}
 });

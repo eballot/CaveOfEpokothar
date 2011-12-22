@@ -155,6 +155,10 @@ enyo.kind({
 		this._updateGroundList();
 	},
 	
+	hidingInventoryView: function() {
+		this.$.itemDescription.setContent("&nbsp;");
+	},
+	
 	_equipmentListSetupRow: function(inSender, inIndex) {
 		var inventoryItem, itemName, weight, previousCategory;
 		if (!this.inventory) {
