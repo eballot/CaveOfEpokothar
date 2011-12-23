@@ -369,7 +369,7 @@ enyo.kind({
 	
 	_levelUp: function() {
 		//TODO: Level-up code (+hp and attrs)
-		this.doStatusText($L('<span style="color:lightgreen;">You gained a level!</span>'));
+		this.doStatusText('<span style="color:lightgreen;">' + $L("You gained a level!") + '</span>');
 		this._statsChanged();
 	},
 	
