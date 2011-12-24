@@ -814,7 +814,7 @@ enyo.kind({
 			}
 			
 			// Create a few random weapons, armor, ammo
-			value = 40 * this.level;
+			value = 25 * (this.level - 1); // no armor on level 1!
 			value = this.createRandomItems("armor", value);
 			value += 30 * this.level;
 			this.createRandomItems("weapons", value);

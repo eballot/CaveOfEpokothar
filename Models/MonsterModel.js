@@ -121,9 +121,9 @@ var kModelKeyTypes = {
 MonsterModel.expLevels = [
 	-1, // level 0 doesn't really exist
 	0,      //1
-	10,     //2
-	30,     //3
-	70,     //4
+	15,     //2
+	40,     //3
+	75,     //4
 	140,    //5
 	270,    //6
 	520,    //7
@@ -684,7 +684,12 @@ MonsterModel.prototype._calculateDefenses = function() {
 	if (this.isPlayer) {
 		defenses = { dodge: 0, block: 0, ac: 0 };
 	} else {
-		defenses = { dodge: this.template.defenses.dodge, block: this.template.defenses.block, ac: this.template.defenses.ac };
+		skill = this.getSkillLevel("fight", true); // monsters defense need to "level" so they're not too easy.
+		defenses = {
+			dodge: skill * this.template.defenses.dodge,
+			block: skill * this.template.defenses.block,
+			ac: skill * this.template.defenses.ac
+		};
 	}
 
 	for (var key in this.equippedItems) {

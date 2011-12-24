@@ -9,27 +9,21 @@ kItemsData.armor = {
 	},
 	studdedleather: {
 		displayName: $L("Studded Leather"),
-		type:"studdedleather", category:"armor", skill:"armor", slot:"torso", defense:8, flexibility:0.9, dexpenalty:-1, weight:20, value:25,/*gp*/
+		type:"studdedleather", category:"armor", skill:"armor", slot:"torso", defense:7, flexibility:0.9, dexpenalty:-1, weight:20, value:25,/*gp*/
 		img: "tiles/player/body/leather_stud.gif",
 		description: $L("This armor has hundreds of small metal rivets attached to soft leather.")
 	},
 	scalemail: {
 		displayName: $L("Scale Mail"),
-		type:"scalemail", category:"armor", skill:"armor", slot:"torso", defense:11, flexibility:0.6, dexpenalty:-4, weight:35, value:50,/*gp*/
+		type:"scalemail", category:"armor", skill:"armor", slot:"torso", defense:10, flexibility:0.6, dexpenalty:-4, weight:35, value:50,/*gp*/
 		img: "tiles/player/body/scalemail2.gif",
 		description: $L("This is coat of soft leather covered with overlapping pieces of metal.")
 	},
 	chainmail: {
 		displayName: $L("Chain mail"),
-		type:"chainmail", category:"armor", skill:"armor", slot:"torso", defense:13, flexibility:0.5, dexpenalty:-5, weight:40, value:150,/*gp*/
+		type:"chainmail", category:"armor", skill:"armor", slot:"torso", defense:12, flexibility:0.5, dexpenalty:-5, weight:40, value:150,/*gp*/
 		img: "tiles/player/body/chainmail2.gif",
 		description: $L("This armor is made of interlocking metal rings worn over soft leather.")
-	},
-	fieldplate: {
-		displayName: $L("Field plate mail"),
-		type:"fieldplate", category:"armor", skill:"armor", slot:"torso", defense:15, flexibility:0.3, dexpenalty:-7, weight:50, value:600,/*gp*/
-		img: "tiles/player/body/half_plate.gif",
-		description: $L("Field plate mail consists of chain mail armor plus interlocking metal plates protecting the torso and shoulders.")
 	},
 
 	/** Shields **/
@@ -43,14 +37,14 @@ kItemsData.armor = {
 	smallshield: {
 		displayName: $L("Small shield"),
 		type:"smallshield", category:"armor", skill:"shield", weight:6, value:9,/*gp*/
-		hands:1, slot:"shield", defense:0, block:4, dexpenalty:0,
+		hands:1, slot:"shield", defense:0, block:3, dexpenalty:0,
 		img: "tiles/player/hand2/shield_round_small.gif",
 		description: $L("A small metal shield strapped to the forearm and gripped with the hand.")
 	},
 	shield: {
 		displayName: $L("Shield"),
 		type:"shield", category:"armor", skill:"shield", weight:15, value:25,/*gp*/
-		hands:1, slot:"shield", defense:0, block:6, dexpenalty:0,
+		hands:1, slot:"shield", defense:0, block:5, dexpenalty:0,
 		img: "tiles/player/hand2/shield_round6.gif",
 		description: $L("A medium metal shield strapped to the forearm and gripped with the hand.")
 	},
@@ -76,13 +70,13 @@ kItemsData.armor = {
 	},
 	fullhelm: {
 		displayName: $L("Full iron helmet"),
-		type:"fullhelm", category:"armor", slot:"head", skill:"armor", defense:4, flexibility:0.9, dexpenalty:0, weight:10, value:30,/*gp*/
+		type:"fullhelm", category:"armor", slot:"head", skill:"armor", defense:3, flexibility:0.9, dexpenalty:0, weight:10, value:30,/*gp*/
 		img: "tiles/player/head/iron3.gif",
 		description: $L("A full iron helmet protects the entire head and face, but limits visibility.")
 	},
 	hornedhelm: {
 		displayName: $L("Horned helmet"),
-		type:"hornedhelm", category:"armor", slot:"head", easy:true, defense:2, flexibility:1, dexpenalty:0, weight:8, value:10,/*gp*/
+		type:"hornedhelm", category:"armor", slot:"head", easy:true, defense:1.5, flexibility:1, dexpenalty:0, weight:8, value:10,/*gp*/
 		img: "tiles/player/head/horned.gif",
 		description: $L("A helmet with large horns attached.")
 	},
@@ -90,19 +84,19 @@ kItemsData.armor = {
 	/** Gauntlets **/
 	leatherglove: {
 		displayName: $L("Leather gloves"),
-		type:"leatherglove", category:"armor", slot:"glove", easy:true, defense:1, flexibility:1, dexpenalty:0, weight:1, value:2,/*gp*/
+		type:"leatherglove", category:"armor", slot:"glove", easy:true, defense:0.5, flexibility:1, dexpenalty:0, weight:1, value:2,/*gp*/
 		img: "tiles/player/arm/glove_brown.gif",
 		description: $L("Gloves made of stiffened leather that protect the hands and forearms.")
 	},
 	mailglove: {
 		displayName: $L("Mail gauntlets"),
-		type:"mailglove", category:"armor", slot:"glove", easy:true, defense:2, flexibility:1, dexpenalty:0, weight:2, value:5,/*gp*/
+		type:"mailglove", category:"armor", slot:"glove", easy:true, defense:1, flexibility:1, dexpenalty:0, weight:2, value:5,/*gp*/
 		img: "tiles/player/arm/glove_gray.gif",
 		description: $L("Gloves made of chain mail and leather that protect the hands and forearms.")
 	},
 	plateglove: {
 		displayName: $L("Plate gauntlets"),
-		type:"plateglove", category:"armor", slot:"glove", easy:true, defense:3, flexibility:1, dexpenalty:0, weight:4, value:8,/*gp*/
+		type:"plateglove", category:"armor", slot:"glove", easy:true, defense:1.5, flexibility:1, dexpenalty:0, weight:4, value:8,/*gp*/
 		img: "tiles/player/arm/glove_black.gif",
 		description: $L("Gloves made of articulated pieces of metal that protect the hands and forearms.")
 	},
@@ -110,7 +104,7 @@ kItemsData.armor = {
 	/** Gauntlets **/
 	leathershoes: {
 		displayName: $L("Sturdy shoes"),
-		type:"leathershoes", category:"armor", slot:"shoes", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:2,/*gp*/
+		type:"leathershoes", category:"armor", slot:"shoes", easy:true, defense:0.5, flexibility:1, dexpenalty:0, weight:1, value:2,/*gp*/
 		img: "tiles/player/boot/short_brown.gif",
 		description: $L("A pair of sturdy leather shoes. They don't provide much protection in combat, but it's better than walking around barefoot.")
 	},
@@ -141,7 +135,30 @@ Object.defineProperty(kItemsData.armor,
 	}
 });
 
+// Plate armor is too powerful to be random loot. You can get it by defeating knights.
+Object.defineProperty(kItemsData.armor, 
+	"fieldplate", {
+	enumerable: false,
+	value: {
+		displayName: $L("Field plate mail"),
+		type:"fieldplate", category:"armor", skill:"armor", slot:"torso", defense:15, flexibility:0.3, dexpenalty:-7, weight:50, value:600,/*gp*/
+		img: "tiles/player/body/half_plate.gif",
+		description: $L("Field plate mail consists of chain mail armor plus interlocking metal plates protecting the torso and shoulders.")
+	}
+});
+
 //The following are simple clothing that shouldn't be enumerable so they don't show up as random loot
+Object.defineProperty(kItemsData.armor, 
+	"legarmor", {
+	enumerable: false,
+	value: {
+		displayName: "", // no displayName because this is only equipped on npcs
+		type:"legarmor", category:"armor", slot:"legs", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
+		img: "tiles/player/leg/leg_armor01.gif",
+		description: "", // no description because this is only equipped on npcs
+	}
+});
+
 Object.defineProperty(kItemsData.armor, 
 	"pantsblack", {
 	enumerable: false,
