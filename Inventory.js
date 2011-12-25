@@ -248,8 +248,12 @@ enyo.kind({
 				break;
 				
 			case "corpse":
-				// TODO "butcher"
-				options = [ Inventory.kItemOptions.kDrop, Inventory.kItemOptions.kEat, Inventory.kItemOptions.kInspect ];
+				if (inventoryItem.getType() === "bones") {
+					options = [ Inventory.kItemOptions.kDrop, Inventory.kItemOptions.kInspect ];
+				} else {
+					// TODO "butcher"
+					options = [ Inventory.kItemOptions.kDrop, Inventory.kItemOptions.kEat, Inventory.kItemOptions.kInspect ];
+				}
 				break;
 				
 			default:
