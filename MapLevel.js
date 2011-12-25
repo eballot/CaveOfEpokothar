@@ -801,7 +801,7 @@ enyo.kind({
 			this.$.actorsContainer.render();
 			
 			// First create some food items
-			nourishment = 2000;
+			nourishment = 2000 + this.level * 25;
 			typeKeys = Object.keys(kItemsData.food);
 			while (nourishment > 0) {
 				type = typeKeys[Math.floor(Math.random() * typeKeys.length)];
@@ -814,7 +814,7 @@ enyo.kind({
 			}
 			
 			// Create a few random weapons, armor, ammo
-			value = 25 * (this.level - 1); // no armor on level 1!
+			value = 30 * (this.level - 1); // no armor on level 1!
 			value = this.createRandomItems("armor", value);
 			value += 30 * this.level;
 			this.createRandomItems("weapons", value);
