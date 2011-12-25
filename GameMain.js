@@ -78,7 +78,7 @@ enyo.kind({
 					}, {
 						kind: enyo.ToolButton,
 						caption: $L("Restart"),
-						onclick: "playerDeath"
+						onclick: "_confirmRestart"
 					}]
 				}]
 			}, {
@@ -128,11 +128,26 @@ enyo.kind({
 		kind: enyo.Popup,
 		scrim: true,
 		components: [{
-			content: "You don't have enough free hands to hold that."
+			content: $L("You don't have enough free hands to hold that.")
 		}, {
 			kind: enyo.Button,
 			caption: enyo._$L("OK"),
 			onclick: "_closeNoHandsAlert"
+		}]
+	}, {
+		name: "confirmRestart",
+		kind: enyo.Popup,
+		scrim: true,
+		components: [{
+			content: $L("Really quit the current game and start anew?")
+		}, {
+			kind: enyo.Button,
+			caption: enyo._$L("Restart"),
+			onclick: "_reallyRestart"
+		}, {
+			kind: enyo.Button,
+			caption: enyo._$L("Cancel"),
+			onclick: "_closeConfirmRestart"
 		}]
 	}, {
 		name: "gameOverDialog",
@@ -516,6 +531,19 @@ enyo.kind({
 		this.$.nohandsAlert.close();
 	},
 
+	_confirmRestart: function() {
+		this.$.confirmRestart.openAtCenter();
+	},
+	
+	_closeConfirmRestart: function() {
+		this.$.confirmRestart.close();
+	},
+
+	_reallyRestart: function() {
+		this._closeConfirmRestart();
+		this.playerDeath(this, $L("You quit!"));
+	},
+	
 	_restartGame: function() {
 		this.$.gameOverDialog.close();
 		this.startNewGame();
