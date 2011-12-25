@@ -540,8 +540,13 @@ MonsterModel.prototype.getDefense = function() {
 MonsterModel.prototype.getDamageTaken = function() {
 	return this.damageTaken;
 };
+
 MonsterModel.prototype.takeDamage = function(damage) {
 	this.damageTaken += damage;
+	return (this.damageTaken > this.hp);
+};
+
+MonsterModel.prototype.isDead = function() {
 	return (this.damageTaken > this.hp);
 };
 

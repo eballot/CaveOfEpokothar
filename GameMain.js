@@ -235,10 +235,14 @@ enyo.kind({
 	},
 	
 	useStairs: function(inSender) {
-		var position = this.$.me.getPosition();
-		this.$.map.useStairsAt(position.x, position.y);
-		this.scrollMapToPlayer();
-		this._updateToobarButtons();
+		// Before taking the stairs, everyone gets a chance to attack you.
+		this.$.map.everyoneTakeATurn(++this.turnCount);
+		if (!this.$.me.isDead()) {
+			var position = this.$.me.getPosition();
+			this.$.map.useStairsAt(position.x, position.y);
+			this.scrollMapToPlayer();
+			this._updateToobarButtons();
+		}
 	},
 	
 	searchNearby: function(inSender) {
@@ -248,7 +252,7 @@ enyo.kind({
 	
 	_restAndHeal: function(inSender) {
 		var endTurn, remainingDamage, visibleActors;
-		endTurn = this.turnCount +  100;
+		endTurn = this.turnCount +  75;
 		remainingDamage = this.$.me.getDamageTaken();
 		while (remainingDamage > 0 && this.turnCount < endTurn) {
 			visibleActors = this.$.map.whoCanPlayerSee();

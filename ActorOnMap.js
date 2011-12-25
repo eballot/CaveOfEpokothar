@@ -210,6 +210,10 @@ enyo.kind({
 		}
 	},
 	
+	isDead: function() {
+		return this.monsterModel.isDead();
+	},
+	
 	getDamageTaken: function() {
 		return this.monsterModel.getDamageTaken();
 	},
@@ -368,6 +372,7 @@ enyo.kind({
 			return null;
 		}
 	},
+	
 	// range=0 means melee attack
 	useAttack: function(weapon, defender, range, extraBonus) {
 		var success=false, death=false, statusText="", tohit, defenses, damage, newLevel, ammoItem;
