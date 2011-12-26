@@ -76,7 +76,7 @@ enyo.kind({
 				name: "playerClassItem",
 				kind: enyo.Item,
 				tapHighlight: true,
-				onclick: "_equipmentListItemClick",
+				onclick: "_playerClassClick",
 				components: [{
 					kind: enyo.HFlexBox,
 					components: [{
@@ -86,6 +86,21 @@ enyo.kind({
 					}]
 				}]
 			}]
+		}]
+	}, {
+		name: "difficulty",
+		kind: enyo.PopupSelect,
+		onSelect: "_difficultySelected",
+		modal: true,
+		dismissWithClick: false,
+		dismissWithEscape: false,
+		scrim: true,
+		items: [{
+			caption: $L("Easy"), skillLvl:3
+		}, {
+			caption: $L("Moderate"), skillLvl:2
+		}, {
+			caption: $L("Difficult"), skillLvl:1
 		}]
 	}],
 	
@@ -104,25 +119,31 @@ enyo.kind({
 		return !!playerClass;
 	},
 
-	_equipmentListItemClick: function(inSender, inEvent) {
-		var playerClass = kPlayerClasses[inEvent.rowIndex];
-		if (playerClass) {
-			var player = {
-				level: 1,
-				inventory: [],
-				skills: {}
-			};
-			player.race = playerClass.race;
-			
-			// Fill in the details for the player
-			this[playerClass.focus](player);
-			playerClass.player = player;
-			this.doSelect(playerClass);
-			this.close();
+	_playerClassClick: function(inSender, inEvent) {
+		this.playerClass = kPlayerClasses[inEvent.rowIndex];
+		if (this.playerClass) {
+			this.$.difficulty.openAtCenter();
 		}
 	},
 	
-	warrior: function(player) {
+	_difficultySelected: function(inSender, inItem) {
+		var player = {
+			level: 1,
+			inventory: [],
+			skills: {}
+		};
+		player.race = this.playerClass.race;
+		
+		// Fill in the details for the player
+		this[this.playerClass.focus](player, inItem.skillLvl);
+		this.playerClass.player = player;
+		
+		this.doSelect(this.playerClass);
+		this.close();
+	},
+	
+	warrior: function(player, defaultLevel) {
+		defaultLevel = defaultLevel || 1;
 		if (player.race === "dwarf") {
 			player.dex = 9;
 			player.str = 18;
@@ -137,11 +158,11 @@ enyo.kind({
 				new ItemModel("food", "bread"),
 			];
 			player.skills = {
-				fight: {lvl:1, xp:0},
-				axe: {lvl:1, xp:0},
-				thrown: {lvl:1, xp:0},
-				armor: {lvl:1, xp:0},
-				shield: {lvl:1, xp:0}
+				fight: {lvl:defaultLevel, xp:0},
+				axe: {lvl:defaultLevel, xp:0},
+				thrown: {lvl:defaultLevel, xp:0},
+				armor: {lvl:defaultLevel, xp:0},
+				shield: {lvl:defaultLevel, xp:0}
 			};
 		} else {
 			// Default is human
@@ -157,18 +178,18 @@ enyo.kind({
 				new ItemModel("food", "bread"),
 			];
 			player.skills = {
-				fight: {lvl:1, xp:0},
-				sword: {lvl:1, xp:0},
-				spear: {lvl:1, xp:0},
-				armor: {lvl:1, xp:0},
-				shield: {lvl:1, xp:0}
+				fight: {lvl:defaultLevel, xp:0},
+				sword: {lvl:defaultLevel, xp:0},
+				spear: {lvl:defaultLevel, xp:0},
+				armor: {lvl:defaultLevel, xp:0},
+				shield: {lvl:defaultLevel, xp:0}
 			};
 		}
 	},
 	
-	ranger: function(player) {
+	ranger: function(player, defaultLevel) {
 		if (player.race === "halfling") {
-			player.dex = 14;
+			player.dex = 16;
 			player.str = 8;
 			player.int = 7;
 			player.inventory = [
@@ -180,15 +201,15 @@ enyo.kind({
 				new ItemModel("food", "bread")
 			];
 			player.skills = {
-				fight: {lvl:1, xp:0},
-				sling: {lvl:1, xp:0},
-				dagger: {lvl:1, xp:0},
-				shield: {lvl:1, xp:0},
-				dodge: {lvl:1, xp:0}
+				fight: {lvl:defaultLevel, xp:0},
+				sling: {lvl:defaultLevel, xp:0},
+				dagger: {lvl:defaultLevel, xp:0},
+				shield: {lvl:defaultLevel, xp:0},
+				dodge: {lvl:defaultLevel, xp:0}
 			};
 		} else {
 			// Default is human
-			player.dex = 14;
+			player.dex = 15;
 			player.str = 10;
 			player.int = 5;
 			player.inventory = [
@@ -200,11 +221,11 @@ enyo.kind({
 				new ItemModel("food", "bread")
 			];
 			player.skills = {
-				fight: {lvl:1, xp:0},
-				sword: {lvl:1, xp:0},
-				bow: {lvl:1, xp:0},
-				dagger: {lvl:1, xp:0},
-				dodge: {lvl:1, xp:0}
+				fight: {lvl:defaultLevel, xp:0},
+				sword: {lvl:defaultLevel, xp:0},
+				bow: {lvl:defaultLevel, xp:0},
+				dagger: {lvl:defaultLevel, xp:0},
+				dodge: {lvl:defaultLevel, xp:0}
 			};
 		}
 	}
