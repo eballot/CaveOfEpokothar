@@ -1,7 +1,8 @@
 var HostileAI = function(actor) {
 	this.actor = actor;
 	// Flag to indicate that the actor is aware of the player
-	this.awareOfPlayer = false;
+	//TODO: for now, they're always aware. Need to implement noise/stealth
+	this.awareOfPlayer = true;
 };
 
 HostileAI.prototype.performTurn = function(map) {
@@ -9,8 +10,7 @@ HostileAI.prototype.performTurn = function(map) {
 	distanceX, distanceY, absDistanceX, absDistanceY, moveX, moveY, pointA, pointB;
 
 	if (!this.awareOfPlayer) {
-		//Check if the player is seen or heard
-		this.awareOfPlayer = true; //TODO: remove after testing
+		//TODO: Check if the player is seen or heard
 	} else {
 		player = map.getPlayer().getPosition();
 		position = this.actor.getPosition();

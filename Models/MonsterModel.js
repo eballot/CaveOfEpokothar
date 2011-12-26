@@ -513,7 +513,7 @@ MonsterModel.prototype.exerciseSkill = function(skillName) {
 		}
 	}
 	
-	if (Math.random() < 0.4) {
+	if (Math.random() < 0.5) {
 		skillObj = this.skills[skillName];
 		if (!skillObj) {
 			// new, unpracticed skill
@@ -521,7 +521,7 @@ MonsterModel.prototype.exerciseSkill = function(skillName) {
 		} else {
 			++skillObj.xp;
 			// Special case for lvl 0 since you're still learning the basics...
-			if ((skillObj.lvl === 0 && skillObj.xp > 35) || skillObj.xp >= (skillObj.lvl + 1) * 10) {
+			if ((skillObj.lvl === 0 && skillObj.xp > 25) || skillObj.xp >= (skillObj.lvl + 1) * 10) {
 				skillObj.xp = 0;
 				++skillObj.lvl;
 				// More skill may change defenses.
