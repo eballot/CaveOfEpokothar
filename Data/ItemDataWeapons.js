@@ -89,7 +89,7 @@ kItemsData.weapons = {
 	crossbow: {
 		displayName: $L("Crossbow"),
 		type: "crossbow", category:"weapons", slot:"weapon", skill: "crossbow", ammo: true, attackActions: "pierce", weight:6, value:50,/*gp*/
-		hands:2, accuracy:8, damageMin:1, damageRnd:7, meleeReach:-1, rangeReach:20, rangeaccuracy:8,
+		hands:2, accuracy:8, damageMin:1, damageRnd:7, meleeReach:-1, rangeReach:20, rangeAccuracy:8,
 		img: "tiles/player/hand1/crossbow2.gif",
 		description: $L("A crossbow for shooting arrows.")
 	},
@@ -103,7 +103,7 @@ kItemsData.weapons = {
 	longbow: {
 		displayName: $L("Longbow"),
 		type: "longbow", category:"weapons", slot:"weapon", skill: "bow", ammo: true, attackActions: "pierce", weight:3, value:75,/*gp*/
-		hands:2, accuracy:8, damageMin:1, damageRnd:7, meleeReach:-1, rangeReach:20, rangeaccuracy:8,
+		hands:2, accuracy:8, damageMin:1, damageRnd:7, meleeReach:-1, rangeReach:20, rangeAccuracy:8,
 		img: "tiles/player/hand1/bow3.gif",
 		description: $L("A bow for shooting arrows.")
 	},

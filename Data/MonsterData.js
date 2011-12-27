@@ -9,11 +9,12 @@ var kMonstersAtLevel = [
 	/*7*/ ["dogwar", "orc", "orcwarrior"],
 	/*8*/ ["dogwar", "humanarcher", "humanwarrior"],
 	/*9*/ ["humanarcher", "humanknight", "humanwarrior"],
+	/*10*/ ["dogwar", "orcwarrior", "spider"],
 ];
 
 var kMonsterData = {
 	epokothar:{
-		monsterName:$L("Lord Epokothar"), xp:3, hpMin:5, hpRnd:3, defenses:{dodge:15, block:1, ac:1}, dex:15, hands:0, attacks:[{type:"bitesmall"}],
+		monsterName:$L("Lord Epokothar"), xp:3, hpMin:5, hpRnd:3, defenses:{dodge:25, block:3, ac:3}, dex:15, hands:0, attacks:[{type:"bitesmall"}],
 		img:"tiles/dc-mon0/epokothar.gif", corpse:"insectoid", corpseImg:"deadInsect"
 	},
 	centaur:{
@@ -64,12 +65,12 @@ var kMonsterData = {
 	},
 	humanarcher:{
 		monsterName:$L("Human Archer"), xp:3, hpMin:3, hpRnd:6, defenses:{dodge:12, block:0, ac:6}, dex:16, hands:2, showEquippedImg:true,
-		inventory:[{type:"longbow", category:"weapons", extras:{equipped:true}}, {type:"arrow", category:"ammo", extras:{equipped:true, count:14}}],
+		inventory:[{type:"longbow", category:"weapons", extras:{equipped:true}}, {type:"arrow", category:"ammo", extras:{equipped:true, count:36}}],
 		img:"tiles/player/base/human_m.gif", corpse:"humanoid", corpseImg:"deadHumanoidFlesh",
 		defaultEquipped:{legs:new ItemModel("armor", "pantsblack"), torso:new ItemModel("armor", "studdedleather")}
 	},
 	humanknight:{
-		monsterName:$L("Human Knight"), xp:4, hpMin:3, hpRnd:6, defenses:{dodge:7, block:0, ac:12}, dex:10, hands:2, showEquippedImg:true,
+		monsterName:$L("Human Knight"), xp:4, hpMin:3, hpRnd:6, defenses:{dodge:7, block:0, ac:5}, dex:10, hands:2, showEquippedImg:true,
 		inventory:[{type:"heavymace", category:"weapons", extras:{equipped:true}}, {type:"fieldplate", category:"armor", extras:{equipped:true}}],
 		img:"tiles/player/base/human_m.gif", corpse:"humanoid", corpseImg:"deadHumanoidFlesh",
 		defaultEquipped:{legs:new ItemModel("armor", "legarmor"), head:new ItemModel("armor", "fullhelm")}
@@ -90,7 +91,7 @@ var kMonsterData = {
 		img:"tiles/dc-mon0/orc0.gif", corpse:"humanoid", corpseImg:"deadOrc"
 	},
 	orcwarrior:{
-		monsterName:$L("Orc Warrior"), xp:4, hpMin:4, hpRnd:7, defenses:{dodge:8, block:4, ac:10}, dex:12, hands:2, showEquippedImg:true, wpnTopOffset:"1px",
+		monsterName:$L("Orc Warrior"), xp:4, hpMin:4, hpRnd:7, defenses:{dodge:8, block:4, ac:8}, dex:12, hands:2, showEquippedImg:true, wpnTopOffset:"1px",
 		inventory:[{type:"greataxe", category:"weapons", extras:{equipped:true}}],
 		img:"tiles/dc-mon0/orc_warrior0.gif", corpse:"humanoid", corpseImg:"deadOrc"
 	},
