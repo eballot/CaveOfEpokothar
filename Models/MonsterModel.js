@@ -8,6 +8,7 @@ var MonsterModel = function(details) {
 	this.damageTaken = 0;
 	this.hunger = MonsterModel.hunger.satiatedLevel; // start out at the high end of hungry
 	this.experience = 0;
+	this.difficulty = details.difficulty || 1;
 	
 	this.equippedItems = {
 			cloak: undefined,
@@ -31,6 +32,8 @@ var MonsterModel = function(details) {
 		}
 	}
 
+	this.learnSkillChance = 0.3 + 0.2 * this.difficulty;
+	
 	// hp will be restored if loading from db, otherwise need to generate it now
 	// that other attributes have been set
 	if (!this.hp) {
@@ -165,6 +168,7 @@ MonsterModel.propertiesToSave = [
 	{ key:"damageTaken", type:kModelKeyTypes.raw },
 	{ key:"defenses",    type:kModelKeyTypes.object },
 	{ key:"dex",         type:kModelKeyTypes.raw },
+	{ key:"difficulty",  type:kModelKeyTypes.raw },
 	{ key:"experience",  type:kModelKeyTypes.raw },
 	{ key:"hp",          type:kModelKeyTypes.raw },
 	{ key:"hunger",      type:kModelKeyTypes.raw },
@@ -513,7 +517,7 @@ MonsterModel.prototype.exerciseSkill = function(skillName) {
 		}
 	}
 	
-	if (Math.random() < 0.5) {
+	if (Math.random() < this.learnSkillChance) {
 		skillObj = this.skills[skillName];
 		if (!skillObj) {
 			// new, unpracticed skill

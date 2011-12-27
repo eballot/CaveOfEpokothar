@@ -96,11 +96,11 @@ enyo.kind({
 		dismissWithEscape: false,
 		scrim: true,
 		items: [{
-			caption: $L("Easy"), skillLvl:3
+			caption: $L("Easy"), difficulty:3
 		}, {
-			caption: $L("Moderate"), skillLvl:2
+			caption: $L("Moderate"), difficulty:2
 		}, {
-			caption: $L("Difficult"), skillLvl:1
+			caption: $L("Difficult"), difficulty:1
 		}]
 	}],
 	
@@ -133,17 +133,17 @@ enyo.kind({
 			skills: {}
 		};
 		player.race = this.playerClass.race;
+		player.difficulty = inItem.difficulty || 1;
 		
 		// Fill in the details for the player
-		this[this.playerClass.focus](player, inItem.skillLvl);
+		this[this.playerClass.focus](player);
 		this.playerClass.player = player;
 		
 		this.doSelect(this.playerClass);
 		this.close();
 	},
 	
-	warrior: function(player, defaultLevel) {
-		defaultLevel = defaultLevel || 1;
+	warrior: function(player) {
 		if (player.race === "dwarf") {
 			player.dex = 9;
 			player.str = 18;
@@ -158,11 +158,11 @@ enyo.kind({
 				new ItemModel("food", "bread"),
 			];
 			player.skills = {
-				fight: {lvl:defaultLevel, xp:0},
-				axe: {lvl:defaultLevel, xp:0},
-				thrown: {lvl:defaultLevel, xp:0},
-				armor: {lvl:defaultLevel, xp:0},
-				shield: {lvl:defaultLevel, xp:0}
+				fight: {lvl:player.difficulty, xp:0},
+				axe: {lvl:player.difficulty, xp:0},
+				thrown: {lvl:player.difficulty, xp:0},
+				armor: {lvl:player.difficulty, xp:0},
+				shield: {lvl:player.difficulty, xp:0}
 			};
 		} else {
 			// Default is human
@@ -178,16 +178,16 @@ enyo.kind({
 				new ItemModel("food", "bread"),
 			];
 			player.skills = {
-				fight: {lvl:defaultLevel, xp:0},
-				sword: {lvl:defaultLevel, xp:0},
-				spear: {lvl:defaultLevel, xp:0},
-				armor: {lvl:defaultLevel, xp:0},
-				shield: {lvl:defaultLevel, xp:0}
+				fight: {lvl:player.difficulty, xp:0},
+				sword: {lvl:player.difficulty, xp:0},
+				spear: {lvl:player.difficulty, xp:0},
+				armor: {lvl:player.difficulty, xp:0},
+				shield: {lvl:player.difficulty, xp:0}
 			};
 		}
 	},
 	
-	ranger: function(player, defaultLevel) {
+	ranger: function(player) {
 		if (player.race === "halfling") {
 			player.dex = 16;
 			player.str = 8;
@@ -201,11 +201,11 @@ enyo.kind({
 				new ItemModel("food", "bread")
 			];
 			player.skills = {
-				fight: {lvl:defaultLevel, xp:0},
-				sling: {lvl:defaultLevel, xp:0},
-				dagger: {lvl:defaultLevel, xp:0},
-				shield: {lvl:defaultLevel, xp:0},
-				dodge: {lvl:defaultLevel, xp:0}
+				fight: {lvl:player.difficulty, xp:0},
+				sling: {lvl:player.difficulty, xp:0},
+				dagger: {lvl:player.difficulty, xp:0},
+				shield: {lvl:player.difficulty, xp:0},
+				dodge: {lvl:player.difficulty, xp:0}
 			};
 		} else {
 			// Default is human
@@ -221,11 +221,11 @@ enyo.kind({
 				new ItemModel("food", "bread")
 			];
 			player.skills = {
-				fight: {lvl:defaultLevel, xp:0},
-				sword: {lvl:defaultLevel, xp:0},
-				bow: {lvl:defaultLevel, xp:0},
-				dagger: {lvl:defaultLevel, xp:0},
-				dodge: {lvl:defaultLevel, xp:0}
+				fight: {lvl:player.difficulty, xp:0},
+				sword: {lvl:player.difficulty, xp:0},
+				bow: {lvl:player.difficulty, xp:0},
+				dagger: {lvl:player.difficulty, xp:0},
+				dodge: {lvl:player.difficulty, xp:0}
 			};
 		}
 	}
