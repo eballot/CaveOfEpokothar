@@ -9,7 +9,7 @@ var MapGeneratorBossLevel = {
 	 * 
 	 */
 	generateMap: function(width, height) {
-		var results, x, y, tiles, epok, throne, loot, stairsUpX, midpointY, corridorWX, corridorEX, corridorNY, corridorSY,
+		var results, x, y, tiles, rooms, epok, throne, loot, stairsUpX, midpointY, corridorWX, corridorEX, corridorNY, corridorSY,
 			chamberWX, chamberEX, chamberNY, chamberSY;
 		
 		// First fill it all with walls and later carve out the rooms and corridors
@@ -46,11 +46,12 @@ var MapGeneratorBossLevel = {
 			tiles[x][corridorSY] =  {base:MapTileIcons.floor};
 		}
 
+		rooms = [];
 		//Storage rooms
-		this._buildStorageSet(tiles, corridorWX, corridorNY - 7, true);
-		this._buildStorageSet(tiles, corridorWX + 30, corridorNY - 7, true);
-		this._buildStorageSet(tiles, corridorWX, corridorSY + 3, false);
-		this._buildStorageSet(tiles, corridorWX + 30, corridorSY + 3, false);
+		this._buildStorageSet(tiles, corridorWX, corridorNY - 7, true, rooms);
+		this._buildStorageSet(tiles, corridorWX + 30, corridorNY - 7, true, rooms);
+		this._buildStorageSet(tiles, corridorWX, corridorSY + 3, false, rooms);
+		this._buildStorageSet(tiles, corridorWX + 30, corridorSY + 3, false, rooms);
 		
 		// Foyer to main chamber
 		chamberEX = corridorEX - 2;
@@ -99,7 +100,8 @@ var MapGeneratorBossLevel = {
 			up: {x:stairsUpX, y:midpointY},
 			epok: epok,
 			throne: throne,
-			loot: loot
+			loot: loot,
+			rooms: rooms
 		};
 		return results;
 	},
@@ -113,10 +115,11 @@ var MapGeneratorBossLevel = {
 		}
 	},
 	
-	_buildStorageSet: function(tiles, startX, startY, up) {
+	_buildStorageSet: function(tiles, startX, startY, up, rooms) {
 		var extentX, extentY;
 		extentX = startX + 10;
 		extentY = startY + 5;
+		rooms.push({x:startX, y:startY, w:10, h:5});
 		this._buildRoom(tiles, startX, extentX, startY, extentY);
 
 		startX = extentX + 1;
@@ -134,6 +137,7 @@ var MapGeneratorBossLevel = {
 
 		startX = extentX + 1;
 		extentX = startX + 10;
+		rooms.push({x:startX, y:startY, w:10, h:5});
 		this._buildRoom(tiles, startX, extentX, startY, extentY);
 	}
 };

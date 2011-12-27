@@ -394,18 +394,7 @@ enyo.kind({
 		}
 
 		if (position) {
-			this.actors.push(this.createComponent({
-				kind: "ActorOnMap",
-				owner: this,
-				parent: this.$.actorsContainer,				
-				position: position,
-				monsterModel: m,
-				showing: false,
-				onclick: "_monsterClicked",
-				onDied: "_monsterDiedHandler",
-				onStatusText: "doStatusText",
-				onItemPickedUp: "_monsterPickedUpItemHandler"
-			}));
+			this._addActor(m, position, "_monsterDiedHandler");
 		}
 		
 		return !!position;
@@ -420,7 +409,7 @@ enyo.kind({
 		}
 		
 		// Periodically check to see if more actors should appear on the scene
-		if (this.actors.length < 3 + this.level && turnCount % 250 === 0) {
+		if (this.actors.length < 3 + this.level && turnCount % 150 === 0) {
 			if (this.createRandomMonster("hostile")) {
 				this.$.actorsContainer.render(); // enyo doesn't add the new component to the DOM tree until you call render() on an ancestor
 			}
@@ -814,9 +803,9 @@ enyo.kind({
 			}
 			
 			// Create a few random weapons, armor, ammo
-			value = 30 * (this.level - 1); // no armor on level 1!
+			value = 40 * (this.level - 1); // no armor on level 1!
 			value = this.createRandomItems("armor", value);
-			value += 30 * this.level;
+			value += 35 * this.level;
 			this.createRandomItems("weapons", value);
 			
 			this.createRandomItems("ammo", 1.5 * this.level);
@@ -828,31 +817,51 @@ enyo.kind({
 		newMap = MapGeneratorBossLevel.generateMap(MapLevel.kMapWidth, MapLevel.kMapHeight);
 		this.map = {
 			tiles: newMap.tiles,
+			rooms: newMap.rooms,
 			stairsUp: newMap.up
 		};
 		
-		this.actors.push(this.createComponent({
-			kind: "ActorOnMap",
-			owner: this,
-			parent: this.$.actorsContainer,				
-			position: {x:newMap.throne.x, y:newMap.throne.y},
-			monsterModel: new MonsterModel({
-				race: "epokothar",
-				level: this.level,
-				attitude:"hostile"
-			}),
-			showing: false,
-			onclick: "_monsterClicked",
-			onDied: "_epokotharDiedHandler",
-			onStatusText: "doStatusText",
-			onItemPickedUp: "_monsterPickedUpItemHandler"
-		}));
-		//TODO: add a few evil minions
+		this._addActor(new MonsterModel({
+			race: "epokothar",
+			level: this.level,
+			attitude:"hostile"
+		}), {x:newMap.throne.x, y:newMap.throne.y}, "_epokotharDiedHandler"),
+
+		// Add evil minions
+		this._addActor(new MonsterModel({
+			race: "humanknight",
+			level: Math.ceil(this.level / 2),
+			attitude:"hostile"
+		}), {x:newMap.throne.x+1, y:newMap.throne.y-1}, "_monsterDiedHandler"),
+
+		this._addActor(new MonsterModel({
+			race: "humanknight",
+			level: Math.ceil(this.level / 2),
+			attitude:"hostile"
+		}), {x:newMap.throne.x+1, y:newMap.throne.y+1}, "_monsterDiedHandler"),
 		this.$.actorsContainer.render();
 		
 		item = new ItemModel("armor", "cloakehpeway");
 		position = this._generateRandomPosition(newMap.loot);
 		this.addItem(item, position.x, position.y);
+		
+		this.createRandomItems("armor", 300);
+		this.createRandomItems("weapons", 500);
+	},
+	
+	_addActor: function(monsterModel, position, diedHandler) {
+		this.actors.push(this.createComponent({
+			kind: "ActorOnMap",
+			owner: this,
+			parent: this.$.actorsContainer,				
+			position: position,
+			monsterModel: monsterModel,
+			showing: false,
+			onclick: "_monsterClicked",
+			onDied: diedHandler || "_monsterDiedHandler",
+			onStatusText: "doStatusText",
+			onItemPickedUp: "_monsterPickedUpItemHandler"
+		}));
 	},
 	
 //	_createOffscreenImages: function() {
