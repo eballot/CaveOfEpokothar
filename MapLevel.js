@@ -677,7 +677,9 @@ enyo.kind({
 				that.$.missile.removeClass("animate "+imgClass);
 				if (!ammoItem.destroyedWhenUsed(hit)) {
 					newItem = ammoItem.makeCopy();
-					newItem.setAutoPickupFlag();
+					if (shooter.isPlayer()) {
+						newItem.setAutoPickupFlag();
+					}
 					newItem.setEquipped(false);
 					if (ammoItem.getCategory() === "ammo") {
 						newItem.setRemainingUses(1);
