@@ -21,7 +21,7 @@ enyo.kind({
 		name: "appMenu",
 		kind: enyo.AppMenu,
 		components: [{
-			caption: $L("About"),
+			caption: enyo._$L("Help"),
 			onclick: "_showAbout"
 		}]
 	}],
