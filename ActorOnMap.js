@@ -378,7 +378,7 @@ enyo.kind({
 		var success=false, death=false, statusText="", tohit, defenses, damage, newLevel, ammoItem;
 
 		tohit = Math.random() * 20;
-		if (this.isPlayer() && (tohit < 3 || tohit > 18)) {
+		if (this.isPlayer() && tohit < 5) {
 			this.exerciseSkill("fight");
 		}
 		tohit = (tohit * this.monsterModel.getSkillLevel("fight", true)) + (weapon.getAccuracy(range) * this.monsterModel.getSkillLevel(weapon, true, range>0)) + extraBonus;
