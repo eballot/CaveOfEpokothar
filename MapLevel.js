@@ -7,7 +7,8 @@ enyo.kind({
 	events: {
 		onStatusText: "doStatusText",
 		onMonsterClicked: "",
-		onMonsterDied: ""
+		onMonsterDied: "",
+		onQuestComplete: ""
 	},
 	components: [{
 		name: "canvas",
@@ -15,7 +16,7 @@ enyo.kind({
 		style: "background:url(tiles/floor_tile.gif);",
 		nodeTag:"canvas"
 	}, {
-		//Need to call render() on a div that doesn't include the canvas since so canvas doesn't redraw whenever a new actor is added
+		//Need to call render() on a div that doesn't include the canvas so canvas doesn't redraw whenever a new actor is added
 		name: "actorsContainer",
 		className: "actors-container"
 	}, {
@@ -704,8 +705,9 @@ enyo.kind({
 	},
 	
 	_epokotharDiedHandler: function(inActor) {
-		//TODO: show congratulatory message and instructions to take the cloak out.
 		this._monsterDiedHandler(inActor);
+		this.doStatusText('<span style="color:lightgreen;">' + $L("Huzzah, you defeated Epokothar! The cloak is hidden nearby.") + '</span>');
+		this.doQuestComplete();
 	},
 	
 	_monsterDiedHandler: function(inActor) {

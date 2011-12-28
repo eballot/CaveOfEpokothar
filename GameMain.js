@@ -33,6 +33,7 @@ enyo.kind({
 						onclick: "_mapClickHandler",
 						onMonsterClicked: "_monsterClickHandler",
 						onStatusText: "_showStatusText",
+						onQuestComplete: "_questCompleteHandler",
 						onMonsterDied: "_updateKillList"
 					}, {
 						name: "me",
@@ -216,7 +217,7 @@ enyo.kind({
 	
 	saveGame: function(inSender) {
 		//TODO: save environment info: turns, identified items, etc
-		var gameEnvironment = '{"v":1,"turns":' + this.turnCount + ',"mapLevel":' + this.$.map.getLevel() + '}';
+		var gameEnvironment = '{"v":1,"turns":' + this.turnCount + ',"allowExit":' + this.allowExit + ',"mapLevel":' + this.$.map.getLevel() + '}';
 		localStorage.setItem("environment", gameEnvironment);
 		localStorage.setItem("kills", JSON.stringify(this.killList));
 
@@ -233,6 +234,7 @@ enyo.kind({
 				return false;
 			}
 			this.turnCount = data.turns;
+			this.allowExit = data.allowExit;
 			killList = localStorage.getItem("kills");
 			this.killList = killList ? JSON.parse(killList) : {};
 			
@@ -250,13 +252,19 @@ enyo.kind({
 	},
 	
 	useStairs: function(inSender) {
+		var position, tileKind;
 		// Before taking the stairs, everyone gets a chance to attack you.
 		this.$.map.everyoneTakeATurn(++this.turnCount);
 		if (!this.$.me.isDead()) {
-			var position = this.$.me.getPosition();
-			this.$.map.useStairsAt(position.x, position.y);
-			this.scrollMapToPlayer();
-			this._updateToobarButtons();
+			position = this.$.me.getPosition();
+			tileKind = this.$.map.getTileKindAt(position.x, position.y);
+			if (tileKind === MapTileIcons.stairsUp.kind && this.allowExit && this.$.map.getLevel() === 1) {
+				this.playerDeath(this, $L("Contratulations, you completed your quest!"));
+			} else {
+				this.$.map.useStairsAt(position.x, position.y);
+				this.scrollMapToPlayer();
+				this._updateToobarButtons();
+			}
 		}
 	},
 	
@@ -309,6 +317,7 @@ enyo.kind({
 
 		localStorage.removeItem("player");
 		localStorage.removeItem("environment");
+		localStorage.removeItem("kills");
 		obj.maxLevel = this.$.map.purgeMaps();
 
 		obj.turns = this.turnCount;
@@ -465,7 +474,7 @@ enyo.kind({
 		if (tileKind === MapTileIcons.stairsDown.kind) {
 			this.$.stairsUp.setShowing(false);
 			this.$.stairsDown.setShowing(true);
-		} else if (tileKind === MapTileIcons.stairsUp.kind && this.$.map.getLevel() !== 1) { //TODO: for now, you can't leave. Later add a check if quest is complete
+		} else if (tileKind === MapTileIcons.stairsUp.kind && (this.allowExit || this.$.map.getLevel() !== 1)) {
 			this.$.stairsUp.setShowing(true);
 			this.$.stairsDown.setShowing(false);
 		} else {
@@ -547,6 +556,10 @@ enyo.kind({
 	_restartGame: function() {
 		this.$.gameOverDialog.close();
 		this.startNewGame();
+	},
+
+	_questCompleteHandler: function(inSender) {
+		this.allowExit = true;
 	},
 
 	_updateKillList: function(inSender, inMonster) {
