@@ -2,7 +2,7 @@ kItemsData.armor = {
 		
 	/** Body armor **/
 	leather: {
-		displayName: $L("Leather"),
+		displayName: $L("Leather Armor"),
 		type:"leather", category:"armor", skill:"armor", slot:"torso", easy:true, defense:4, flexibility:1, dexpenalty:0, weight:15, value:10,/*gp*/
 		img: "tiles/player/body/leather_armour.gif",
 		description: $L("This armor is made of stiffened leather. Armor skill is not required to effectively use leather armor.")
