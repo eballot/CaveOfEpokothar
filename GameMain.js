@@ -217,7 +217,7 @@ enyo.kind({
 	
 	saveGame: function(inSender) {
 		//TODO: save environment info: turns, identified items, etc
-		var gameEnvironment = '{"v":1,"turns":' + this.turnCount + ',"allowExit":' + this.allowExit + ',"mapLevel":' + this.$.map.getLevel() + '}';
+		var gameEnvironment = '{"v":1,"turns":' + this.turnCount + ',"allowExit":' + (this.allowExit || false) + ',"mapLevel":' + this.$.map.getLevel() + '}';
 		localStorage.setItem("environment", gameEnvironment);
 		localStorage.setItem("kills", JSON.stringify(this.killList));
 
