@@ -11,11 +11,6 @@ enyo.kind({
 		onQuestComplete: ""
 	},
 	components: [{
-		name: "canvas",
-		kind: enyo.Control,
-		style: "background:url(tiles/floor_tile.gif);",
-		nodeTag:"canvas"
-	}, {
 		//Need to call render() on a div that doesn't include the canvas so canvas doesn't redraw whenever a new actor is added
 		name: "actorsContainer",
 		className: "actors-container"
@@ -25,10 +20,11 @@ enyo.kind({
 	}],
 	className: "map-styles",
 	statics: {
-		kMapHeight: 70,
-		kMapWidth: 70,
+		kMapHeight: 72,
+		kMapWidth: 72,
 		kTileSize: 32,
 		kViewRadius: 8,
+		kCanvasPartsCount: 3,
 		kDrawStateBlack: 0,
 		kDrawStateShadow: 1,
 		kDrawStateVisible: 2
@@ -193,13 +189,55 @@ enyo.kind({
 		return Math.max(--level, this.level);
 	},
 	
+	/*
+	 * A single large canvas takes too long to re-render itself. To improve performance, create 9 smaller canvases
+	 * so the re-rendering is less obvious (best-case 1/9 as bad, worst case 4/9 as bad). To keep click handling
+	 * unchanged, overlay the canvas array with a single large div.
+	 */
 	rendered: function() {
+		var x, y, n, rawWidth, rawHeight, width, height, top, left, newNodes, mapNode, insertBeforeThisNode;
 		this.inherited(arguments);
-		this.canvas = this.$.canvas.hasNode();
-		this.canvas.height = MapLevel.kMapHeight * MapLevel.kTileSize;
-		this.canvas.width = MapLevel.kMapWidth * MapLevel.kTileSize;
-		this.ctx = this.canvas.getContext("2d");
 		
+		this.canvasTileWidth = Math.ceil(MapLevel.kMapWidth / MapLevel.kCanvasPartsCount);
+		this.canvasTileHeight = Math.ceil(MapLevel.kMapHeight / MapLevel.kCanvasPartsCount);
+		rawWidth = this.canvasTileWidth * MapLevel.kTileSize;
+		rawHeight = this.canvasTileHeight * MapLevel.kTileSize;
+		width = rawWidth + "px";
+		height = rawHeight + "px";
+		
+		this.ctx = [];
+		newNodes = [];
+		for (y = 0; y < MapLevel.kCanvasPartsCount; y++) {
+			top = (rawHeight * y) + "px";
+			for (x = 0; x < MapLevel.kCanvasPartsCount; x++) {
+				left = (rawWidth * x) + "px";
+				n = document.createElement("canvas");
+				n.height = rawHeight;
+				n.width = rawWidth;
+				n.style.position = "absolute";
+				n.style.top = top;
+				n.style.left = left;
+				n.style.width = width;
+				n.style.height = height;
+				this.ctx.push(n.getContext("2d"));
+				newNodes.push(n);
+			}
+		}
+
+		n = document.createElement("div");
+		n.style.position = "absolute";
+		n.style.top = "0";
+		n.style.left = "0";
+		n.style.width = (MapLevel.kMapWidth * MapLevel.kTileSize) + "px";
+		n.style.height = (MapLevel.kMapHeight * MapLevel.kTileSize) + "px";
+		newNodes.push(n);
+
+		mapNode = this.hasNode();
+		insertBeforeThisNode = this.$.actorsContainer.hasNode();
+		for (x = 0; x < newNodes.length; x++) {
+			mapNode.insertBefore(newNodes[x], insertBeforeThisNode);
+		}
+
 		if (this.iconsLoaded) {
 			this._renderMap(0,0, MapLevel.kMapWidth, MapLevel.kMapHeight, true);
 			if (this.player) {
@@ -632,9 +670,6 @@ enyo.kind({
 						extraBonus -= 4; // target gets a defense bonus for partial cover behind an obstructing feature
 					}
 					prevItem = item;
-					
-//					this.ctx.fillStyle = "rgba(80,0,0,0.4)";
-//					this.ctx.fillRect((ix*MapLevel.kTileSize), (iy*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
 				}
 			} else {
 				if (ix <= 0) {
@@ -868,52 +903,9 @@ enyo.kind({
 		}));
 	},
 	
-//	_createOffscreenImages: function() {
-//		var context, tileObj, floorCanvas, wallCanvas, floorShadedCanvas, wallShadedCanvas;
-//		
-//		floorCanvas = document.createElement("canvas");
-//		floorCanvas.width = 32;
-//		floorCanvas.height = 32;
-//		context = floorCanvas.getContext("2d");
-//		tileObj = MapTileIcons.floor;
-//		context.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, 0, 0, MapLevel.kTileSize, MapLevel.kTileSize);
-//
-//		floorShadedCanvas = document.createElement("canvas");
-//		floorShadedCanvas.width = 32;
-//		floorShadedCanvas.height = 32;
-//		context = floorShadedCanvas.getContext("2d");
-//		tileObj = MapTileIcons.floor;
-//		context.drawImage(floorCanvas, 0, 0);
-//		context.fillStyle = "rgba(0,0,0,0.4)";
-//		context.fillRect(0, 0, MapLevel.kTileSize, MapLevel.kTileSize);
-//
-//		wallCanvas = document.createElement("canvas");
-//		wallCanvas.width = 32;
-//		wallCanvas.height = 32;
-//		context = wallCanvas.getContext("2d");
-//		tileObj = MapTileIcons.wall;
-//		context.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, 0, 0, MapLevel.kTileSize, MapLevel.kTileSize);
-//
-//		wallShadedCanvas = document.createElement("canvas");
-//		wallShadedCanvas.width = 32;
-//		wallShadedCanvas.height = 32;
-//		context = wallShadedCanvas.getContext("2d");
-//		tileObj = MapTileIcons.wall;
-//		context.drawImage(wallCanvas, 0, 0);
-//		context.fillStyle = "rgba(0,0,0,0.4)";
-//		context.fillRect(0, 0, MapLevel.kTileSize, MapLevel.kTileSize);
-//   		this.offscreenCanvas = {
-//			floor: floorCanvas,
-//			wall: wallCanvas,
-//			floorShaded: floorShadedCanvas,
-//			wallShaded: wallShadedCanvas
-//		};
-//   		
-//	},
-
 	_renderMap: function(initX, initY, extentX, extentY, forceRender) {
-		var x, y, columns, tile, tileType, key, tileObj, itemPile, tileDrawState;
-		if (!this.canvas || !this.iconsLoaded) {
+		var x, y, ctxIndex, adjX, adjY, columns, context, tile, tileType, key, tileObj, itemPile, tileDrawState;
+		if (!this.ctx || !this.iconsLoaded) {
 			return; // Not ready yet, so just return
 		}
 
@@ -925,8 +917,12 @@ enyo.kind({
 
 		tileDrawState = this.tileDrawState;
 		for (x = initX; x < extentX; x++) {
+			adjX = x % this.canvasTileWidth;
 			columns = this.map.tiles[x];
 			for (y = initY; y < extentY; y++) {
+				adjY = y % this.canvasTileHeight;
+				ctxIndex = Math.floor(MapLevel.kCanvasPartsCount * (x / MapLevel.kMapWidth + Math.floor(MapLevel.kCanvasPartsCount * y / MapLevel.kMapWidth)));
+				context = this.ctx[ctxIndex];
 				tile = columns[y];
 				if (tile) {
 					if (tile.visited) {
@@ -942,12 +938,7 @@ enyo.kind({
 					tileObj = MapTileIcons[tileType];
 					if (forceRender || tile.visited === this.currentTime && tileDrawState[x][y] !== MapLevel.kDrawStateVisible) {
 						tileDrawState[x][y] = MapLevel.kDrawStateVisible;
-						// Commented out because using background image for floor tiles doesn't improve rendering performance
-						//if (tileType === "floor") {
-						//	this.ctx.clearRect((x*MapLevel.kTileSize), (y*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
-						//} else {
-							this.ctx.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, (x*MapLevel.kTileSize), (y*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
-						//}
+						context.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, (adjX*MapLevel.kTileSize), (adjY*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
 
 						key = this._itemsKey({x:x, y:y});
 						itemPile = this.items[key];
@@ -958,12 +949,12 @@ enyo.kind({
 							} else {
 								tileObj = itemPile.getTileImg();
 								if (tileObj) {
-									this.ctx.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, (x*MapLevel.kTileSize), (y*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
+									context.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, (adjX*MapLevel.kTileSize), (adjY*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
 									if (itemPile.count() > 1) {
-										this.ctx.fillStyle = "yellow";
-										this.ctx.font = "bold 24px sans-serif";
-										this.ctx.textBaseline = "top";
-										this.ctx.fillText("+", (x*MapLevel.kTileSize), (y*MapLevel.kTileSize));
+										context.fillStyle = "yellow";
+										context.font = "bold 24px sans-serif";
+										context.textBaseline = "top";
+										context.fillText("+", (adjX*MapLevel.kTileSize), (adjY*MapLevel.kTileSize));
 									}
 								}
 							}
@@ -973,14 +964,14 @@ enyo.kind({
 					// Add shading to tiles that are currently blocked from view
 					if (tile.visited !== this.currentTime && (forceRender || tileDrawState[x][y] !== MapLevel.kDrawStateShadow)) {
 						tileDrawState[x][y] = MapLevel.kDrawStateShadow;
-						this.ctx.fillStyle = "rgba(0,0,0,0.4)";
-						this.ctx.fillRect((x*MapLevel.kTileSize), (y*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
+						context.fillStyle = "rgba(0,0,0,0.4)";
+						context.fillRect((adjX*MapLevel.kTileSize), (adjY*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
 					}
 				} else {
 					if (forceRender || tileDrawState[x][y] !== MapLevel.kDrawStateBlack) {
 						tileDrawState[x][y] = MapLevel.kDrawStateBlack;
-						this.ctx.fillStyle = "black";
-						this.ctx.fillRect((x*MapLevel.kTileSize), (y*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
+						context.fillStyle = "black";
+						context.fillRect((adjX*MapLevel.kTileSize), (adjY*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
 					}
 				}
 			}
