@@ -847,7 +847,7 @@ enyo.kind({
 			value += 35 * this.level;
 			this.createRandomItems("weapons", value);
 			
-			this.createRandomItems("ammo", 1.5 * this.level);
+			this.createRandomItems("ammo", 3.3 * this.level);
 		}
 	},
 	
