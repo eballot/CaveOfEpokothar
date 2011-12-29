@@ -280,7 +280,7 @@ MonsterModel.prototype.getExpToNextLevel = function(asPercentage) {
 	}
 };
 
-MonsterModel.prototype.getLevel = function(xp) {
+MonsterModel.prototype.getLevel = function() {
 	return this.level || 0;
 };
 
@@ -535,6 +535,10 @@ MonsterModel.prototype.exerciseSkill = function(skillName) {
 		}
 	}
 	return skillIncreased;
+};
+
+MonsterModel.prototype.increaseAttribute = function(attr) {
+	this[attr] += 1;
 };
 
 MonsterModel.prototype.getDefense = function() {

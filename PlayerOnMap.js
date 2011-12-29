@@ -14,6 +14,31 @@ enyo.kind({
 		name: "interactionChoicePopup",
 		kind: enyo.PopupSelect,
 		onSelect: "_handleInteractionChoice"
+	}, {
+		name: "improveAttributeDialog",
+		kind: enyo.Popup,
+		modal: true,
+		dismissWithClick: false,
+		dismissWithEscape: false,
+		scrim: true,
+		components: [{
+			content: $L("Choose an attribute to improve.")
+		}, {
+			kind: enyo.Button,
+			caption: $L("Strength"),
+			attr: "str",
+			onclick: "_improveAttributeHandler"
+		}, {
+			kind: enyo.Button,
+			caption: $L("Dexterity"),
+			attr: "dex",
+			onclick: "_improveAttributeHandler"
+		}, {
+			kind: enyo.Button,
+			caption: $L("Intelligence"),
+			attr: "int",
+			onclick: "_improveAttributeHandler"
+		}]
 	}],
 	statics: {
 		kRangedAttackShoot: new enyo.g11n.Template($L("Shoot with #{weaponName}")),
@@ -370,9 +395,21 @@ enyo.kind({
 	_levelUp: function() {
 		//TODO: Level-up code (+hp and attrs)
 		this.doStatusText('<span style="color:lightgreen;">' + $L("You gained a level!") + '</span>');
-		this._statsChanged();
+		if (this.monsterModel.getLevel() % 3 === 0) {
+			this.$.improveAttributeDialog.openAtCenter();
+		} else {
+			this._statsChanged();
+		}
 	},
 	
+	_improveAttributeHandler: function(inSender, inEvent) {
+		if (inSender && inSender.attr) {
+			this.monsterModel.increaseAttribute(inSender.attr);
+			this._statsChanged();
+		}
+		this.$.improveAttributeDialog.close();
+	},
+
 	_statsChanged: function() {
 		var i, content = [], text, hp, damageTaken, defenses, weapon, hpColor, knownSkills, skill, skillLevel, ammoItem;
 		hp = this.monsterModel.hp;
