@@ -1,10 +1,10 @@
 {
-	"id": "com.excessdata.app.rogue.epokothar",
-	"version": "0.0.2",
-	"vendor": "Excess Data",
+	"id": "com.groovycats.app.epokothar",
+	"version": "1.0.0",
+	"vendor": "GroovyCats",
 	"type": "web",
 	"main": "index.html",
 	"title": "Cave of Epokothar",
-	"icon": "icon.png",
+	"icon": "icon64.png",
 	"uiRevision": 2
 }
