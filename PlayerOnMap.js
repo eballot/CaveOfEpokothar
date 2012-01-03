@@ -277,6 +277,22 @@ enyo.kind({
 		if (encumberance > 100) {
 			this.doStatusText($L("You're carrying so much stuff that you can't move."));
 		} else {
+			if (this.monsterModel.getInebriationLevel() > kItemsData.inebriationDrunk) {
+				// Simulate stumbling by randomly steering left or right
+				i = Math.random();
+				if (moveX === 0) {
+					if (i < 0.33) moveX = -1;
+					else if (i > 0.67) moveX = 1;
+				} else if (moveY === 0) {
+					if (i < 0.33) moveY = -1;
+					else if (i > 0.67) moveY = 1;
+				} else if (i < 0.33) {
+					moveX = 0;
+				} else if (i > 0.67) {
+					moveY = 0;
+				}
+			}
+
 			map.moveBy(this, moveX, moveY);
 	
 			// Check if there's items to automatically pickup
