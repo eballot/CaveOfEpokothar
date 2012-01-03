@@ -345,7 +345,7 @@ enyo.kind({
 	},
 	
 	getItemPileAt:function(position) {
-		return this.items[this._itemsKey(position)];
+		return this.items[this._itemsKey(position.x, position.y)];
 	},
 
 	createItem: function(category, type, extras) {
@@ -366,9 +366,8 @@ enyo.kind({
 	},
 
 	addItem: function(itemModel, x, y) {
-		var position, key, pile;
-		position = {x:x, y:y};
-		key = this._itemsKey(position);
+		var key, pile;
+		key = this._itemsKey(x, y);
 		pile = this.items[key];
 		if (!pile) {
 			this.items[key] = new ItemPile(itemModel);
@@ -382,7 +381,7 @@ enyo.kind({
 	
 	itemPileChanged: function(position) {
 		var key, pile;
-		key = this._itemsKey(position);
+		key = this._itemsKey(position.x, position.y);
 		pile = this.items[key];
 		if (pile) {
 			if (pile.isEmpty()) {
@@ -568,7 +567,7 @@ enyo.kind({
 			return tile.base;
 		}
 		
-		return this.items[this._itemsKey(position)];
+		return this.items[this._itemsKey(position.x, position.y)];
 	},
 	
 	searchNearby: function(actor, distance) {
@@ -734,8 +733,8 @@ enyo.kind({
 		return (tile && tile.visited === this.currentTime);
 	},
 
-	_itemsKey: function(position) {
-		return "x"+position.x+"y"+position.y;
+	_itemsKey: function(x, y) {
+		return "x"+x+"y"+y;
 	},
 	
 	_epokotharDiedHandler: function(inActor) {
@@ -939,7 +938,7 @@ enyo.kind({
 						tileDrawState[x][y] = MapLevel.kDrawStateVisible;
 						context.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, (adjX*MapLevel.kTileSize), (adjY*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
 
-						key = this._itemsKey({x:x, y:y});
+						key = this._itemsKey(x, y);
 						itemPile = this.items[key];
 						if (itemPile) {
 							// Aging the pile here because it is lazy (only done when the pile comes into view)
