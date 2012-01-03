@@ -148,7 +148,7 @@ enyo.kind({
 	}],
 	
 	playerChanged: function(oldPlayer) {
-		this._updateInventoryList();
+		this._updateInventoryList(false);
 	},
 	
 	mapChanged: function(oldMap) {
@@ -301,7 +301,7 @@ enyo.kind({
 			}
 			
 			// redraw both lists
-			this._updateInventoryList();
+			this._updateInventoryList(true);
 			this.$.groundList.punt();
 		}
 	},
@@ -315,7 +315,7 @@ enyo.kind({
 				case Inventory.kItemOptions.kDrop.action:
 					this.player.dropItem(this.map, index);
 					// redraw both lists
-					this._updateInventoryList();
+					this._updateInventoryList(true);
 					this._updateGroundList();
 					break;
 					
@@ -325,30 +325,28 @@ enyo.kind({
 						this.$.notHungryDialog.openAtCenter();
 						this.$.notHungryText.setContent(result);
 					}
-					this._updateInventoryList();
+					this._updateInventoryList(true);
 					break;
 					
 				case Inventory.kItemOptions.kEquip.action:
 					this.player.equipItem(index);
-					this._updateInventoryList();
+					this.$.equipmentList.refresh();
 					break;
 					
 				case Inventory.kItemOptions.kUnequip.action:
 					this.player.unequipItem(index);
-					this._updateInventoryList();
+					this.$.equipmentList.updateRow(index);
 					break;
 					
 				case Inventory.kItemOptions.kDrink.action:
 					this.player.drinkItem(this.inventory[index]);
-					this._updateInventoryList();
+					this._updateInventoryList(true);
 					break;
 					
 				case Inventory.kItemOptions.kInspect.action:
 					item = this.inventory[index];
 					if (item.identifyMagic(this.player.getIntelligence(), false)) {
-						//TODO: update the list item with the new displayName. Since enyo gives each list item
-						// the same id, this would require rebuilding the list and then scrolling back to the 
-						// same scroll position.
+						this.$.equipmentList.updateRow(index);
 					}
 					this.$.itemDescription.setContent(item.getDescription());
 					break;
@@ -358,7 +356,7 @@ enyo.kind({
 		}
 	},
 	
-	_updateInventoryList: function() {
+	_updateInventoryList: function(refresh) {
 		var i, length, obj = {}, totalWeight;
 		this.inventory = this.player.getInventoryList();
 		function sortCallback(a,b) {
@@ -393,7 +391,11 @@ enyo.kind({
 			obj.totalWeight = totalWeight.toFixed(1);
 			this.$.totalWeight.setContent(Inventory.kEncumberance.evaluate(obj));
 		}
-		this.$.equipmentList.punt();
+		if (refresh) {
+			this.$.equipmentList.refresh();
+		} else {
+			this.$.equipmentList.punt();
+		}
 	},
 	
 	_updateGroundList: function() {
