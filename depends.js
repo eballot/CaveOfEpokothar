@@ -13,9 +13,11 @@ enyo.depends(
 	"Data/ItemDataArmor.js",
 	"Data/ItemDataCorpse.js",
 	"Data/ItemDataFood.js",
+	"Data/ItemDataPotions.js",
 	"Data/ItemDataWeapons.js",
 	"Data/Skills.js",
 
+	"Models/EffectsServant.js",
 	"Models/ItemModel.js",
 	"Models/ItemPile.js",
 	"Models/MonsterModel.js",

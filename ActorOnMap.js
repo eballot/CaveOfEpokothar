@@ -158,6 +158,7 @@ enyo.kind({
 	performTurn: function(map) {
 		this.ai.performTurn(map);
 		this.setShowing(map.hasLineOfSiteToPlayer(this));
+		this._applyIllEffectsForTurn();
 	},
 	
 	attack: function(defender) {
@@ -357,31 +358,23 @@ enyo.kind({
 		return this.monsterModel.inventory || [];
 	},
 	
-	getCorpseItem: function(turnCount) {
-		var extras, corpse;
-		corpse = this.monsterModel.getCorpse();
-		if (corpse) {
-			monsterName = this.monsterModel.getDisplayName(true);
-			extras = {
-				monsterName: this.monsterModel.getDisplayName(true),
-				tileImg: this.monsterModel.getTileImg(),
-				deathTurn: turnCount
-			};
-			return new ItemModel("corpse", corpse, extras);
-		} else {
-			return null;
-		}
+	getCorpseItem: function() {
+		return this.monsterModel.getCorpseItem();
 	},
 	
 	// range=0 means melee attack
 	useAttack: function(weapon, defender, range, extraBonus) {
 		var success=false, death=false, statusText="", tohit, defenses, damage, newLevel, ammoItem;
+		extraBonus = extraBonus || 0;
 
 		tohit = Math.random() * 20;
 		if (this.isPlayer() && tohit < 5) {
 			this.exerciseSkill("fight");
 		}
-		tohit = (tohit * this.monsterModel.getSkillLevel("fight", true)) + (weapon.getAccuracy(range) * this.monsterModel.getSkillLevel(weapon, true, range>0)) + extraBonus;
+		
+		tohit = (tohit * this.monsterModel.getSkillLevel("fight", true));
+		tohit += (weapon.getAccuracy(range) * this.monsterModel.getSkillLevel(weapon, true, range>0));
+		tohit += (extraBonus - (this.monsterModel.getInebriationLevel() / 100));
 		defenses = defender.monsterModel.getDefense();
 
 		if (tohit < defenses.dodge) {
@@ -505,5 +498,20 @@ enyo.kind({
 	
 	_statsChanged: function() {
 		return ""; // base version of this function does nothing.
+	},
+	
+	_applyIllEffectsForTurn: function() {
+		var died = false, poisonLevel;
+
+		poisonLevel = this.monsterModel.getPoisonLevel();
+		if (poisonLevel > 0 && Math.random() * 100 < poisonLevel) {
+			this.statsChangedFlag = true;
+			died = this.monsterModel.takeDamage(1);
+			if (died) {
+				this.doDied($L("The poison killed you"));
+			}
+		}
+		
+		return died;
 	}
 });

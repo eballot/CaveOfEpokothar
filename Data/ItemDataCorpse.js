@@ -10,22 +10,22 @@ Object.defineProperty(kItemsData,
 		},
 		animalsmall: {
 			displayName: $L("TBD"),
-			type:"animalsmall", category:"corpse", canSpoil:true, weight:25, nourishment:250, value:0,/*gp*/
+			type:"animalsmall", category:"corpse", canSpoil:true, disease:33, weight:25, nourishment:250, value:0,/*gp*/
 			description: $L("Carrion can be eaten if you're really hungry.")
 		},
 		equine: {
 			displayName: $L("TBD"),
-			type:"equine", category:"corpse", canSpoil:true, weight:250, nourishment:1000, value:0,/*gp*/
+			type:"equine", category:"corpse", canSpoil:true, disease:33, weight:250, nourishment:1000, value:0,/*gp*/
 			description: $L("Carrion can be eaten if you're really hungry.")
 		},
 		humanoid: {
 			displayName: $L("TBD"),
-			type:"humanoid", category:"corpse", canSpoil:true, weight:125, nourishment:500, value:0,/*gp*/
+			type:"humanoid", category:"corpse", canSpoil:true, disease:33, weight:125, nourishment:500, value:0,/*gp*/
 			description: $L("Carrion can be eaten if you're really hungry.")
 		},
 		insectoid: {
 			displayName: $L("TBD"),
-			type:"insectoid", category:"corpse", canSpoil:true, weight:30, nourishment:550, value:0,/*gp*/
+			type:"insectoid", category:"corpse", canSpoil:true, disease:33, weight:30, nourishment:550, value:0,/*gp*/
 			description: $L("Carrion can be eaten if you're really hungry.")
 		}
 	}

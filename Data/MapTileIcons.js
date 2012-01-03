@@ -80,6 +80,22 @@ var MapTileIcons = {
 	cheese:     { img: "items", offsetX: 160, offsetY: 320 },
 	sausage:    { img: "items", offsetX: 192, offsetY: 320 },
 	
+	//potions
+	potionMurky: { img: "items", offsetX: 256, offsetY: 416 }, //gray/blue
+	potionBlue:  { img: "items", offsetX: 288, offsetY: 416 },
+	potionGray:  { img: "items", offsetX: 320, offsetY: 416 },
+	potionOpaque:{ img: "items", offsetX: 352, offsetY: 416 }, //white
+	potionMarine:{ img: "items", offsetX: 384, offsetY: 416 },
+	potionViolet:{ img: "items", offsetX: 416, offsetY: 416 },
+	potionOrange:{ img: "items", offsetX: 448, offsetY: 416 },
+	potionBlack: { img: "items", offsetX: 480, offsetY: 416 }, //dark blue
+	potionRed:   { img: "items", offsetX: 512, offsetY: 416 },
+	potionYellow:{ img: "items", offsetX: 544, offsetY: 416 },
+	potionGreen: { img: "items", offsetX: 576, offsetY: 416 },
+	potionBrown: { img: "items", offsetX: 608, offsetY: 416 },
+	potionPink:  { img: "items", offsetX: 32, offsetY: 448 },
+	potionWhite: { img: "items", offsetX: 32, offsetY: 448 },
+	
 	//dead things
 	bones:               { img: "items", offsetX: 256, offsetY: 320 },
 	deadHumanoidBrown:   { img: "corpses", offsetX: 32, offsetY: 0 },

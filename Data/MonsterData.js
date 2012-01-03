@@ -15,7 +15,7 @@ var kMonstersAtLevel = [
 var kMonsterData = {
 	epokothar:{
 		monsterName:$L("Lord Epokothar"), xp:3, hpMin:5, hpRnd:3, defenses:{dodge:25, block:3, ac:3}, dex:15, hands:0, attacks:[{type:"bitesmall"}],
-		img:"tiles/dc-mon0/epokothar.gif", corpse:"insectoid", corpseImg:"deadInsect"
+		img:"tiles/dc-mon0/epokothar.gif", corpse:"insectoid", corpseImg:"deadInsect", disease:100
 	},
 	centaur:{
 		monsterName:$L("Centaur"), xp:3, hpMin:2, hpRnd:7, defenses:{dodge:6, block:3, ac:10}, dex:8, hands:2, showEquippedImg:false,
@@ -24,7 +24,7 @@ var kMonsterData = {
 	},
 	cockroach:{
 		monsterName:$L("Giant Cockroach"), xp:1, hpMin:1, hpRnd:3, defenses:{dodge:2, block:2, ac:10}, hands:0, attacks:[{type:"bitesmall", extras:{bonus:-2}}],
-		img:"tiles/dc-mon0/giant_cockroach.gif", corpse:"insectoid", corpseImg:"deadInsect"
+		img:"tiles/dc-mon0/giant_cockroach.gif", corpse:"insectoid", corpseImg:"deadInsect", disease:50
 	},
 	dog:{
 		monsterName:$L("Large Dog"), xp:2, hpMin:2, hpRnd:4, defenses:{dodge:8, block:0, ac:6}, hands:0, attacks:[{type:"bitemedium"}],
@@ -44,7 +44,7 @@ var kMonsterData = {
 	goblin:{
 		monsterName:$L("Goblin"), xp:2, hpMin:2, hpRnd:5, defenses:{dodge:5, block:4, ac:9}, dex:8, hands:2, showEquippedImg:true, wpnTopOffset:"4px",
 		inventory:[{type:"shortsword", category:"weapons", extras:{equipped:true}}],
-		img:"tiles/dc-mon0/goblin0.gif", corpse:"humanoid", corpseImg:"deadGoblin"
+		img:"tiles/dc-mon0/goblin0.gif", corpse:"humanoid", corpseImg:"deadGoblin", disease:50
 	},
 	halfling:{
 		monsterName:$L("Halfling"), xp:3, hpMin:2, hpRnd:5, defenses:{dodge:8, block:0, ac:8}, dex:12, hands:2, showEquippedImg:true,
@@ -55,7 +55,7 @@ var kMonsterData = {
 	hobgoblin:{
 		monsterName:$L("Hobgoblin"), xp:3, hpMin:2, hpRnd:7, defenses:{dodge:5, block:0, ac:11}, dex:8, hands:2, showEquippedImg:true,
 		inventory:[{type:"waraxe", category:"weapons", extras:{equipped:true}}, {type:"shield", category:"armor", extras:{equipped:true}}],
-		img:"tiles/dc-mon0/hobgoblin0.gif", corpse:"humanoid", corpseImg:"deadGoblin"
+		img:"tiles/dc-mon0/hobgoblin0.gif", corpse:"humanoid", corpseImg:"deadGoblin", disease:50
 	},
 	human:{
 		monsterName:$L("Human"), xp:2, hpMin:2, hpRnd:6, defenses:{dodge:8, block:0, ac:10}, dex:12, hands:2, showEquippedImg:true,
@@ -88,16 +88,16 @@ var kMonsterData = {
 	orc:{
 		monsterName:$L("Orc"), xp:2, hpMin:2, hpRnd:7, defenses:{dodge:8, block:4, ac:9}, dex:11, hands:2, showEquippedImg:true, wpnTopOffset:"1px",
 		inventory:[{type:"club", category:"weapons", extras:{equipped:true}}],
-		img:"tiles/dc-mon0/orc0.gif", corpse:"humanoid", corpseImg:"deadOrc"
+		img:"tiles/dc-mon0/orc0.gif", corpse:"humanoid", corpseImg:"deadOrc", disease:75
 	},
 	orcwarrior:{
 		monsterName:$L("Orc Warrior"), xp:4, hpMin:4, hpRnd:7, defenses:{dodge:8, block:4, ac:8}, dex:12, hands:2, showEquippedImg:true, wpnTopOffset:"1px",
 		inventory:[{type:"greataxe", category:"weapons", extras:{equipped:true}}],
-		img:"tiles/dc-mon0/orc_warrior0.gif", corpse:"humanoid", corpseImg:"deadOrc"
+		img:"tiles/dc-mon0/orc_warrior0.gif", corpse:"humanoid", corpseImg:"deadOrc", disease:75
 	},
 	rat:{
 		monsterName:$L("Giant Rat"), xp:2, hpMin:1, hpRnd:4, defenses:{dodge:8, block:0, ac:5}, hands:0, attacks:[{type:"bitemedium"}],
-		img:"tiles/dc-mon0/rat.gif", corpse:"animalsmall", corpseImg:"deadRatGray"
+		img:"tiles/dc-mon0/rat.gif", corpse:"animalsmall", corpseImg:"deadRatGray", disease:80
 	},
 	skeleton:{
 		monsterName:$L("Skeleton"), xp:2, hpMin:2, hpRnd:4, defenses:{dodge:2, block:5, ac:11}, hands:0, attacks:[{type:"longsword"}],

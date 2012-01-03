@@ -338,9 +338,18 @@ enyo.kind({
 					this._updateInventoryList();
 					break;
 					
+				case Inventory.kItemOptions.kDrink.action:
+					this.player.drinkItem(this.inventory[index]);
+					this._updateInventoryList();
+					break;
+					
 				case Inventory.kItemOptions.kInspect.action:
 					item = this.inventory[index];
-					item.identifyMagic(this.player.getIntelligence(), false);
+					if (item.identifyMagic(this.player.getIntelligence(), false)) {
+						//TODO: update the list item with the new displayName. Since enyo gives each list item
+						// the same id, this would require rebuilding the list and then scrolling back to the 
+						// same scroll position.
+					}
 					this.$.itemDescription.setContent(item.getDescription());
 					break;
 				//TODO: handle other actions

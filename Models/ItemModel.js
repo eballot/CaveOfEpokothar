@@ -14,6 +14,51 @@ ItemModel.corpseNameTemplate = new enyo.g11n.Template($L("#{monsterName} corpse"
 ItemModel.rottenNameTemplate = new enyo.g11n.Template($L("Rotting #{monsterName} corpse"));
 ItemModel.bonesNameTemplate = new enyo.g11n.Template($L("#{monsterName} bones"));
 
+/*
+ *  Static functions
+ */
+
+ItemModel.initRandomNames = function() {
+	var key, i, j, obj;
+	
+	ItemModel.randomNames = {};
+
+	// First shuffle kItemAdornments.potions
+	for (i = kItemAdornments.potions.length - 1; i > 0; i--) {
+		j = Math.floor(Math.random() * (i + 1));
+		obj = kItemAdornments.potions[i];
+		kItemAdornments.potions[i] = kItemAdornments.potions[j];
+		kItemAdornments.potions[j] = obj;
+	}
+
+	i = 0;
+	for (key in kItemsData.potions) {
+		obj = kItemAdornments.potions[i++];
+		// Make a copy so it can be modified (the name can chance once the item is identified)
+		ItemModel.randomNames[key] = {
+			displayName: obj.displayName,
+			tileImg: obj.tileImg
+		};
+	}
+};
+
+ItemModel.saveRandomNames = function() {
+	localStorage.setItem("randomNames", JSON.stringify(ItemModel.randomNames));
+};
+
+ItemModel.restoreRandomNames = function() {
+	var names = localStorage.getItem("randomNames");
+	if (names) {
+		ItemModel.randomNames = JSON.parse(names);
+	} else {
+		ItemModel.initRandomNames();
+	}
+};
+
+
+/*
+ * Object functions
+ */
 
 ItemModel.prototype.makeCopy = function() {
 	var key, extras, newItem;
@@ -45,13 +90,13 @@ ItemModel.prototype.getType = function() {
 };
 
 ItemModel.prototype.getDisplayName = function(terse) {
-	var name;
+	var name, type;
 	//TODO: for now just display the name, but later, need this to include
 	//unidentified ("murky purple potion")
-	
+	type = this.getType();
 	if (this.canSpoil()) {
 		if (this.extras.rotten) {
-			if (this.getType() === "bones") {
+			if (type === "bones") {
 				name = ItemModel.bonesNameTemplate.evaluate(this.extras);
 			} else {
 				name = ItemModel.rottenNameTemplate.evaluate(this.extras);
@@ -59,9 +104,11 @@ ItemModel.prototype.getDisplayName = function(terse) {
 		} else {
 			name = ItemModel.corpseNameTemplate.evaluate(this.extras);
 		}
+	} else if (ItemModel.randomNames[type]) {
+		name = ItemModel.randomNames[type].displayName;
 	} else {
 		
-		// Copy the displayName from template to extras to the string templating can use it,
+		// Copy the displayName from template to extras so the string templating can use it,
 		// even though it wastes space when saving a game
 		if (!this.extras.displayName && (this.extras.adornment || this.extras.cursed || this.extras.bonus)) {
 			this.extras.displayName = this.template.displayName;
@@ -76,15 +123,25 @@ ItemModel.prototype.getDisplayName = function(terse) {
 		} else {
 			name = this.template.displayName || this.template.type;
 		}
-		if (this.extras.count > 1) {
-			name += " (" + this.extras.count + ")";
-		}
 	}
+	
+	if (this.extras.count > 1) {
+		name += " (" + this.extras.count + ")";
+	}
+
 	return name;
 };
 
 ItemModel.prototype.getTileImg = function() {
-	return MapTileIcons[this.extras.tileImg || this.template.type];
+	var randomTileImg, type = this.template.type;
+	randomTileImg = ItemModel.randomNames[type] && MapTileIcons[ItemModel.randomNames[type].tileImg];
+	if (randomTileImg) {
+		return randomTileImg;
+	} else if (this.extras.tileImg) {
+		return MapTileIcons[this.extras.tileImg];
+	} else {
+		return MapTileIcons[this.template.type];
+	}
 };
 
 ItemModel.prototype.getDescription = function() {
@@ -139,7 +196,7 @@ ItemModel.prototype.requiresAmmunition = function() {
 };
 
 ItemModel.prototype.autoPickup = function() {
-	return this.template.category === "food" || this.extras.autoPickup;
+	return this.template.category === "food" || this.template.category === "potions" || this.extras.autoPickup;
 };
 
 ItemModel.prototype.setAutoPickupFlag = function() {
@@ -164,7 +221,8 @@ ItemModel.prototype.setRemainingUses = function(count) {
 
 ItemModel.prototype.incrementUses = function(count) {
 	if (!this.extras.count) {
-		this.extras.count = count;
+		// Assume the item has 1 count if 'count' is not defined
+		this.extras.count = 1 + count;
 	} else {
 		this.extras.count += count;
 	}
@@ -208,6 +266,59 @@ ItemModel.prototype.getImage = function() {
 
 ItemModel.prototype.getNourishment = function() {
 	return this.template.nourishment || 0;
+};
+
+ItemModel.prototype.getDiseasedAmount = function() {
+	var diseaseChance = 0;
+	if (this.extras && this.extras.disease) {
+		diseaseChance = this.extras.disease;
+	} else if (this.template.disease) {
+		diseaseChance = this.template.disease;
+	}
+	
+	if (this.extras.rotten) {
+		diseaseChance *= 3;
+	}
+	
+	if (diseaseChance && Math.random() * 100 < diseaseChance) {
+		return diseaseChance;
+	} else {
+		return 0;
+	}
+};
+
+ItemModel.prototype.getEffect = function() {
+	var effect = {}, duration, amount;
+	
+	if (this.template.amount) {
+		amount = this.template.amount;
+		if (this.template.amountRand) {
+			amount += Math.floor(Math.random() * this.template.amountRand);
+		}
+		effect.amount = amount;
+	}
+	
+	if (this.template.attrAmount) {
+		effect.attrAmount = this.template.attrAmount;
+	}
+	
+	if (this.template.duration) {
+		duration = this.template.duration;
+		if (this.template.durationRand) {
+			duration += Math.floor(Math.random() * this.template.durationRand);
+		}
+		effect.duration = duration;
+	}
+	
+	if (this.template.attribute) {
+		effect.attribute = this.template.attribute;
+	}
+
+	if (this.template.effect) {
+		effect.effect = this.template.effect;
+	}
+
+	return effect;
 };
 
 ItemModel.prototype.setEquipped = function(equipped) {
@@ -280,16 +391,28 @@ ItemModel.prototype.magicUnidentified = function() {
 };
 
 ItemModel.prototype.identifyMagic = function(int, allowRetry) {
-	var bonus = this.extras.bonus;
+	var bonus, type;
+	if (this.extras.knownBonus) {
+		return false; // Already identified this item
+	}
+	
 	if (!allowRetry && this.extras.idInt === int) {
 		return false;
 	}
-
-	if (int > (20 * Math.random()) + (2 * bonus)) {
-		if (bonus > 0) {
-			this.extras.knownBonus = "+" + bonus;
-		} else if (bonus < 0) {
-			this.extras.knownBonus = bonus + "";
+	
+	bonus = this.extras.bonus || 0;
+	if (int > (18 * Math.random()) + (2 * Math.abs(bonus))) {
+		type = this.getType();
+		if (ItemModel.randomNames[type]) {
+			// Replace the random displayname with the item's real displayname
+			ItemModel.randomNames[type].displayName = this.template.displayName;
+			this.extras.knownBonus = 1; //to mark this as identified
+		} else {
+			if (bonus > 0) {
+				this.extras.knownBonus = "+" + bonus;
+			} else if (bonus < 0) {
+				this.extras.knownBonus = bonus + "";
+			}
 		}
 		
 		// It's been identified so don't need to track this anymore
@@ -314,8 +437,15 @@ ItemModel.prototype.setBonus = function(val) {
 };
 
 ItemModel.prototype.addMagicBonus = function(level) {
-	var x, bonus, adornmentsList;
-	//TODO: potential to be a cursed item, but not until there's scrolls to identify or uncurse.
+	var x, bonus, category, adornmentsList;
+	//TODO: potential for item to be cursed or blessed, but not until there's scrolls to identify and uncurse.
+	
+	category = this.getCategory();
+	// For now, potions and food can't have magic bonuses.
+	if (category === "food" || category === "potions") {
+		return;
+	}
+
 	bonus = Math.floor(Math.random() * level / 2);
 	if (bonus > 5) {
 		bonus = 5;
@@ -325,7 +455,7 @@ ItemModel.prototype.addMagicBonus = function(level) {
 	if (bonus) {
 		this.setBonus(bonus);
 
-		adornmentsList = kItemAdornments[this.getCategory()];
+		adornmentsList = kItemAdornments[category];
 		if (adornmentsList.length > 0) {
 			// Essentially there's a 50% chance that the item will have an adornment
 			x = Math.floor(Math.random() * 2 * adornmentsList.length);
@@ -428,10 +558,10 @@ ItemModel.prototype.canSpoil = function() {
 };
 
 // returns true if the item should disappear (has rotted away)
-ItemModel.prototype.checkAge = function(turnCount, changedCallback) {
+ItemModel.prototype.checkAge = function(changedCallback) {
 	var duration, extras = this.extras;
 	if (this.canSpoil() && extras.deathTurn) {
-		duration = turnCount - extras.deathTurn;
+		duration = GameMain.turnCount - extras.deathTurn;
 		if (duration > 10000) {
 			if (changedCallback) {
 				changedCallback("delete");

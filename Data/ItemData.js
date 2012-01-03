@@ -9,6 +9,9 @@ var kItemsData = {
 		}
 };
 
+kItemsData.inebriationBuzzed = 150;
+kItemsData.inebriationDrunk = 300;
+
 var kAttackActions = {
 	blunt: ["bludgeon", "bash", "smash"],
 	claw: ["scratch", "rip"],

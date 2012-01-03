@@ -9,6 +9,9 @@ enyo.kind({
 	events: {
 		onNeedNewPlayer: ""
 	},
+	statics: {
+		turnCount: 0
+	},
 	components: [{
 		name: "mainSlidingView",
 		kind: enyo.SlidingView,
@@ -204,9 +207,10 @@ enyo.kind({
 	
 	startNewGame: function() {
 		//TODO: init environment info: turns, identified items, etc
-		this.turnCount = 0;
+		GameMain.turnCount = 0;
 		this.statusText = [];
 		this.killList = {};
+		ItemModel.initRandomNames();
 		this.$.map.newGame();
 		
 		// send the NeedNewPlayer event asynchronously in case the app is still creating the DOM
@@ -217,12 +221,17 @@ enyo.kind({
 	
 	saveGame: function(inSender) {
 		//TODO: save environment info: turns, identified items, etc
-		var gameEnvironment = '{"v":1,"turns":' + this.turnCount + ',"allowExit":' + (this.allowExit || false) + ',"mapLevel":' + this.$.map.getLevel() + '}';
-		localStorage.setItem("environment", gameEnvironment);
-		localStorage.setItem("kills", JSON.stringify(this.killList));
+		var mapLevel, gameEnvironment;
+		mapLevel = this.$.map.getLevel();
+		if (mapLevel) {
+			gameEnvironment = '{"v":1,"turns":' + GameMain.turnCount + ',"allowExit":' + (this.allowExit || false) + ',"mapLevel":' + mapLevel + '}';
+			localStorage.setItem("environment", gameEnvironment);
+			localStorage.setItem("kills", JSON.stringify(this.killList));
+			ItemModel.saveRandomNames();
 
-		this.$.me.save();
-		this.$.map.save();
+			this.$.me.save();
+			this.$.map.save();
+		}
 	},
 	
 	restoreGame: function() {
@@ -233,11 +242,12 @@ enyo.kind({
 			if (data.v !== 1) {
 				return false;
 			}
-			this.turnCount = data.turns;
+			GameMain.turnCount = data.turns;
 			this.allowExit = data.allowExit;
 			killList = localStorage.getItem("kills");
 			this.killList = killList ? JSON.parse(killList) : {};
 			
+			ItemModel.restoreRandomNames();
 			this.$.me.restore();
 			this.$.map.setLevel(data.mapLevel);
 		}
@@ -254,7 +264,9 @@ enyo.kind({
 	useStairs: function(inSender) {
 		var position, tileKind;
 		// Before taking the stairs, everyone gets a chance to attack you.
-		this.$.map.everyoneTakeATurn(++this.turnCount);
+		++GameMain.turnCount;
+		this.$.map.everyoneTakeATurn();
+		this.$.me.endOfTurn();
 		if (!this.$.me.isDead()) {
 			position = this.$.me.getPosition();
 			tileKind = this.$.map.getTileKindAt(position.x, position.y);
@@ -270,17 +282,17 @@ enyo.kind({
 	
 	searchNearby: function(inSender) {
 		this.$.map.searchNearby(this.$.me, 2);
-		this.$.me.rest(this.turnCount);
+		this.$.me.rest();
 	},
 	
 	_restAndHeal: function(inSender) {
 		var endTurn, remainingDamage, visibleActors;
-		endTurn = this.turnCount +  75;
+		endTurn = GameMain.turnCount +  75;
 		remainingDamage = this.$.me.getDamageTaken();
-		while (remainingDamage > 0 && this.turnCount < endTurn) {
+		while (remainingDamage > 0 && GameMain.turnCount < endTurn) {
 			visibleActors = this.$.map.whoCanPlayerSee();
 			if (visibleActors.length === 0) {
-				this.$.me.rest(this.turnCount);
+				this.$.me.rest();
 			} else {
 				this._showStatusText(this, $L("There's a monster nearby."));
 				return;
@@ -320,7 +332,7 @@ enyo.kind({
 		localStorage.removeItem("kills");
 		obj.maxLevel = this.$.map.purgeMaps();
 
-		obj.turns = this.turnCount;
+		obj.turns = GameMain.turnCount;
 		for (var monsterName in this.killList) {
 			deadThings.push(monsterName + ": " + this.killList[monsterName]);
 		}
@@ -335,13 +347,14 @@ enyo.kind({
 		// The rest is done in _deathOverview() callback
 		this.$.gameOverDialog.openAtCenter();
 		
-		this.turnCount = 0;
+		GameMain.turnCount = 0;
 	},
 	
 	gameLoop: function(inSender, inHungerString) {
-		++this.turnCount;
+		++GameMain.turnCount;
 		this.$.map.showFieldOfView(this.$.me, false);
-		this.$.map.everyoneTakeATurn(this.turnCount);
+		this.$.map.everyoneTakeATurn();
+		this.$.me.endOfTurn();
 		this.scrollMapToPlayer();
 	},
 	
@@ -370,7 +383,7 @@ enyo.kind({
 					throw new Error("mapClickHandler: can't find dive with class===map-scroller");
 				}
 			}
-			this.$.me.interactWithMap(this.$.map, tileX, tileY, this.turnCount);
+			this.$.me.interactWithMap(this.$.map, tileX, tileY);
 			this._updateToobarButtons();
 			return true;
 		}
@@ -378,7 +391,7 @@ enyo.kind({
 	
 	_monsterClickHandler: function(inSender, inActor) {
 		var position = inActor.getPosition();
-		this.$.me.interactWithMap(this.$.map, position.x, position.y, this.turnCount);
+		this.$.me.interactWithMap(this.$.map, position.x, position.y);
 		return true;
 	},
 	
@@ -423,28 +436,28 @@ enyo.kind({
 			
 			switch (inDetails.keyIdentifier) {
 			case "Up":
-				this.$.me.interactWithMap(this.$.map, position.x, position.y-1, this.turnCount);
+				this.$.me.interactWithMap(this.$.map, position.x, position.y-1);
 				break;
 			case "Down":
-				this.$.me.interactWithMap(this.$.map, position.x, position.y+1, this.turnCount);
+				this.$.me.interactWithMap(this.$.map, position.x, position.y+1);
 				break;
 			case "Left":
-				this.$.me.interactWithMap(this.$.map, position.x-1, position.y, this.turnCount);
+				this.$.me.interactWithMap(this.$.map, position.x-1, position.y);
 				break;
 			case "Right":
-				this.$.me.interactWithMap(this.$.map, position.x+1, position.y, this.turnCount);
+				this.$.me.interactWithMap(this.$.map, position.x+1, position.y);
 				break;
 			case "Home":
-				this.$.me.interactWithMap(this.$.map, position.x-1, position.y-1, this.turnCount);
+				this.$.me.interactWithMap(this.$.map, position.x-1, position.y-1);
 				break;
 			case "PageUp":
-				this.$.me.interactWithMap(this.$.map, position.x+1, position.y-1, this.turnCount);
+				this.$.me.interactWithMap(this.$.map, position.x+1, position.y-1);
 				break;
 			case "End":
-				this.$.me.interactWithMap(this.$.map, position.x-1, position.y+1, this.turnCount);
+				this.$.me.interactWithMap(this.$.map, position.x-1, position.y+1);
 				break;
 			case "PageDown":
-				this.$.me.interactWithMap(this.$.map, position.x+1, position.y+1, this.turnCount);
+				this.$.me.interactWithMap(this.$.map, position.x+1, position.y+1);
 				break;
 			}
 			
@@ -453,7 +466,7 @@ enyo.kind({
 	},
 
 	_handleUnload: function() {
-		if (this.turnCount > 0) {
+		if (GameMain.turnCount > 0) {
 			this.saveGame();
 		}
 	},

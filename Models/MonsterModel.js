@@ -5,6 +5,8 @@ var MonsterModel = function(details) {
 	t = kMonsterData[details.race || "human"];
 	this.template = t;
 	
+	this.effectsServant = new EffectsServant(this);
+	
 	this.damageTaken = 0;
 	this.hunger = MonsterModel.hunger.satiatedLevel; // start out at the high end of hungry
 	this.experience = 0;
@@ -169,6 +171,8 @@ MonsterModel.propertiesToSave = [
 	{ key:"defenses",    type:kModelKeyTypes.object },
 	{ key:"dex",         type:kModelKeyTypes.raw },
 	{ key:"difficulty",  type:kModelKeyTypes.raw },
+	{ key:"disease",     type:kModelKeyTypes.raw },
+	{ key:"inebriated",  type:kModelKeyTypes.raw },
 	{ key:"experience",  type:kModelKeyTypes.raw },
 	{ key:"hp",          type:kModelKeyTypes.raw },
 	{ key:"hunger",      type:kModelKeyTypes.raw },
@@ -176,8 +180,11 @@ MonsterModel.propertiesToSave = [
 	{ key:"inventory",   type:kModelKeyTypes.array },
 	{ key:"isPlayer",    type:kModelKeyTypes.raw },
 	{ key:"level",       type:kModelKeyTypes.raw },
+	{ key:"poison",      type:kModelKeyTypes.raw },
 	{ key:"race",        type:kModelKeyTypes.string },
+	{ key:"resistances", type:kModelKeyTypes.object },
 	{ key:"skills",      type:kModelKeyTypes.object },
+	{ key:"effects",     type:kModelKeyTypes.object },
 	{ key:"str",         type:kModelKeyTypes.raw },
 ];
 
@@ -236,6 +243,10 @@ MonsterModel.loadFromObject = function(o) {
 	return new MonsterModel(o);
 };
 
+MonsterModel.prototype.setEffectChangedCallback = function(callback) {
+	this.effectChangedCallback = callback;
+};
+
 MonsterModel.prototype.getGraphic = function() {
 	return this.template.img;
 };
@@ -251,8 +262,29 @@ MonsterModel.prototype.getDisplayName = function(short) {
 };
 
 MonsterModel.prototype.getCorpse = function() {
-	if (this.template.corpse && this.damageTaken < (this.hp * 2) && Math.random() < 0.67) {
+	if (this.template.corpse && this.damageTaken < (this.hp * 2) && Math.random() < 0.4) {
 		return this.template.corpse;
+	} else {
+		return null;
+	}
+};
+
+MonsterModel.prototype.getCorpseItem = function() {
+	var extras, corpse;
+	corpse = this.getCorpse();
+	if (corpse) {
+		monsterName = this.getDisplayName(true);
+		extras = {
+			monsterName: this.getDisplayName(true),
+			tileImg: this.getTileImg(),
+			deathTurn: GameMain.turnCount
+		};
+		
+		if (this.template.disease) {
+			extras.disease = this.template.disease;
+		}
+		
+		return new ItemModel("corpse", corpse, extras);
 	} else {
 		return null;
 	}
@@ -539,6 +571,9 @@ MonsterModel.prototype.exerciseSkill = function(skillName) {
 
 MonsterModel.prototype.increaseAttribute = function(attr) {
 	this[attr] += 1;
+	if (this.effectChangedCallback) {
+		this.effectChangedCallback(attr, this[attr], 1);
+	}
 };
 
 MonsterModel.prototype.getDefense = function() {
@@ -551,6 +586,9 @@ MonsterModel.prototype.getDamageTaken = function() {
 
 MonsterModel.prototype.takeDamage = function(damage) {
 	this.damageTaken += damage;
+	if (this.damageTaken < 0) {
+		this.damageTaken = 0;
+	}
 	return (this.damageTaken > this.hp);
 };
 
@@ -589,6 +627,18 @@ MonsterModel.prototype.updateWeightCarried = function(weight) {
 	return this.getEncumberance(weight);
 };
 
+MonsterModel.prototype.getInebriationLevel = function() {
+	return this.inebriated || 0;
+};
+
+MonsterModel.prototype.getPoisonLevel = function() {
+	return this.poison || 0;
+};
+
+MonsterModel.prototype.getDiseased = function() {
+	return this.disease;
+};
+
 MonsterModel.prototype.getEncumberance = function(weight) {
 	if (!weight) {
 		weight = this.weight;
@@ -600,13 +650,34 @@ MonsterModel.prototype.getAccuracy = function() {
 	return this.template.accuracy;
 };
 
+MonsterModel.prototype.expireEffects = function() {
+	return this.effectsServant.expireEffects();
+};
+
+MonsterModel.prototype.drinkPotion = function(item) {
+	var effect = null;
+	
+	if (item) {
+		this.updateHunger(item.getNourishment());
+		effect = item.getEffect();
+		if (effect && this.effectsServant.addEffect(effect)) {
+			//TODO maybe identify the potion
+		}
+
+		if (item.useItOnce() === 0) {
+			this.removeItemFromInventory(item);
+		}
+	}
+};
+
 MonsterModel.prototype.eatItemByIndex = function(index) {
-	var result = null, item, nourishment;
+	var result = null, item, nourishment, diseaseAmount, category;
 	
 	item = this.inventory[index];
 	if (item) {
-		if (item.getCategory() === "corpse" && this.hunger > MonsterModel.hunger.ravenousLevel) {
-			result = $L("You aren't hungry enough to eat dead things.");
+		category = item.getCategory();
+		if (category === "corpse" && this.hunger > MonsterModel.hunger.ravenousLevel) {
+			result = $L("You aren't hungry enough to eat carrion.");
 		} else {
 			// Don't eat it if you're too full
 			nourishment = item.getNourishment();
@@ -616,6 +687,10 @@ MonsterModel.prototype.eatItemByIndex = function(index) {
 				// TODO: eating a corpse could make you sick or could add intrinsic abilities
 				this.updateHunger(nourishment);
 				this.inventory.splice(index, 1);
+				diseaseAmount = item.getDiseasedAmount();
+				if (diseaseAmount > 0) {
+					this.effectsServant.addDiseaseEffect(diseaseAmount);
+				}
 			}
 		}
 	}

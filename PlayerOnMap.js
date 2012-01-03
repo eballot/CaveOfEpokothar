@@ -52,6 +52,7 @@ enyo.kind({
 		}
 		details.isPlayer = true;
 		this.monsterModel = new MonsterModel(details);
+		this.monsterModel.setEffectChangedCallback(this._effectChanged.bind(this));
 
 		this.$.avatar.setSrc(this.monsterModel.getGraphic());
 		faceGraphic = this.monsterModel.getFaceGraphic();
@@ -74,6 +75,7 @@ enyo.kind({
 			data = JSON.parse(serialized);
 			this.positionAt(data.position.x, data.position.y);
 			this.monsterModel = MonsterModel.loadFromObject(data.monsterModel);
+			this.monsterModel.setEffectChangedCallback(this._effectChanged.bind(this));
 			this.$.avatar.setSrc(this.monsterModel.getGraphic());
 			this.showEquippedItems();
 			this._statsChanged();
@@ -94,7 +96,7 @@ enyo.kind({
 		return this.monsterModel.getDefense();
 	},
 
-	interactWithMap: function(map, x, y, turnCount) {
+	interactWithMap: function(map, x, y) {
 		var done, i, inventory, currentPosition, rad, distanceX, distanceY, absDistanceX, absDistanceY, nearX, nearY,
 		    something, firstAttack, meleeReach, rangeReach, changedCallback, options, text, action;
 		done = false;
@@ -148,7 +150,6 @@ enyo.kind({
 				} else if (something.kind === MapTileIcons.doorClosed.kind) {
 					done = true;
 					map.openDoorAt(nearX, nearY);
-					this._autoHeal(turnCount);
 					this._finishMyTurn(MonsterModel.hunger.walkNormal);
 				}
 			}
@@ -158,7 +159,6 @@ enyo.kind({
 				something = map.whatIsAt(x,y, false);
 				if (!something) {
 					this.move(map, distanceX, distanceY);
-					this._autoHeal(turnCount);
 				} else {
 					//TODO: handle all attacks
 					firstAttack = this.monsterModel.getEquippedItem("weapon");
@@ -168,7 +168,7 @@ enyo.kind({
 					meleeReach = firstAttack ? firstAttack.getMeleeReach() : 1;
 					rangeReach = firstAttack ? firstAttack.getRangedReach() : 0;
 
-					if (something.kind === "ActorOnMap") {
+					if (something.kind === "ActorOnMap" && map.hasLineOfSiteToPlayer(something)) {
 						if (absDistanceX <= meleeReach && absDistanceY <= meleeReach) {
 							if (something.getAttitude() === "hostile") {
 								this._doMeleeAttack(something);
@@ -188,7 +188,7 @@ enyo.kind({
 								{ caption:$L("Move"), action:this.move.bind(this, map, distanceX, distanceY) }
 							];
 							
-							if (rangeReach > 0 && absDistanceX <= rangeReach && absDistanceY <= rangeReach && map.hasLineOfSiteToPlayer(something)) {
+							if (rangeReach > 0 && absDistanceX <= rangeReach && absDistanceY <= rangeReach) {
 								if (firstAttack.requiresAmmunition()) {
 									//Shoot
 									text = PlayerOnMap.kRangedAttackShoot.evaluate({weaponName:firstAttack.getDisplayName(true)});
@@ -225,7 +225,6 @@ enyo.kind({
 						this.$.interactionChoicePopup.openAtCenter();
 					} else {
 						this.move(map, distanceX, distanceY);
-						this._autoHeal(turnCount);
 					}
 				}
 			}
@@ -241,15 +240,26 @@ enyo.kind({
 				}
 			};
 			for (i = inventory.length - 1; i >= 0; i--) {
-				if (inventory[i].checkAge(turnCount, changedCallback)) {
+				if (inventory[i].checkAge(changedCallback)) {
 					inventory.splice(i, 1);
 				}
 			}
 		}
 	},
 	
-	rest: function(turnCount) {
-		this._autoHeal(turnCount);
+	// Invoked at the end of the gameloop after all other actors have taken their turn
+	endOfTurn: function() {
+		var expired;
+		this._autoHeal();
+		expired = this.monsterModel.expireEffects();
+		this._applyIllEffectsForTurn();
+		
+		if (this.statsChangedFlag || expired) {
+			this._statsChanged();
+		}
+	},
+
+	rest: function() {
 		this._finishMyTurn(MonsterModel.hunger.rest);
 	},
 	
@@ -284,7 +294,7 @@ enyo.kind({
 							statusText = statusTemplate.evaluate({name:item.getDisplayName()});
 							this.doStatusText(statusText);
 						}
-						this._statsChanged();
+						this.statsChangedFlag = true;
 						
 						map.itemPileChanged(position);
 					}
@@ -336,7 +346,7 @@ enyo.kind({
 			that.$.status.removeClass("animate");
 		}, 500);
 
-		this._statsChanged();
+		this.statsChangedFlag = true;
 		
 		return died;
 	},
@@ -345,30 +355,37 @@ enyo.kind({
 		var result = null, prehunger;
 		prehunger = this.monsterModel.getHunger(false);
 		result = this.monsterModel.eatItemByIndex(index);
-		// null result means ok. if the hunger level changed, update the stats bar
-		if (!result && prehunger !== this.monsterModel.getHunger(false)) {
+		// null result means you ate something (otherwise it is the reason you couldn't eat the item)
+		if (!result) {
 			this._statsChanged();
 		}
 
 		return result;
 	},
 
+	drinkItem: function(item) {
+		this.monsterModel.drinkPotion(item);
+		this._statsChanged();
+		//TODO: only identify if it has a noticeable effect
+		return item.identifyMagic(this.getIntelligence() + 15, true);
+	},
+
 	_doMeleeAttack: function(target) {
 		this.attack(target);
 		this._finishMyTurn(MonsterModel.hunger.fight);
 	},
-		
+
 	_doRangedAttack: function(weapon, target, map) {
 		this.rangedAttack(weapon, target, map);
 		this._finishMyTurn(MonsterModel.hunger.fight);
 	},
-		
+
 	_finishMyTurn: function(hungerChange) {
 		var hungerDescription = this.monsterModel.updateHunger(hungerChange);
 		if (hungerDescription) {
 			if (this.hungerDescription !== hungerDescription) {
 				this.hungerDescription = hungerDescription;
-				this._statsChanged();
+				this.statsChangedFlag = true;
 			}
 			this.doActed(hungerDescription);
 		} else {
@@ -376,13 +393,13 @@ enyo.kind({
 		}
 	},
 	
-	_autoHeal: function(turnCount) {
+	_autoHeal: function() {
 		var damageTaken = this.monsterModel.getDamageTaken();
-		if (damageTaken > 0 && turnCount % 15 === 0) {
+		if (damageTaken > 0 && GameMain.turnCount % 15 === 0) {
 			// negative damage heals 
 			this.monsterModel.takeDamage(-1);
 			this.monsterModel.updateHunger(MonsterModel.hunger.autoHeal);
-			this._statsChanged();
+			this.statsChangedFlag = true;
 		}
 	},
 	
@@ -398,7 +415,7 @@ enyo.kind({
 		if (this.monsterModel.getLevel() % 3 === 0) {
 			this.$.improveAttributeDialog.openAtCenter();
 		} else {
-			this._statsChanged();
+			this.statsChangedFlag = true;
 		}
 	},
 	
@@ -410,8 +427,67 @@ enyo.kind({
 		this.$.improveAttributeDialog.close();
 	},
 
+	_effectChanged: function(effect, amount, change) {
+		switch (effect) {
+		case "dex":
+			if (change > 0) {
+				this.doStatusText($L("You feel more agile."));
+			} else if (change < 0) {
+				this.doStatusText($L("You feel less agile."));
+			}
+			break;
+			
+		case "int":
+			if (change > 0) {
+				this.doStatusText($L("You feel smarter."));
+			} else if (change < 0) {
+				this.doStatusText($L("You feel dumber."));
+			}
+			break;
+			
+		case "str":
+			if (change > 0) {
+				this.doStatusText($L("You feel stronger."));
+			} else if (change < 0) {
+				this.doStatusText($L("You feel weaker."));
+			}
+			break;
+			
+		case "disease":
+			if (amount === 0) {
+				this.doStatusText($L("You feel well again."));
+			} else if (change < 0) {
+				this.doStatusText($L("You feel a bit better."));
+			} else {
+				this.doStatusText($L("You feel sick."));
+			}
+			break;
+			
+		case "poison":
+			if (amount === 0) {
+				this.doStatusText($L("The poison has worn off."));
+			} else if (change < 0) {
+				this.doStatusText($L("The poison is wearing off."));
+			} else {
+				this.doStatusText($L("You feel poisoned."));
+			}
+			break;
+		
+		case "inebriated":
+			if (amount > kItemsData.inebriationBuzzed) {
+				if (change < 0) {
+					this.doStatusText($L("You feel less tipsy."));
+				} else {
+					this.doStatusText($L("You are feeling tipsy."));
+				}
+			}
+			break;
+		}
+	},
+
 	_statsChanged: function() {
-		var i, content = [], text, hp, damageTaken, defenses, weapon, hpColor, knownSkills, skill, skillLevel, ammoItem;
+		var i, content = [], text, hp, damageTaken, defenses, weapon, hpColor, poisoned, diseased, inebriated, knownSkills, skill, skillLevel, ammoItem;
+		this.statsChangedFlag = false;
 		hp = this.monsterModel.hp;
 		damageTaken = this.monsterModel.getDamageTaken();
 		defenses = this.getDefenses();
@@ -437,6 +513,27 @@ enyo.kind({
 			content.push(text);
 		}
 		content.push(this.monsterModel.getHunger(true));
+		
+		poisoned = this.monsterModel.getPoisonLevel();
+		diseased = this.monsterModel.getDiseased();
+		inebriated = this.monsterModel.getInebriationLevel();
+		if (poisoned || diseased || inebriated > kItemsData.inebriationBuzzed) {
+			text = [];
+			if (poisoned) {
+				text.push($L("Poisoned"));
+			}
+			if (diseased) {
+				text.push($L("Diseased"));
+			}
+			if (inebriated) {
+				if (inebriated > kItemsData.inebriationDrunk) {
+					text.push($L("Drunk"));
+				} else if (inebriated > kItemsData.inebriationBuzzed) {
+					text.push($L("Slightly Inebriated"));
+				}
+			}
+			content.push('<span style="color:tan">' + text.join(", ") + '</span>');
+		}
 		
 		knownSkills = this.monsterModel.getKnownSkills();
 		if (knownSkills) {

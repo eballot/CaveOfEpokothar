@@ -399,7 +399,7 @@ enyo.kind({
 			type = typeKeys[Math.floor(Math.random() * typeKeys.length)];
 			item = this.createItem(category, type);
 			if (item) {
-				if (item.canConsolidate()) {
+				if (item.canConsolidate() && category !== "potions") {
 					item.setRemainingUses(Math.floor(Math.random() * 12) + 3);
 				}
 				
@@ -439,16 +439,15 @@ enyo.kind({
 		return !!position;
 	},
 	
-	everyoneTakeATurn: function(turnCount) {
+	everyoneTakeATurn: function() {
 		var i, arrayLength;
-		this.turnCount = turnCount;
 		arrayLength = this.actors.length;
 		for (i = 0; i < arrayLength; i++) {
 			this.actors[i].performTurn(this);
 		}
 		
 		// Periodically check to see if more actors should appear on the scene
-		if (this.actors.length < 3 + this.level && turnCount % 150 === 0) {
+		if (this.actors.length < 3 + this.level && GameMain.turnCount % 150 === 0) {
 			if (this.createRandomMonster("hostile")) {
 				this.$.actorsContainer.render(); // enyo doesn't add the new component to the DOM tree until you call render() on an ancestor
 			}
@@ -757,7 +756,7 @@ enyo.kind({
 			inventory = actor.getInventoryList();
 			position = actor.getPosition();
 
-			corpse = actor.getCorpseItem(this.turnCount);
+			corpse = actor.getCorpseItem();
 			if (corpse) {
 				this.addItem(corpse, position.x, position.y);
 			}
@@ -846,8 +845,8 @@ enyo.kind({
 			value = this.createRandomItems("armor", value);
 			value += 35 * this.level;
 			this.createRandomItems("weapons", value);
-			
 			this.createRandomItems("ammo", 3.3 * this.level);
+			this.createRandomItems("potions", 400 + Math.floor(Math.random() * 200 * this.level));
 		}
 	},
 	
@@ -944,7 +943,7 @@ enyo.kind({
 						itemPile = this.items[key];
 						if (itemPile) {
 							// Aging the pile here because it is lazy (only done when the pile comes into view)
-							if (itemPile.checkAge(this.turnCount)) {
+							if (itemPile.checkAge()) {
 								delete this.items[key];
 							} else {
 								tileObj = itemPile.getTileImg();

@@ -93,12 +93,12 @@ ItemPile.prototype.autoPickupItems = function() {
 };
 
 //returns true if the pile is empty and should be removed
-ItemPile.prototype.checkAge = function(turnCount) {
+ItemPile.prototype.checkAge = function() {
 	var i, arrayLength;
 
 	arrayLength = this.items.length - 1;
 	for (i = arrayLength; i >= 0; i--) {
-		if (this.items[i].checkAge(turnCount)) {
+		if (this.items[i].checkAge()) {
 			this.items.splice(i, 1);
 		}
 	}
