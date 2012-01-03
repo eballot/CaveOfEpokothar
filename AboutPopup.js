@@ -12,7 +12,7 @@ enyo.kind({
 			kind: enyo.Image,
 			height: "32px",
 			width: "32px",
-			src: "icon.png"
+			src: "icon64.png"
 		}, {
 			content: $L("About"),
 			style: "margin-left:7px; margin-top:3px;"
