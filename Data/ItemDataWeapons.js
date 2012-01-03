@@ -1,5 +1,12 @@
 kItemsData.weapons = {
 	// Melee weapons (may also be thrown)
+//	broadsword: {
+//		displayName: $L("Broadsword"),
+//		type: "broadsword", category:"weapons", slot:"weapon", skill: "sword", attackActions: "sword", weight:6, value:25,/*gp*/
+//		hands:1, accuracy:8, damageMin:2, damageRnd:7, meleeReach:1, rangeReach:-1, rangeAccuracy:1,
+//		img: "tiles/player/hand1/broadsword.gif",
+//		description: $L("A heavy double-edged sword.")
+//	},
 	club: {
 		displayName: $L("Club"),
 		type: "club", category:"weapons", slot:"weapon", skill: "club", attackActions: "blunt", weight:3, value:0.1,/*gp*/
@@ -20,6 +27,13 @@ kItemsData.weapons = {
 		hands:2, accuracy:7, damageMin:1, damageRnd:11, meleeReach:1, rangeReach:-1, rangeAccuracy:1,
 		img: "tiles/player/hand1/great_axe.gif",
 		description: $L("A huge axe that requires two hands to swing.")
+	},
+	greatsword: {
+		displayName: $L("Greatsword"),
+		type: "greatsword", category:"weapons", slot:"weapon", skill: "sword", attackActions: "sword", weight:8, value:45,/*gp*/
+		hands:2, accuracy:8, damageMin:2, damageRnd:9, meleeReach:1, rangeReach:-1, rangeAccuracy:1,
+		img: "tiles/player/hand1/great_sword.gif",
+		description: $L("A large, heavy sword that requires two hands to wield.")
 	},
 	handaxe: {
 		displayName: $L("Handaxe"),

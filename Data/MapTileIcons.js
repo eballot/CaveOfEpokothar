@@ -48,9 +48,11 @@ var MapTileIcons = {
 	sandals:    { img: "items", offsetX: 384, offsetY: 256 },
 	
 	//weapons
+	//broadsword: { img: "items", offsetX: 192, offsetY: 64 },
 	club:       { img: "items", offsetX: 480, offsetY: 0 },
 	dagger:     { img: "items", offsetX: 320, offsetY: 32 },
 	greataxe:   { img: "items", offsetX: 512, offsetY: 64 },
+	greatsword: { img: "items", offsetX: 0, offsetY: 64 },
 	handaxe:    { img: "items", offsetX: 384, offsetY: 64 },
 	heavymace:  { img: "items", offsetX: 544, offsetY: 0 },
 	longsword:  { img: "items", offsetX: 544, offsetY: 32 },
