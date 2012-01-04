@@ -20,7 +20,7 @@ Tasks:
 
 // drop random loot
 
-// Level-up - inc attribute (str/dex/int)
+// Only identify potion if it's effect is obvious (eg, must be poisoned for antidote effect to be obvious)
 
 // Implement stealth & sneak attack
 
@@ -48,5 +48,7 @@ Performance research:
 5. making floor tiles be a background image is negligible impact. 
 6. disabling MapLevel._renderMap() "fixes" the problem since nothing is drawn to the canvas.
 + using graphics accel for actors (adding translateZ and fixed width and height) is definitely necessary (webkit.compositing.paintGraphicsLayerContents is ~130ms with v ~240ms without)
-
++ break up the single large canvas into 9 smaller canvases (this resulted in a very significant performance improvement)
 - build a list of changes to make and do them in a tight loop (see if that changes drawing perf)
+
+
