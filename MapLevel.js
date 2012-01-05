@@ -62,18 +62,17 @@ enyo.kind({
 	},
 
 	setLevel: function(level) {
-		var i, arrayLen;
+		var key;
 		if (this.level) {
 			this.save();
 		}
 		
 		if (this.actors) {
-			arrayLen = this.actors.length;
-			for (i = 0; i < arrayLen; i++) {
-				this.actors[i].destroy();
+			for (key in this.actors) {
+				this.actors[key].destroy();
 			}
 		}
-		this.actors = [];
+		this.actors = {};
 		this.items = {};
 		this.level = level;
 		if (!this.restore()) {
@@ -100,12 +99,11 @@ enyo.kind({
 	
 	save: function() {
 		// Save: items, actors, map
-		var idx, arrayLen, originalMapTiles, serialized, serializedActors = [], serializedItems = [];
-		arrayLen = this.actors.length;
-		for (idx = 0; idx < arrayLen; idx++) {
-			serializedActors.push(this.actors[idx].saveToString());
+		var key, originalMapTiles, serialized, serializedActors = [], serializedItems = [];
+		for (key in this.actors) {
+			serializedActors.push(this.actors[key].saveToString());
 		}
-		for (var key in this.items) {
+		for (key in this.items) {
 			serializedItems.push('"' + key + '":[' + this.items[key].toString() + ']');
 		}
 		
@@ -122,13 +120,13 @@ enyo.kind({
 	},
 	
 	restore: function() {
-		var loaded = false, data, itemStack, item, idx, arrayLen, serialized;
+		var loaded = false, data, itemStack, item, key, idx, arrayLen, serialized;
 		
 		serialized = localStorage.getItem("map"+this.level);
 		if (serialized) {
 			try {
 				data = JSON.parse(serialized);
-				for (var key in data.items) {
+				for (key in data.items) {
 					itemStack = data.items[key];
 					arrayLen = itemStack.length;
 					for (idx = 0; idx < arrayLen; idx++) {
@@ -140,9 +138,11 @@ enyo.kind({
 				}
 				
 				arrayLen = data.actors.length;
+				this.actors = {};
 				for (idx = 0; idx < arrayLen; idx++) {
 					item = data.actors[idx];
-					data.actors[idx] = this.createComponent({
+					key = this._itemsKey(item.position.x, item.position.y);
+					this.actors[key] = this.createComponent({
 						kind: "ActorOnMap",
 						owner: this,
 						parent: this.$.actorsContainer,				
@@ -159,7 +159,6 @@ enyo.kind({
 				// Build out the tiles
 				data.map.tiles = MapRleCodex.decode(data.map.tiles);
 				this.map = data.map;
-				this.actors = data.actors;
 				this.items = data.items;
 
 				this.player.positionAt(data.player.x, data.player.y);
@@ -261,7 +260,7 @@ enyo.kind({
 	},
 	
 	showFieldOfView: function(item, updateActors) {
-		var x, y, extentX, extentY, position, i, length, actor;
+		var x, y, extentX, extentY, position, key, actor;
 		if (!this.iconsLoaded || !this.map || !this.map.tiles) {
 			return;
 		}
@@ -280,9 +279,8 @@ enyo.kind({
 		}
 		
 		if (updateActors) {
-			length = this.actors.length;
-			for (i = 0; i < length; i++) {
-				actor = this.actors[i];
+			for (key in this.actors) {
+				actor = this.actors[key];
 				actor.setShowing(this.hasLineOfSiteToPlayer(actor));
 			}
 		}
@@ -416,7 +414,7 @@ enyo.kind({
 	},
 
 	createRandomMonster: function(attitude, position) {
-		var m, monsterKeys;
+		var m, key, playerX, playerY, monsterKeys;
 		monsterKeys = kMonstersAtLevel[this.level - 1];
 		if (!monsterKeys) {
 			console.error("MonsterAtLevel undefined for level " + this.level);
@@ -428,7 +426,17 @@ enyo.kind({
 			attitude:attitude
 		});
 		if (!position) {
-			position = this._generateRandomPosition();
+			// Make sure the random position isn't already occupied by another monster or the player
+			if (this.player) {
+				position = this.player.getPosition();
+				playerX = position.x;
+				playerY = position.y;
+			}
+
+			do {
+				position = this._generateRandomPosition();
+				key = this._itemsKey(position.x, position.y);
+			} while (this.actors[key] || (position.x === playerX && position.y === playerY));
 		}
 
 		if (position) {
@@ -439,14 +447,26 @@ enyo.kind({
 	},
 	
 	everyoneTakeATurn: function() {
-		var i, arrayLength;
-		arrayLength = this.actors.length;
+		var keys, oldKey, position, oldX, oldY, actor, i, arrayLength;
+		keys = Object.keys(this.actors);
+		arrayLength = keys.length;
 		for (i = 0; i < arrayLength; i++) {
-			this.actors[i].performTurn(this);
+			oldKey = keys[i];
+			actor = this.actors[oldKey];
+			position = actor.getPosition();
+			oldX = position.x; // store the 'old' x & y coordinates before taking a turn
+			oldY = position.y;
+			actor.performTurn(this);
+			// Check if the actor moved. Note that position is a reference to an object so don't need to
+			// 'get' it again (the properties within it are updated by the actor).
+			if (position.x !== oldX || position.y !== oldY) {
+				delete this.actors[oldKey];
+				this.actors[this._itemsKey(position.x, position.y)] = actor;
+			}
 		}
 		
 		// Periodically check to see if more actors should appear on the scene
-		if (this.actors.length < 3 + this.level && GameMain.turnCount % 150 === 0) {
+		if (arrayLength < 3 + this.level && GameMain.turnCount % 150 === 0) {
 			if (this.createRandomMonster("hostile")) {
 				this.$.actorsContainer.render(); // enyo doesn't add the new component to the DOM tree until you call render() on an ancestor
 			}
@@ -454,10 +474,9 @@ enyo.kind({
 	},
 	
 	whoCanPlayerSee: function() {
-		var i, length, actor, visibleActors = [];
-		length = this.actors.length;
-		for (i = 0; i < length; i++) {
-			actor = this.actors[i];
+		var key, actor, visibleActors = [];
+		for (key in this.actors) {
+			actor = this.actors[key];
 			if (this.hasLineOfSiteToPlayer(actor)) {
 				visibleActors.push(actor);
 			}
@@ -517,12 +536,6 @@ enyo.kind({
 				}
 				break;
 
-			case "ItemOnMap":
-			case "PileOfItems":
-				//TODO if small, move onto it, else what?
-				acted = false;
-				break;
-				
 			default:
 				acted = true;
 				actor.positionAt(x, y);
@@ -543,7 +556,7 @@ enyo.kind({
 	},
 	
 	whatIsAt: function(x, y, justItems) {
-		var i, position, arrayLength, tile;
+		var key, position, tile;
 		position = this.player.getPosition();
 
 		if (!justItems) {
@@ -551,23 +564,18 @@ enyo.kind({
 				return this.player;
 			}
 			
-			arrayLength = this.actors.length;
-			for (i = 0; i < arrayLength; i++) {
-				position = this.actors[i].getPosition();
-				if (position.x === x && position.y === y) {
-					return this.actors[i];
-				}
+			key = this._itemsKey(x, y);
+			if (this.actors[key]) {
+				return this.actors[key];
 			}
 			
 			tile = this.map.tiles[x][y];
 			if (tile && tile.base.obstructed) {
-				return tile.base; //TODO: return the whole thing?
+				return tile.base;
 			}
-			
-			return tile.base;
 		}
 		
-		return this.items[this._itemsKey(position.x, position.y)];
+		return this.items[this._itemsKey(x, y)];
 	},
 	
 	searchNearby: function(actor, distance) {
@@ -744,16 +752,17 @@ enyo.kind({
 	},
 	
 	_monsterDiedHandler: function(inActor) {
-		var i, actor, inventory, position, corpse;
+		var i, key, actor, inventory, position, corpse;
 		// Let the map know that another monster was killed
 		this.doMonsterDied(inActor.whatAreYou(false));
-		i = this.actors.indexOf(inActor);
-		if (i !== -1) {
-			actor = this.actors.splice(i, 1)[0];
+		position = inActor.getPosition();
+		key = this._itemsKey(position.x, position.y);
+		actor = this.actors[key];
+		if (actor) {
+			delete this.actors[key];
 			// Get loot items from the monster and drop them on the map
 			// TODO: maybe drop some money or random item
 			inventory = actor.getInventoryList();
-			position = actor.getPosition();
 
 			corpse = actor.getCorpseItem();
 			if (corpse) {
@@ -896,18 +905,23 @@ enyo.kind({
 	},
 	
 	_addActor: function(monsterModel, position, diedHandler) {
-		this.actors.push(this.createComponent({
-			kind: "ActorOnMap",
-			owner: this,
-			parent: this.$.actorsContainer,				
-			position: position,
-			monsterModel: monsterModel,
-			showing: false,
-			onclick: "_monsterClicked",
-			onDied: diedHandler || "_monsterDiedHandler",
-			onStatusText: "doStatusText",
-			onItemPickedUp: "_monsterPickedUpItemHandler"
-		}));
+		var key = this._itemsKey(position.x, position.y);
+		if (!this.actors[key]) {
+			this.actors[key] = this.createComponent({
+				kind: "ActorOnMap",
+				owner: this,
+				parent: this.$.actorsContainer,				
+				position: position,
+				monsterModel: monsterModel,
+				showing: false,
+				onclick: "_monsterClicked",
+				onDied: diedHandler || "_monsterDiedHandler",
+				onStatusText: "doStatusText",
+				onItemPickedUp: "_monsterPickedUpItemHandler"
+			});
+			return true;
+		}
+		return false;
 	},
 	
 	_renderMap: function(initX, initY, extentX, extentY, forceRender) {

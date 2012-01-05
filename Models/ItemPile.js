@@ -8,7 +8,7 @@ var ItemPile = function(itemModel) {
 	}
 };
 
-ItemPile.kind = "PileOfItems";
+ItemPile.prototype.kind = "PileOfItems";
 
 ItemPile.prototype.isEmpty = function() {
 	return this.items.length === 0;
