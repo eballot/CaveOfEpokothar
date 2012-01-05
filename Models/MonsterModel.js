@@ -684,7 +684,7 @@ MonsterModel.prototype.eatItemByIndex = function(index) {
 			if (this.hunger + nourishment > MonsterModel.hunger.maxLevel) {
 				result = $L("You are too full to eat that.");
 			} else {
-				// TODO: eating a corpse could make you sick or could add intrinsic abilities
+				// Eating a corpse could make you sick or could add intrinsic abilities
 				this.updateHunger(nourishment);
 				this.inventory.splice(index, 1);
 				diseaseAmount = item.getDiseasedAmount();

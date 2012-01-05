@@ -116,7 +116,7 @@ kItemsData.armor = {
 	},
 	sandals: {
 		displayName: $L("Sandals"),
-		type:"sandals", category:"armor", slot:"shoes", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:0.5, value:1,/*gp*/
+		type:"sandals", category:"armor", slot:"shoes", easy:true, defense:0.1, flexibility:1, dexpenalty:0, weight:0.5, value:1,/*gp*/
 		img: "tiles/player/boot/mesh_black.gif",
 		description: $L("Sandals are probably the most basic form of footwear.")
 	}
@@ -155,7 +155,7 @@ Object.defineProperty(kItemsData.armor,
 		displayName: "", // no displayName because this is only equipped on npcs
 		type:"legarmor", category:"armor", slot:"legs", easy:true, defense:0, flexibility:1, dexpenalty:0, weight:1, value:1,/*gp*/
 		img: "tiles/player/leg/leg_armor01.gif",
-		description: "", // no description because this is only equipped on npcs
+		description: "" // no description because this is only equipped on npcs
 	}
 });
 
