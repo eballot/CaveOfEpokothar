@@ -761,7 +761,10 @@ enyo.kind({
 			}
 
 			for (i = 0; i < inventory.length; i++) {
-				this.addItem(inventory[i], position.x, position.y);
+				// Don't always drop an inventory item (just to keep things a bit random)
+				if (Math.random() < 0.65) {
+					this.addItem(inventory[i], position.x, position.y);
+				}
 			}
 
 			actor.destroy();
@@ -820,8 +823,8 @@ enyo.kind({
 
 			this.createRandomMonster("neutral");
 			this.createRandomMonster("neutral");
-			var x=0;
-			while (++x < 20) {
+			value = 20 + this.level;
+			while (--value > 0) {
 				this.createRandomMonster("hostile");
 			}
 			this.$.actorsContainer.render();
@@ -845,7 +848,7 @@ enyo.kind({
 			value += 35 * this.level;
 			this.createRandomItems("weapons", value);
 			this.createRandomItems("ammo", 3.3 * this.level);
-			this.createRandomItems("potions", 400 + Math.floor(Math.random() * 200 * this.level));
+			this.createRandomItems("potions", 400 + Math.floor(Math.random() * 100 * this.level));
 		}
 	},
 	
