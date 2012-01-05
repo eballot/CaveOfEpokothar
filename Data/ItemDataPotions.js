@@ -1,5 +1,12 @@
 //TODO: add drain, might, stone skin
 kItemsData.potions = {
+	sustenance: {
+		//Potion of sustenance has no attribute nor effect. It simply has a *lot* of nourishment.
+		displayName: $L("Potion of Sustenance"),
+		type:"sustenance", category:"potions", weight:0.15, nourishment:5000, value:150,/*gp*/
+		canConsolidate: true,
+		description: $L("A potion is a liquid with magical properties that you can drink. The effect of these properties may be positive or negative.")
+	},
 	dexterity: {
 		displayName: $L("Potion of Agility"),
 		type:"dexterity", category:"potions", weight:0.15, nourishment:25, value:200,/*gp*/
@@ -47,5 +54,5 @@ kItemsData.potions = {
 		type:"poisonAntidote", category:"potions", weight:0.15, nourishment:25, value:100,/*gp*/
 		effect:"poisonAntidote", amount:2, duration:0, amountRand:1, canConsolidate: true,
 		description: $L("A potion is a liquid with magical properties that you can drink. The effect of these properties may be positive or negative.")
-	},
+	}
 };
