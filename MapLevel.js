@@ -853,7 +853,7 @@ enyo.kind({
 	},
 	
 	_buildBossLevel: function() {
-		var newMap, item, position;
+		var i, newMap, item, position;
 		newMap = MapGeneratorBossLevel.generateMap(MapLevel.kMapWidth, MapLevel.kMapHeight);
 		this.map = {
 			tiles: newMap.tiles,
@@ -865,20 +865,26 @@ enyo.kind({
 			race: "epokothar",
 			level: this.level,
 			attitude:"hostile"
-		}), {x:newMap.throne.x, y:newMap.throne.y}, "_epokotharDiedHandler"),
+		}), {x:newMap.throne.x, y:newMap.throne.y}, "_epokotharDiedHandler");
 
 		// Add evil minions
 		this._addActor(new MonsterModel({
 			race: "humanknight",
 			level: Math.ceil(this.level / 2),
 			attitude:"hostile"
-		}), {x:newMap.throne.x+1, y:newMap.throne.y-1}, "_monsterDiedHandler"),
-
+		}), {x:newMap.throne.x+1, y:newMap.throne.y-1}, "_monsterDiedHandler");
 		this._addActor(new MonsterModel({
 			race: "humanknight",
 			level: Math.ceil(this.level / 2),
 			attitude:"hostile"
-		}), {x:newMap.throne.x+1, y:newMap.throne.y+1}, "_monsterDiedHandler"),
+		}), {x:newMap.throne.x+1, y:newMap.throne.y+1}, "_monsterDiedHandler");
+
+		// And a few random hostiles
+		i = 10;
+		while (--i > 0) {
+			this.createRandomMonster("hostile");
+		}
+		
 		this.$.actorsContainer.render();
 		
 		item = new ItemModel("armor", "cloakehpeway");
