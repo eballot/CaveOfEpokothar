@@ -5,6 +5,7 @@
 enyo.kind({
 	name: "AboutPopup",
 	kind: enyo.Popup,
+	width: "100%",
 	openClassName: "help-container",
 	components: [{
 		kind: enyo.HFlexBox,
