@@ -5,6 +5,7 @@
 enyo.kind({
 	name: "AboutPopup",
 	kind: enyo.Popup,
+	modal: true,
 	width: "100%",
 	openClassName: "help-container",
 	components: [{
