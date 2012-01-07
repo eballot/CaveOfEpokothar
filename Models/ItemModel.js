@@ -441,14 +441,15 @@ ItemModel.prototype.addMagicBonus = function(level) {
 	//TODO: potential for item to be cursed or blessed, but not until there's scrolls to identify and uncurse.
 	
 	category = this.getCategory();
-	// For now, potions and food can't have magic bonuses.
-	if (category === "food" || category === "potions") {
+	// For now, only ammo, armor and weapons can have magic bonuses.
+	if (category !== "ammo" && category !== "armor" && category !== "weapons") {
 		return;
 	}
 
+	// Max bonus is +3
 	bonus = Math.floor(Math.random() * level / 2);
-	if (bonus > 5) {
-		bonus = 5;
+	if (bonus > 3) {
+		bonus = 3;
 	}
 
 	// If the bonus is 0, the item isn't magical so skip the rest 
