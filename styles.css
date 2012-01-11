@@ -201,3 +201,20 @@
   color: #444;
   font-size: 16px;
 }
+
+/* Device with small screen height, like kind fire */
+@media screen and (max-height: 650px) {
+	.player-stats-box {
+		font-size:small;
+	}
+	
+	.help-body-title {
+		font-size: 14px;
+		margin-top: 5px;
+	}
+
+	.help-body-text {
+	  font-size: 14px;
+	}
+}
+

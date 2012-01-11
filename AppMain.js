@@ -26,6 +26,17 @@ enyo.kind({
 		}]
 	}],
 	
+	create: function() {
+		this.inherited(arguments);
+		this.phonegapOnMenuKeyDownBound = this._phonegapOnMenuKeyDown.bind(this);
+		document.addEventListener("menubutton", this.phonegapOnMenuKeyDownBound, false);
+	},
+	
+	destroy: function() {
+		document.removeEventListener("menubutton", this.phonegapOnMenuKeyDownBound);
+		this.inherited(arguments);
+	},
+
 	// GameMain sends this when a new player needs to be created
 	_createNewPlayer: function() {
 		this.$.createCharacter.openAtCenter();
@@ -41,5 +52,10 @@ enyo.kind({
 	 */
 	_showAbout: function() {
 		this.$.aboutPopup.open();
-	}
+	},
+	
+	_phonegapOnMenuKeyDown: function() {
+		//this.$.appMenu.openAppMenu();
+		this.$.aboutPopup.open();
+	}	
 });
