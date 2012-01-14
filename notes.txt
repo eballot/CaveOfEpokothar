@@ -14,13 +14,13 @@ spells: casting, air, earth, fire, water
 other: stealth, search (traps, hidden doors, invisible monsters?)
 
 Tasks:
-// Implement Epokothar's level - bodyguards, extra loot
+// Don't include magic armor and weapon bonus in the value against which the skill is multiplied
 
 // Better AI - hear/see player
 
 // drop random loot
 
-// Only identify potion if it's effect is obvious (eg, must be poisoned for antidote effect to be obvious)
+// Only identify a potion or magic item if it's effect is obvious (eg, must be poisoned for antidote effect to be obvious)
 
 // Implement stealth & sneak attack
 
@@ -32,13 +32,15 @@ Tasks:
 
 // Add rings - protection, stealth, strength, agility, health, etc.
 
-// Add amulets - protection, health, intelligence, etc.
+// Add amulets - sustenance, health, intelligence, etc.
 
 // Make armor take time to wear or remove
 
 // fine-tune balance creatures & weapon accuracy
 
 // hostile monsters can swap places with neutrals (player can too?)
+
+// Look into this tile set: http://www.lostgarden.com/search?q=sprites
 
 Performance research:
 1. webkit.compositing.paintGraphicsLayerContents takes ~130ms & webkit.pixmap.create takes ~60ms per turn. That is all related to drawing to the canvas.
