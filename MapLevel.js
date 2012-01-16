@@ -938,10 +938,10 @@ enyo.kind({
 
 		tileDrawState = this.tileDrawState;
 		for (x = initX; x < extentX; x++) {
-			adjX = x % this.canvasTileWidth;
+			adjX = (x % this.canvasTileWidth) * MapLevel.kTileSize;
 			columns = this.map.tiles[x];
 			for (y = initY; y < extentY; y++) {
-				adjY = y % this.canvasTileHeight;
+				adjY = (y % this.canvasTileHeight) * MapLevel.kTileSize;
 				ctxIndex = Math.floor(MapLevel.kCanvasPartsCount * (x / MapLevel.kMapWidth + Math.floor(MapLevel.kCanvasPartsCount * y / MapLevel.kMapWidth)));
 				context = this.ctx[ctxIndex];
 				tile = columns[y];
@@ -959,7 +959,7 @@ enyo.kind({
 					tileObj = MapTileIcons[tileType];
 					if (forceRender || tile.visited === this.currentTime && tileDrawState[x][y] !== MapLevel.kDrawStateVisible) {
 						tileDrawState[x][y] = MapLevel.kDrawStateVisible;
-						context.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, (adjX*MapLevel.kTileSize), (adjY*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
+						context.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, adjX, adjY, MapLevel.kTileSize, MapLevel.kTileSize);
 
 						key = this._itemsKey(x, y);
 						itemPile = this.items[key];
@@ -970,12 +970,12 @@ enyo.kind({
 							} else {
 								tileObj = itemPile.getTileImg();
 								if (tileObj) {
-									context.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, (adjX*MapLevel.kTileSize), (adjY*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
+									context.drawImage(MapTileIcons.imgs[tileObj.img], tileObj.offsetX, tileObj.offsetY, MapLevel.kTileSize, MapLevel.kTileSize, adjX, adjY, MapLevel.kTileSize, MapLevel.kTileSize);
 									if (itemPile.count() > 1) {
 										context.fillStyle = "yellow";
 										context.font = "bold 24px sans-serif";
 										context.textBaseline = "top";
-										context.fillText("+", (adjX*MapLevel.kTileSize), (adjY*MapLevel.kTileSize));
+										context.fillText("+", adjX, adjY);
 									}
 								}
 							}
@@ -986,13 +986,13 @@ enyo.kind({
 					if (tile.visited !== this.currentTime && (forceRender || tileDrawState[x][y] !== MapLevel.kDrawStateShadow)) {
 						tileDrawState[x][y] = MapLevel.kDrawStateShadow;
 						context.fillStyle = "rgba(0,0,0,0.4)";
-						context.fillRect((adjX*MapLevel.kTileSize), (adjY*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
+						context.fillRect(adjX, adjY, MapLevel.kTileSize, MapLevel.kTileSize);
 					}
 				} else {
 					if (forceRender || tileDrawState[x][y] !== MapLevel.kDrawStateBlack) {
 						tileDrawState[x][y] = MapLevel.kDrawStateBlack;
 						context.fillStyle = "black";
-						context.fillRect((adjX*MapLevel.kTileSize), (adjY*MapLevel.kTileSize), MapLevel.kTileSize, MapLevel.kTileSize);
+						context.fillRect(adjX, adjY, MapLevel.kTileSize, MapLevel.kTileSize);
 					}
 				}
 			}
