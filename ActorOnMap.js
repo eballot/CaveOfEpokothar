@@ -101,6 +101,17 @@ enyo.kind({
 		this.setShowing(map.hasLineOfSiteToPlayer(this));
 	},
 
+	// mousedown & mouseup event handlers are here to block event propagation so they
+	// don't bubble up to the map's mousedown/up event handlers.
+	mousedownHandler: function(inSender, inEvent) {
+		this.doMousedown(inEvent);
+		return true;
+	},
+	mouseupHandler: function(inSender, inEvent) {
+		this.doMouseup(inEvent);
+		return true;
+	},
+
 	whatAreYou: function(showAttitude) {
 		var text;
 		if (showAttitude) {

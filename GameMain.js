@@ -33,7 +33,10 @@ enyo.kind({
 						name: "map",
 						kind: "MapLevel",
 						className: "map-styles",
-						onclick: "_mapClickHandler",
+						onmousedown: "_mapMouseDownHandler",
+						onmousemove: "_mapMouseMoveHandler",
+						onmouseup: "_mapMouseUpHandler",
+						onmouseout: "_mapMouseUpHandler",
 						onMonsterClicked: "_monsterClickHandler",
 						onStatusText: "_showStatusText",
 						onQuestComplete: "_questCompleteHandler",
@@ -351,41 +354,78 @@ enyo.kind({
 	},
 	
 	gameLoop: function(inSender, inHungerString) {
+		var position;
 		++GameMain.turnCount;
 		this.$.map.showFieldOfView(this.$.me, false);
 		this.$.map.everyoneTakeATurn();
 		this.$.me.endOfTurn();
 		this.scrollMapToPlayer();
+		if (this.clickEvent) {
+			// Update the target coordinates to match the change in player coordinates
+			position = this.$.me.getPosition();
+			this.clickEvent.targetX += (position.x - this.clickEvent.playerX);
+			this.clickEvent.targetY += (position.y - this.clickEvent.playerY);
+			this.clickEvent.playerX = position.x;
+			this.clickEvent.playerY = position.y;
+
+			this.clickHandleTimer = setTimeout(this._mapClickHandler.bind(this), 400);
+		}
 	},
 	
-	_mapClickHandler: function(inSender, inEvent) {
-		var tileX, tileY;
-		if (inSender.kind === "MapLevel") {
-			// offsetX is available in Chrome & Safari versions of webkit
-			if (inEvent.offsetX) {
-				tileX = Math.floor(inEvent.offsetX / MapLevel.kTileSize);
-				tileY = Math.floor(inEvent.offsetY / MapLevel.kTileSize);
-			// layerX is available in Firefox
-			} else if (inEvent.layerX) {
-				tileX = Math.floor(inEvent.layerX / MapLevel.kTileSize);
-				tileY = Math.floor(inEvent.layerY / MapLevel.kTileSize);
-			// Mobile Safari (iPad) doesn't support above so fall back to manually calculating.
-			} else {
-				// Walk up the ancestor list looking for the map scroller div which has the correct offsetTop/Left.
-				var mapScroller = inEvent.target;
-				while (mapScroller && mapScroller.className !== "map-scroller") {
-					mapScroller = mapScroller.parentElement;
-				}
-				if (mapScroller) {
-					tileX = Math.floor((inEvent.pageX - mapScroller.offsetLeft) / MapLevel.kTileSize);
-					tileY = Math.floor((inEvent.pageY - mapScroller.offsetTop) / MapLevel.kTileSize);
-				} else {
-					throw new Error("mapClickHandler: can't find dive with class===map-scroller");
-				}
+	_mapMouseDownHandler: function(inSender, inEvent) {
+		this._setClickEvent(inEvent);
+		this._mapClickHandler();
+		return true;
+	},
+	
+	_mapMouseMoveHandler: function(inSender, inEvent) {
+		if (this.clickEvent) {
+			this._setClickEvent(inEvent);
+		}
+		return true;
+	},
+	
+	_mapMouseUpHandler: function(inSender, inEvent) {
+		if (this.clickHandleTimer) {
+			clearTimeout(this.clickHandleTimer);
+			this.clickHandleTimer = undefined;
+		}
+		this.clickEvent = undefined;
+	},
+	
+	_setClickEvent: function(inEvent) {
+		var tileX, tileY, position;
+
+		if (inEvent.offsetX) {
+			tileX = Math.floor(inEvent.offsetX / MapLevel.kTileSize);
+			tileY = Math.floor(inEvent.offsetY / MapLevel.kTileSize);
+		// layerX is available in Firefox
+		} else if (inEvent.layerX) {
+			tileX = Math.floor(inEvent.layerX / MapLevel.kTileSize);
+			tileY = Math.floor(inEvent.layerY / MapLevel.kTileSize);
+		// Mobile Safari (iPad) doesn't support above so fall back to manually calculating.
+		} else {
+			// Walk up the ancestor list looking for the map scroller div which has the correct offsetTop/Left.
+			var mapScroller = inEvent.target;
+			while (mapScroller && mapScroller.className !== "map-scroller") {
+				mapScroller = mapScroller.parentElement;
 			}
-			this.$.me.interactWithMap(this.$.map, tileX, tileY);
+			if (mapScroller) {
+				tileX = Math.floor((inEvent.pageX - mapScroller.offsetLeft) / MapLevel.kTileSize);
+				tileY = Math.floor((inEvent.pageY - mapScroller.offsetTop) / MapLevel.kTileSize);
+			} else {
+				throw new Error("mapMouseMoveHandler: can't find dive with class===map-scroller");
+			}
+		}
+
+		position = this.$.me.getPosition();
+		this.clickEvent = {targetX:tileX, targetY:tileY, playerX:position.x, playerY:position.y};
+	},
+	
+	_mapClickHandler: function() {
+		if (this.clickEvent) {
+			this.$.me.interactWithMap(this.$.map, this.clickEvent.targetX, this.clickEvent.targetY);
 			this._updateToobarButtons();
-			return true;
 		}
 	},
 	

@@ -556,7 +556,9 @@ enyo.kind({
 	},
 	
 	whatIsAt: function(x, y, justItems) {
-		var key, position, tile;
+		var key, position, tile = undefined;
+		x = Math.min(Math.max(x, 0), MapLevel.kMapWidth-1);
+		y = Math.min(Math.max(y, 0), MapLevel.kMapHeight-1);
 		position = this.player.getPosition();
 
 		if (!justItems) {
@@ -575,7 +577,7 @@ enyo.kind({
 			}
 		}
 		
-		return this.items[this._itemsKey(x, y)];
+		return this.items[this._itemsKey(x, y)] || tile.base;
 	},
 	
 	searchNearby: function(actor, distance) {
