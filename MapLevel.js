@@ -577,7 +577,7 @@ enyo.kind({
 			}
 		}
 		
-		return this.items[this._itemsKey(x, y)] || tile.base;
+		return this.items[this._itemsKey(x, y)] || (tile && tile.base);
 	},
 	
 	searchNearby: function(actor, distance) {
