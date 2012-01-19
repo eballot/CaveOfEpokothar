@@ -368,7 +368,7 @@ enyo.kind({
 			this.clickEvent.playerX = position.x;
 			this.clickEvent.playerY = position.y;
 
-			this.clickHandleTimer = setTimeout(this._mapClickHandler.bind(this), 400);
+			this.clickHandleTimer = setTimeout(this._mapClickHandler.bind(this), 350);
 		}
 	},
 	
