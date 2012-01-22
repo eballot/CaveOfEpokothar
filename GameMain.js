@@ -260,6 +260,7 @@ enyo.kind({
 	
 	createNewCharacter: function(details, initialClass) {
 		this.$.me.createNewCharacter(details);
+		this.$.map.purgeMaps(); // ensure that any previously stored maps are gone
 		this._showStatusText(this, (new enyo.g11n.Template($L("You are playing as a #{name}"))).evaluate({name:initialClass}));
 		this.scrollMapToPlayer();
 	},

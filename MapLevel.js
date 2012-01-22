@@ -175,17 +175,19 @@ enyo.kind({
 	},
 	
 	purgeMaps: function() {
-		var level, mapLevel;
+		var level, maxLevel, mapLevel;
 		level = 1; // Start at 1 because there is no zero level
-		mapLevel = "map" + level;
-		while (localStorage.hasOwnProperty(mapLevel)) {
-			localStorage.removeItem(mapLevel);
-			++level;
+		maxLevel = 1;
+		for (level = 1; level < 100; level++) {
 			mapLevel = "map" + level;
+			if (localStorage.hasOwnProperty(mapLevel)) {
+				localStorage.removeItem(mapLevel);
+				maxLevel = level;
+			}
 		}
 		
 		// The max level explored is either the current map level or the last level deleted from localStorage
-		return Math.max(--level, this.level);
+		return Math.max(maxLevel, this.level);
 	},
 	
 	/*
