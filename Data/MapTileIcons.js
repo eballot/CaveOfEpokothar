@@ -7,6 +7,8 @@ var MapTileIcons = {
 	imgs: {
 	},
 
+	iconsLoaded: false,
+	
 	// dungeon features
 	doorClosed: { img: "dungeon", offsetX: 128, offsetY: 64, kind:"doorClosed", obstructed:true },
 	doorOpen:   { img: "dungeon", offsetX: 160, offsetY: 64, kind: "doorOpen" },
@@ -117,6 +119,9 @@ var MapTileIcons = {
 			MapTileIcons.imgs[key] = new Image();
 			MapTileIcons.imgs[key].src = MapTileIcons.tileSets[key];
 		}
+		MapTileIcons.imgs.dungeon.onload = function imagesLoaded() {
+			MapTileIcons.iconsLoaded = true;
+		};
 	}
 };
 

@@ -4,9 +4,11 @@
 	<title>Cave of Epokothar</title>
 	<script src="enyo_1/enyo.js" launch="nobridge=1" type="text/javascript"></script>
 </head>
-<body>
-<script type="text/javascript">
-	new AppMain().renderInto(document.body);
-</script>
+<body onLoad="onBodyLoad()">
+   <script type="text/javascript" charset="utf-8">
+   function onBodyLoad(){
+      new AppMain().renderInto(document.body);
+   }
+   </script>
 </body>
 </html>

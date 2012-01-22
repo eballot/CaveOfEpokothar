@@ -45,9 +45,6 @@ enyo.kind({
 		}
 		this.tileDrawState = tileDrawState;
 		
-		this.iconsLoaded = false;
-		MapTileIcons.imgs.dungeon.onload = this._iconsLoaded.bind(this);
-		
 		this.applyStyle("width", (MapLevel.kMapWidth*MapLevel.kTileSize)+"px");
 		this.applyStyle("height", (MapLevel.kMapHeight*MapLevel.kTileSize)+"px");
 	},
@@ -239,12 +236,16 @@ enyo.kind({
 			mapNode.insertBefore(newNodes[x], insertBeforeThisNode);
 		}
 
-		if (this.iconsLoaded) {
+		if (MapTileIcons.iconsLoaded) {
 			this._renderMap(0,0, MapLevel.kMapWidth, MapLevel.kMapHeight, true);
 			if (this.player) {
 				this.showFieldOfView(this.player, true);
 				if (this.miniMap) {
-					this.miniMap.drawMap(this.map.tiles, this.player, 0, 0, MapLevel.kMapWidth, MapLevel.kMapHeight);
+					// The minimap is "rendered" after the maplevel. To ensure the entire map gets fully displayed in
+					// the minimap, setup a small delay. The other option would be to setup a callback in the minimap's
+					// rendered function, which feels just a bit overkill.
+					var delayedDrawMap = this.miniMap.drawMap.bind(this.miniMap, this.map.tiles, this.player, 0, 0, MapLevel.kMapWidth, MapLevel.kMapHeight);
+					setTimeout(delayedDrawMap, 25);
 				}
 			}
 		}
@@ -263,7 +264,7 @@ enyo.kind({
 	
 	showFieldOfView: function(item, updateActors) {
 		var x, y, extentX, extentY, position, key, actor;
-		if (!this.iconsLoaded || !this.map || !this.map.tiles) {
+		if (!MapTileIcons.iconsLoaded || !this.map || !this.map.tiles) {
 			return;
 		}
 		
@@ -805,18 +806,6 @@ enyo.kind({
 		}
 	},
 	
-	_iconsLoaded: function() {
-		this.iconsLoaded = true;
-		//this._createOffscreenImages();
-		this._renderMap(0,0, MapLevel.kMapWidth, MapLevel.kMapHeight, true);
-		if (this.miniMap) {
-			this.miniMap.drawMap(this.map.tiles, this.player, 0, 0, MapLevel.kMapWidth, MapLevel.kMapHeight);
-		}
-		if (this.player) {
-			this.showFieldOfView(this.player, true);
-		}
-	},
-	
 	_monsterPickedUpItemHandler: function(inSender, inData) {
 		//TODO: implement this
 	},
@@ -930,7 +919,7 @@ enyo.kind({
 	
 	_renderMap: function(initX, initY, extentX, extentY, forceRender) {
 		var x, y, ctxIndex, adjX, adjY, columns, context, tile, tileType, key, tileObj, itemPile, tileDrawState;
-		if (!this.ctx || !this.iconsLoaded) {
+		if (!this.ctx || !MapTileIcons.iconsLoaded) {
 			return; // Not ready yet, so just return
 		}
 
