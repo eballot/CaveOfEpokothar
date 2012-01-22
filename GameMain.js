@@ -328,6 +328,10 @@ enyo.kind({
 	
 	playerDeath: function(inSender, inDeathReason) {
 		var obj = {}, deadThings = [];
+		
+		// Ensure that the "finger-follow" stops when the player dies
+		this._mapMouseUpHandler(this, undefined);
+		
 		// TODO: show your inventory? 
 		obj.reason = inDeathReason;
 
