@@ -31,7 +31,7 @@ enyo.kind({
 		kind: enyo.Control,
 		className: "help-body-text",
 		allowHtml: true,
-		content: $L("<br/><a href='http://www.facebook.com/CaveOfEpokothar'>Follow Cave of Epokothar</a> on Facebook.<br/>Send questions and comments to <a href='mailto:groovycats@rocketmail.com?subject=Cave%20of%20Epokothar'>groovycats@rocketmail.com</a>")
+		content: $L("<br/><a target='_blank' href='http://www.facebook.com/CaveOfEpokothar'>Follow Cave of Epokothar</a> on Facebook.<br/>Send questions and comments to <a href='mailto:groovycats@rocketmail.com?subject=Cave%20of%20Epokothar'>groovycats@rocketmail.com</a>")
 	}, {
 		kind: "AboutCore"
 	}],

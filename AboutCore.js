@@ -19,7 +19,7 @@ enyo.kind({
 		kind: enyo.Control,
 		className: "help-body-text",
 		allowHtml: true,
-		content: $L("Cave of Epokothar is a <a href='http://en.wikipedia.org/wiki/rogue-like'>rogue-like</a> role-playing game. Move your alter-ego by tapping on the map in the direction " +
+		content: $L("Cave of Epokothar is a <a target='_blank' href='http://en.wikipedia.org/wiki/rogue-like'>rogue-like</a> role-playing game. Move your alter-ego by tapping on the map in the direction " +
 				"you want to go (he will move towards your finger). Some actions are automatic; bumping into a monster automatically attacks it and bumping into a door opens it. You can " +
 				"pickup items by standing on them and going to your inventory. You can also equip and unequip items from the inventory view.<br/>" +
 				"Adventuring builds up an appetite. Make sure to keep an eye on your hunger level and periodically eat something. Whenever you find food, you will automatically pick it up.<br/>" +
