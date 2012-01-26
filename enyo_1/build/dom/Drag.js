@@ -1,4 +1,4 @@
-﻿enyo.kind({
+enyo.kind({
 	name: "enyo.Drag",
 	kind: enyo.Component,
 	events: {

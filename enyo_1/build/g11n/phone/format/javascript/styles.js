@@ -2,7 +2,7 @@
  * @name style.js
  * @fileOverview This file has the implementation of the FmtRegion object that gives the phone format styles for a given region
  * 
- * Copyright (c) 2010-2011, HP Inc.  All rights reserved.
+ * 
  *
  */
 

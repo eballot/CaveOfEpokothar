@@ -1,3 +1,4 @@
+/* Enyo v1.0 | Copyright 2011-2012 Hewlett-Packard Development Company, L.P. | enyojs.com | enyojs.com/license */
 // we may have been assigned an enyo instance by a window opener
 enyo = window.enyo || {};
 

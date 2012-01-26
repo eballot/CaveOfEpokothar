@@ -1,4 +1,4 @@
-﻿//
+//
 // We want to be able to script-include Gizmo files and have them
 // automatically instantiate themselves as constructors.
 //

@@ -2,7 +2,7 @@
  * @name handler.js
  * @fileOverview class to handle phone number parse states
  * 
- * Copyright (c) 2010-2011 HP, Inc.  All rights reserved.
+ * 
  */
 
 /*globals console G11n PhoneLoc */

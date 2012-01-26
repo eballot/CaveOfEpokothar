@@ -2,7 +2,7 @@
  * @name format.js
  * @fileOverview address formatting routines
  * 
- * Copyright 2010 HP, Inc.  All rights reserved.
+ * 
  */
 
 /*globals console G11n Template Locale enyo*/

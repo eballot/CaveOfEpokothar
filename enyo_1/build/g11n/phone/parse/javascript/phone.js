@@ -2,7 +2,7 @@
  * @name phone.js
  * @fileOverview basic routines to parse phone numbers around the world
  * 
- * Copyright (c) 2010-2011 HP, Inc.  All rights reserved.
+ * 
  */
 
 /*globals console G11n PhoneLoc PhoneUtils StatesData NumPlan GBStateHandler StateHandler */

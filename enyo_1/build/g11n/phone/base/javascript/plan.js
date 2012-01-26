@@ -2,7 +2,7 @@
  * @name plan.js
  * @fileOverview This file has the implementation of the Numbering Plan object which gives information about a particular country's numbering plan
  * 
- * Copyright (c) 2010-2011, HP Inc.  All rights reserved.
+ * 
  *
  */
 

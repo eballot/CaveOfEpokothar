@@ -1,4 +1,4 @@
-﻿enyo.kind({
+enyo.kind({
 	name: "enyo.Audio",
 	kind: enyo.Control,
 	published: {

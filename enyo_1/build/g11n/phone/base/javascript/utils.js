@@ -2,7 +2,7 @@
  * @name utils.js
  * @fileOverview Utility functions for the entire phone library
  * 
- * Copyright (c) 2010-2011, HP Inc.  All rights reserved.
+ * 
  *
  */
 

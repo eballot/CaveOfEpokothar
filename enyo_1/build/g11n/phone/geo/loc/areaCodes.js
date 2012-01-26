@@ -2,7 +2,7 @@
  * @name areaCodes.js
  * @fileOverview dummy file for localization -- do not list this file in the manifest.json!
  * 
- * Copyright (c) 2010 Palm, Inc.  All rights reserved.
+ * 
  */
 
 /*globals $L*/

@@ -3,7 +3,7 @@
  * @fileOverview This file has the implementation of the StatesData object which gives information about the states in a finite state machine used to 
  * parse the phone numbers
  * 
- * Copyright (c) 2010-2011 HP, Inc.  All rights reserved.
+ * 
  *
  */
 

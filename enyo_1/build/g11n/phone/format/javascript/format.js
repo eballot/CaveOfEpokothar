@@ -2,7 +2,7 @@
  * @name name.js
  * @fileOverview This file has the implementation of the Name formatter object
  * 
- * Copyright (c) 2010-2011, HP Inc.  All rights reserved.
+ * 
  *
  */
 

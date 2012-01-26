@@ -3,7 +3,7 @@
  * @fileOverview This file has the implementation of the phone locale object. This differs from a regular locale
  * in that the phone locale is normalized to the dialing plan region that controls the plan for the requested country.
  * 
- * Copyright (c) 2010-2011, HP Inc.  All rights reserved.
+ * 
  *
  */
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2011 HP, Inc.  All rights reserved.
+ * 
  */
 
 /*globals G11n PhoneLoc console PhoneNumber NumPlan StatesData PhoneUtils Resources */
