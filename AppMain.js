@@ -29,11 +29,17 @@ enyo.kind({
 	create: function() {
 		this.inherited(arguments);
 		this.phonegapOnMenuKeyDownBound = this._phonegapOnMenuKeyDown.bind(this);
+		this.phonegapPauseListenerBound = this._phonegapPauseListener.bind(this);
 		document.addEventListener("menubutton", this.phonegapOnMenuKeyDownBound, false);
+		// Pause is called when the app is sent to the background on Android. Apparently when an app is
+		// closed on android, the webview doesn't send an unload event so pause is a good equivalent 
+		// event to listen for.
+		document.addEventListener("pause", this.phonegapPauseListenerBound, false);
 	},
 	
 	destroy: function() {
 		document.removeEventListener("menubutton", this.phonegapOnMenuKeyDownBound);
+		document.removeEventListener("pause", this.phonegapPauseListenerBound);
 		this.inherited(arguments);
 	},
 
@@ -56,6 +62,10 @@ enyo.kind({
 	
 	_phonegapOnMenuKeyDown: function() {
 		//this.$.appMenu.openAppMenu();
-		this.$.aboutPopup.open();
-	}	
+		this.$.aboutPopup.toggleOpen();
+	},
+
+	_phonegapPauseListener: function() {
+		this.$.gameMain.saveGame();
+	}
 });
