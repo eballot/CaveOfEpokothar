@@ -187,7 +187,8 @@ enyo.kind({
 	}, {
 		kind: enyo.ApplicationEvents,
 		onKeyup: "_handleKeypress",
-		onUnload: "_handleUnload"
+		onUnload: "_handleUnload",
+		onWindowDeactivated: "_handleWindowDeactivated"
 	}],
 	
 	create: function() {
@@ -514,6 +515,13 @@ enyo.kind({
 		if (GameMain.turnCount > 0) {
 			this.saveGame();
 		}
+	},
+
+	_handleWindowDeactivated: function(inSender, inEvent) {
+		// Users can card the app by swiping up from the bottom edge of the screen. This sends a mousedown
+		// event without sending a mouseup which starts the "follow my finger" feature. Prevent this by
+		// doing the mouseup from a window deactivate.
+		this._mapMouseUpHandler(inSender, inEvent);
 	},
 
 	//Callback for the gameOver dialog. At this point, the components are built so they can be filled in.
