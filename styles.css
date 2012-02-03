@@ -44,11 +44,14 @@
 	top: 0;
 	right: 25%;
 	left: initial;
+	background: url(images/vert-metal-bar.png) repeat-y;
+	background-size: 10px 127px;
+	width: 10px;
 }
 
 .player-stats-box {
 	position:absolute;
-	background-color:#404040;
+	background-color: #383838;
 	color:white;
 	width:25%;
 	height:100%;
