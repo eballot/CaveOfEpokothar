@@ -26,7 +26,8 @@ var PathFinder = {
 			bestDistance = maxDistance;
 			bestCandidateIdx = 0;
 			// Find which tile of the remaining candidate list is closest to the target
-			// TODO: would it be faster to sort the candidateTiles list
+			// TODO: would it be faster to maintain a sorted candidateTiles list? This find is always O(n).
+			//       Finding the insertion point in a sorted list is O(logn)
 			for (i = 0; i < length; ++i) {
 				distance = candidateTiles[i].distanceTotal;
 				if (distance < bestDistance) {
