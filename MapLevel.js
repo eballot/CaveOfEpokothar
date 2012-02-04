@@ -316,6 +316,10 @@ enyo.kind({
 		
 		return blocked;
 	},
+	
+	isActorAt: function(x, y) {
+		return !!this.actors[this._itemsKey(x, y)];
+	},
 
 	setPlayer: function(inPlayer) {
 		this.player = inPlayer;
@@ -588,12 +592,12 @@ enyo.kind({
 		center = actor.getPosition();
 		probability = actor.getSearchProbability();
 
-		x = center.x - distance;
+		x = Math.max(1, center.x - distance);
 		xExtent = center.x + distance + 1;
 		yExtent = center.y + distance + 1;
 		
 		while(x < xExtent) {
-			y = center.y - distance;
+			y = Math.max(1, center.y - distance);
 			while(y < yExtent) {
 				tile = this.map.tiles[x][y];
 				if (tile && tile.base.hidden && Math.random() < probability) {

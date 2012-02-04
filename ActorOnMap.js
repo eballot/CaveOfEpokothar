@@ -71,6 +71,7 @@ enyo.kind({
 		this.__defineGetter__("attitude", this.getAttitude);
 		this.__defineSetter__("attitude", this.setAttitude);
 		if (this.monsterModel) {
+			this.obstructed = true; //Actors obstruct other actors, just like walls and closed doors
 			m = this.monsterModel;
 			this.$.avatar.setSrc(m.getGraphic());
 			this.showEquippedItems();

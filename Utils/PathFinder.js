@@ -58,10 +58,13 @@ var PathFinder = {
 					if (!(adjacentTile.id in visitList)) {
 						visitList[adjacentTile.id] = 1;
 
-						adjacentTile.prev = currentTile;
-						adjacentTile.distanceFrom = currentTile.distanceFrom + PathFinder._distanceTo(adjacentTile, currentTile);
-						adjacentTile.distanceTotal = adjacentTile.distanceFrom + PathFinder._distanceTo(adjacentTile, target);
-						candidateTiles.push(adjacentTile);
+						// Actors block each other so skip if the tile is occupied.
+						if (!map.isActorAt(adjacentTile.x, adjacentTile.y)) {
+							adjacentTile.prev = currentTile;
+							adjacentTile.distanceFrom = currentTile.distanceFrom + PathFinder._distanceTo(adjacentTile, currentTile);
+							adjacentTile.distanceTotal = adjacentTile.distanceFrom + PathFinder._distanceTo(adjacentTile, target);
+							candidateTiles.push(adjacentTile);
+						}
 					}
 				}
 			}

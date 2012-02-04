@@ -7,7 +7,7 @@ var HostileAI = function(actor) {
 
 HostileAI.prototype.performTurn = function(map) {
 	var i, length, acted, player, position, inventory, attacks, equippedWeapon, hasLineOfSite, path,
-	distanceX, distanceY, absDistanceX, absDistanceY, moveX, moveY, pointA, pointB;
+	distanceX, distanceY, absDistanceX, absDistanceY, moveX, moveY, pointA, pointB, something;
 
 	if (!this.awareOfPlayer) {
 		//TODO: Check if the player is seen or heard
@@ -63,6 +63,17 @@ HostileAI.prototype.performTurn = function(map) {
 						moveY = 1;
 					} else {
 						moveY = 0;
+					}
+					something = map.whatIsAt(position.x + moveX, position.y + moveY);
+					// check to see if I need to step around other actors
+					if (something && something.obstructed) {
+						path = PathFinder.find(map, position, player);
+						if (path) {
+							pointA = path.pop();
+							pointB = path.pop();
+							moveX = pointB.x - pointA.x;
+							moveY = pointB.y - pointA.y;
+						}
 					}
 					map.moveBy(this.actor, moveX, moveY);
 				} else {
