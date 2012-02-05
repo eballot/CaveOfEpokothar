@@ -224,17 +224,18 @@ enyo.kind({
 	},
 	
 	saveGame: function(inSender) {
-		//TODO: save environment info: turns, identified items, etc
 		var mapLevel, gameEnvironment;
-		mapLevel = this.$.map.getLevel();
-		if (mapLevel) {
-			gameEnvironment = '{"v":1,"turns":' + GameMain.turnCount + ',"allowExit":' + (this.allowExit || false) + ',"mapLevel":' + mapLevel + '}';
-			localStorage.setItem("environment", gameEnvironment);
-			localStorage.setItem("kills", JSON.stringify(this.killList));
-			ItemModel.saveRandomNames();
-
-			this.$.me.save();
-			this.$.map.save();
+		if (!this.$.me.isDead()) {
+			mapLevel = this.$.map.getLevel();
+			if (mapLevel) {
+				gameEnvironment = '{"v":1,"turns":' + GameMain.turnCount + ',"allowExit":' + (this.allowExit || false) + ',"mapLevel":' + mapLevel + '}';
+				localStorage.setItem("environment", gameEnvironment);
+				localStorage.setItem("kills", JSON.stringify(this.killList));
+				ItemModel.saveRandomNames();
+	
+				this.$.me.save();
+				this.$.map.save();
+			}
 		}
 	},
 	
