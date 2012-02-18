@@ -1,0 +1,15 @@
+{
+  "name": "Cave of Epokothar",
+  "description": "Embark on a quest to defeat the evil demon in this Rogue-like adventure game.",
+  "version": "1.0.3.2",
+  "app": {
+    "launch": {
+      "local_path": "index.html"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "128": "icon96_padding16.png"
+  },
+  "offline_enabled": true
+}
