@@ -5,3 +5,4 @@ The following modifications have been made:
 + The support folder has been removed since CoE doesn't require any of the code within that folder 
 + The framework/libs folder has been removed since CoE doesn't use any of the modules within that folder
 + The framework/source folder has been removed. It is just an uncompressed version of the framework/build folder
++ The file build/palm/themes/Onyx/images/popup.png has been modified from a gradient to a flat color

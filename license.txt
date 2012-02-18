@@ -1,13 +1,32 @@
-TBD
+This source code is available under the Apache License, Version 2.0, with the 
+following exceptions
 
 ==========
-Part of (or All) the graphic tiles used in this program is the public 
+Part of (or all) the graphic tiles used in this program is the public
 domain roguelike tileset "RLTiles".
 Some of the tiles have been modified by GroovyCats.
 
-You can find the original tileset at:
-http://rltiles.sf.net
+You can find the original tileset at: http://rltiles.sf.net
 
 ==========
-The source code for compute the field of view was obtained from
+The source code to compute the field of view was obtained from
 http://roguebasin.roguelikedevelopment.org/index.php/Permissive_Field_of_View_in_Javascript
+
+==========
+The Enyo JavaScript framework is licensed under the Apache License.
+The original code and license is at http://enyojs.com 
+
+==========
+Copyright 2012 Edward Ballot (groovycats@rocketmail.com)
+
+This game is licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may
+obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+specific language governing permissions and limitations under the License.
+   
