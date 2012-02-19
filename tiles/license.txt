@@ -1,5 +1,5 @@
 Part of (or all) the graphic tiles used in this program is the public 
 domain roguelike tileset "RLTiles".
-Some of the tiles have been modified by GroovyCats.
+Some of the tiles have been modified by Edward Ballot (groovycats@rocketmail.com).
 
 You can find the original tileset at: http://rltiles.sf.net
